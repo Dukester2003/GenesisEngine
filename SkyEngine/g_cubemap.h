@@ -5,6 +5,9 @@
 #include "g_mesh.h"
 #include <stb_image.h>
 
+Shader shader;
+Shader skyboxShader;
+
 class CubeMap
 {
 	unsigned int loadCubemap(vector<std::string> faces)
