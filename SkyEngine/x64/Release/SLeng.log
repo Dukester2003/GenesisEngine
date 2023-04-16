@@ -1,0 +1,70 @@
+﻿  bob-omb.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+  enemy.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+  g_collision.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+  game_obj.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+  goomba.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+  lvl.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SLeng\SLeng\g_bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SLeng\SLeng\g_bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SLeng\SLeng\g_bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SLeng\SLeng\g_animation.h(33,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SLeng\SLeng\g_animation.h(34,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SLeng\SLeng\g_animation.h(58,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SLeng\SLeng\g_animation.h(100,21): warning C4018: '<': signed/unsigned mismatch
+  player.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+  whomp.cpp
+C:\Users\qduke\source\repos\SLeng\SLeng\g_model.h(211,43): warning C4018: '<': signed/unsigned mismatch
+BulletDynamics.lib(btDiscreteDynamicsWorld.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletDynamics.lib(btSequentialImpulseConstraintSolver.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletDynamics.lib(btRigidBody.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletDynamics.lib(btTypedConstraint.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletDynamics.lib(btConeTwistConstraint.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletDynamics.lib(btGeneric6DofConstraint.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btDefaultCollisionConfiguration.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btDbvtBroadphase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btCollisionDispatcher.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btCollisionObject.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btPersistentManifold.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btCollisionWorld.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btCollisionShape.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btSimulationIslandManager.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btConvexShape.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btManifoldResult.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btConvexConvexAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btEmptyCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btConvexConcaveCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btCompoundCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btCompoundCompoundCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btConvexPlaneCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btBoxBoxCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btSphereSphereCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btSphereTriangleCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btDbvt.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btOverlappingPairCache.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btBvhTriangleMeshShape.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btHeightfieldTerrainShape.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btUnionFind.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btActivatingCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btPolyhedralContactClipping.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btConvexPolyhedron.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btCollisionAlgorithm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btPolyhedralConvexShape.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btSdfCollisionShape.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btHashedSimplePairCache.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btQuantizedBvh.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btOptimizedBvh.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+BulletCollision.lib(btMiniSDF.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+LinearMath.lib(btConvexHullComputer.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+LinearMath.lib(btGeometryUtil.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in bob-omb.obj
+LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+C:\Users\qduke\source\repos\SLeng\x64\Release\SLeng.exe : fatal error LNK1319: 42 mismatches detected
