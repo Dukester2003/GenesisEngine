@@ -192,6 +192,10 @@
     <ClInclude Include="surface_collision.h" />
     <ClInclude Include="whomp.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="skybox.fs" />
+    <None Include="skybox.vs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

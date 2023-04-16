@@ -25,6 +25,9 @@
     <Filter Include="Header Files\common">
       <UniqueIdentifier>{172d8043-20ab-4898-ac91-3ee49fcc3f71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{83baebc0-0807-4869-bf74-02092ccb5edb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bob-omb.cpp">
@@ -185,5 +188,13 @@
     <ClInclude Include="scene.h">
       <Filter>Header Files\common</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="skybox.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="skybox.fs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -176,7 +176,7 @@ int main()
     InitCommonShaders();
     BulletInstanceDispatch();
     cubeMap.BuildCubeBoxShaders();
-
+    cubeMap.UseSkyBoxShader();
     
     ///////////////////////////////////////////////////////////
     ///                   FLOOR COLLIDERS                   ///
@@ -309,7 +309,7 @@ int main()
 
             // Render SkyBox
             {
-                cubeMap.UseSkyBoxShader();
+                
                 cubeMap.DrawSkyBox();
             }
         }
