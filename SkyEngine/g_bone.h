@@ -3,7 +3,7 @@
 #define BONE_H
 
 /* Container for bone data */
-
+// Orignal Code by Joey De Vries
 #include <vector>
 #include <assimp/scene.h>
 #include <list>

@@ -23,6 +23,7 @@
 #include "whomp.h"
 #include "engine.h"
 #include "scene.h"
+#include "g_cubemap.h"
 #include "Common_Assets.h"
 #include "framebuffers.h"
 #include "surface_collision.h"
@@ -122,11 +123,12 @@ Animation crouchAnimation;
 Animation backJumpAnimation;
 Animation longJumpAnimation;
 
+CubeMap cubeMap;
+
 int main()
 {
     
     InitiateGLFW();
-
 
 
     // glfw window creation
@@ -173,7 +175,7 @@ int main()
     InitCommonModels();
     InitCommonShaders();
     BulletInstanceDispatch();
-
+    cubeMap.BuildCubeBoxShaders();
 
     
     ///////////////////////////////////////////////////////////
@@ -201,7 +203,7 @@ int main()
     grid.CreateGrid();  
     imguiSetup(window);
     InitFrameBuffers();
-    
+    cubeMap.BuildCubeBox();
 
     //UPDATE
     while (!glfwWindowShouldClose(window))
@@ -303,6 +305,12 @@ int main()
                 {
                     glDrawElements(GL_LINES, grid.gridLength, GL_UNSIGNED_INT, NULL);
                 }
+            }
+
+            // Render SkyBox
+            {
+                cubeMap.UseSkyBoxShader();
+                cubeMap.DrawSkyBox();
             }
         }
         

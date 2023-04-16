@@ -3,18 +3,21 @@
 #define CUBEMAP_H
 
 #include "g_mesh.h"
+#include "scene.h"
+#include "common_assets.h"
 #include <stb_image.h>
 
-Shader shader;
 Shader skyboxShader;
 
 class CubeMap
 {
-
+private:
+	unsigned int cubemapTexture;
+	unsigned int skyboxVAO, skyboxVBO;
+public:
 	void BuildCubeBoxShaders()
 	{
-		Shader shader("6.1.cubemaps.vs", "6.1.cubemaps.fs");
-		Shader skyboxShader("6.1.skybox.vs", "6.1.skybox.fs");
+		skyboxShader = Shader("6.1.skybox.vs", "6.1.skybox.fs");
 	}
 	void BuildCubeBox()
 	{
@@ -63,7 +66,6 @@ class CubeMap
 				1.0f, -1.0f,  1.0f
 			};
 		// skybox VAO
-		unsigned int skyboxVAO, skyboxVBO;
 		glGenVertexArrays(1, &skyboxVAO);
 		glGenBuffers(1, &skyboxVBO);
 		glBindVertexArray(skyboxVAO);
@@ -72,9 +74,22 @@ class CubeMap
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-		// load textures
-	// -------------
-		unsigned int cubeTexture = loadTexture(("resources/textures/container.jpg").c_str());
+		vector<std::string> faces
+		{
+			("textures/SpaceSkyBox/right.png"),
+			("textures/SpaceSkyBox/left.png"),
+			("textures/SpaceSkyBox/top.png"),
+			("textures/SpaceSkyBox/bottom.png"),
+			("textures/SpaceSkyBox/front.png"),
+			("textures/SpaceSkyBox/back.png")
+		};
+		cubemapTexture = loadCubemap(faces);
+	}
+
+	void UseSkyBoxShader()
+	{
+		skyboxShader.use();
+		skyboxShader.setInt("skybox", 0);
 	}
 	
 	unsigned int loadCubemap(vector<std::string> faces)
@@ -110,6 +125,23 @@ class CubeMap
 			GL_CLAMP_TO_EDGE);
 		return textureID;
 	}
+	void DrawSkyBox()
+	{
+		// draw skybox as last
+		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader.use();
+		view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+		skyboxShader.setMat4("view", view);
+		skyboxShader.setMat4("projection", projection);
+		// skybox cube
+		glBindVertexArray(skyboxVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		glDepthFunc(GL_LESS); // set depth function back to default
+	}
+	
 };
 
 #endif // !CUBEMAP_H

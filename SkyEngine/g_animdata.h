@@ -1,6 +1,9 @@
 #ifndef ANIM_DATA_H
 #define ANIM_DATA_H
 
+
+// Orignal Code by Joey De Vries
+
 #include<glm/glm.hpp>
 struct BoneInfo
 {

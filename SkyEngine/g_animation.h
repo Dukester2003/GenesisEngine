@@ -2,6 +2,8 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+// Original code by Joey De Vries
+
 #include <vector>
 #include <map>
 #include <glm/glm.hpp>

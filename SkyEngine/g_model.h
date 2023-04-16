@@ -22,10 +22,9 @@
 #include <learnopengl/assimp_glm_helpers.h>
 #include "g_animdata.h"
 
-/// Original Model Loading Code By Joey De Vries
-/// Modified to fit this program
-/// 
-/// 
+/// Original Model Loading Code By Joey De Vries modified to fit this program
+
+
 using namespace std;
 
 inline unsigned int TextureFromFile(const char* path, const string& directory, bool gamma = false);
