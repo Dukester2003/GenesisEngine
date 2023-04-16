@@ -9,6 +9,9 @@
 #include <sstream>
 #include <iostream>
 
+
+// Original "Shader" code by Joey de Vries
+
 class Shader
 {
 public:

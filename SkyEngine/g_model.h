@@ -23,7 +23,7 @@
 #include "g_animdata.h"
 
 /// Original Model Loading Code By Joey De Vries
-///
+/// Modified to fit this program
 /// 
 /// 
 using namespace std;

@@ -10,6 +10,73 @@ Shader skyboxShader;
 
 class CubeMap
 {
+
+	void BuildCubeBoxShaders()
+	{
+		Shader shader("6.1.cubemaps.vs", "6.1.cubemaps.fs");
+		Shader skyboxShader("6.1.skybox.vs", "6.1.skybox.fs");
+	}
+	void BuildCubeBox()
+	{
+		float skyboxVertices[] = {
+				// positions          
+				-1.0f,  1.0f, -1.0f,
+				-1.0f, -1.0f, -1.0f,
+				1.0f, -1.0f, -1.0f,
+				1.0f, -1.0f, -1.0f,
+				1.0f,  1.0f, -1.0f,
+				-1.0f,  1.0f, -1.0f,
+
+				-1.0f, -1.0f,  1.0f,
+				-1.0f, -1.0f, -1.0f,
+				-1.0f,  1.0f, -1.0f,
+				-1.0f,  1.0f, -1.0f,
+				-1.0f,  1.0f,  1.0f,
+				-1.0f, -1.0f,  1.0f,
+
+				1.0f, -1.0f, -1.0f,
+				1.0f, -1.0f,  1.0f,
+				1.0f,  1.0f,  1.0f,
+				1.0f,  1.0f,  1.0f,
+				1.0f,  1.0f, -1.0f,
+				1.0f, -1.0f, -1.0f,
+
+				-1.0f, -1.0f,  1.0f,
+				-1.0f,  1.0f,  1.0f,
+				1.0f,  1.0f,  1.0f,
+				1.0f,  1.0f,  1.0f,
+				1.0f, -1.0f,  1.0f,
+				-1.0f, -1.0f,  1.0f,
+
+				-1.0f,  1.0f, -1.0f,
+				1.0f,  1.0f, -1.0f,
+				1.0f,  1.0f,  1.0f,
+				1.0f,  1.0f,  1.0f,
+				-1.0f,  1.0f,  1.0f,
+				-1.0f,  1.0f, -1.0f,
+
+				-1.0f, -1.0f, -1.0f,
+				-1.0f, -1.0f,  1.0f,
+				1.0f, -1.0f, -1.0f,
+				1.0f, -1.0f, -1.0f,
+				-1.0f, -1.0f,  1.0f,
+				1.0f, -1.0f,  1.0f
+			};
+		// skybox VAO
+		unsigned int skyboxVAO, skyboxVBO;
+		glGenVertexArrays(1, &skyboxVAO);
+		glGenBuffers(1, &skyboxVBO);
+		glBindVertexArray(skyboxVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+		// load textures
+	// -------------
+		unsigned int cubeTexture = loadTexture(("resources/textures/container.jpg").c_str());
+	}
+	
 	unsigned int loadCubemap(vector<std::string> faces)
 	{
 		unsigned int textureID;
