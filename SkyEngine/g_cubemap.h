@@ -25,9 +25,9 @@ public:
 				// positions          
 				-1.0f,  1.0f, -1.0f,
 				-1.0f, -1.0f, -1.0f,
-				1.0f, -1.0f, -1.0f,
-				1.0f, -1.0f, -1.0f,
-				1.0f,  1.0f, -1.0f,
+				 1.0f, -1.0f, -1.0f,
+				 1.0f, -1.0f, -1.0f,
+				 1.0f,  1.0f, -1.0f,
 				-1.0f,  1.0f, -1.0f,
 
 				-1.0f, -1.0f,  1.0f,
@@ -37,24 +37,24 @@ public:
 				-1.0f,  1.0f,  1.0f,
 				-1.0f, -1.0f,  1.0f,
 
-				1.0f, -1.0f, -1.0f,
-				1.0f, -1.0f,  1.0f,
-				1.0f,  1.0f,  1.0f,
-				1.0f,  1.0f,  1.0f,
-				1.0f,  1.0f, -1.0f,
-				1.0f, -1.0f, -1.0f,
+				 1.0f, -1.0f, -1.0f,
+				 1.0f, -1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f, -1.0f,
+				 1.0f, -1.0f, -1.0f,
 
-				-1.0f, -1.0f,  1.0f,
-				-1.0f,  1.0f,  1.0f,
-				1.0f,  1.0f,  1.0f,
-				1.0f,  1.0f,  1.0f,
-				1.0f, -1.0f,  1.0f,
-				-1.0f, -1.0f,  1.0f,
+			    -1.0f, -1.0f,  1.0f,
+			    -1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f, -1.0f,  1.0f,
+			    -1.0f, -1.0f,  1.0f,
 
 				-1.0f,  1.0f, -1.0f,
-				1.0f,  1.0f, -1.0f,
-				1.0f,  1.0f,  1.0f,
-				1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f, -1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
 				-1.0f,  1.0f,  1.0f,
 				-1.0f,  1.0f, -1.0f,
 
@@ -76,12 +76,12 @@ public:
 
 		vector<std::string> faces
 		{
-			("textures/SpaceSkyBox/right.png"),
-			("textures/SpaceSkyBox/left.png"),
-			("textures/SpaceSkyBox/top.png"),
-			("textures/SpaceSkyBox/bottom.png"),
-			("textures/SpaceSkyBox/front.png"),
-			("textures/SpaceSkyBox/back.png")
+			("textures/CloudSkyBox/right.png"),
+			("textures/CloudSkyBox/left.png"),
+			("textures/CloudSkyBox/top.png"),
+		    ("textures/CloudSkyBox/bottom.png"),
+		    ("textures/CloudSkyBox/front.png"),
+			("textures/CloudSkyBox/back.png")
 		};
 		cubemapTexture = loadCubemap(faces);
 	}
@@ -100,8 +100,7 @@ public:
 		int width, height, nrChannels;
 		for (unsigned int i = 0; i < faces.size(); i++)
 		{
-			unsigned char* data = stbi_load(faces[i].c_str(), &width, &height,
-				&nrChannels, 0);
+			unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 3);
 			if (data)
 			{
 				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB,

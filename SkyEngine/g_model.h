@@ -51,17 +51,14 @@ public:
     }
 
     // draws the model, and thus all its meshes
-    void Draw(Shader& shader, glm::vec3 position, glm::vec3 size, glm::vec3 rotation, Model model)
+    void Draw(Shader& shader, glm::vec3 position, glm::vec3 size, glm::quat rotation, Model model)
     {
-        glm::quat quaternion = eulerAnglesToQuaternion(rotation);
-
-
         shader.use();
         glm::mat4 modelMat = glm::mat4(1.0f);
         modelMat = glm::translate(modelMat, glm::vec3(position)); // first translate
 
         // Convert the quaternion to a rotation matrix and apply it
-        modelMat *= glm::mat4_cast(quaternion);
+        modelMat *= glm::mat4_cast(rotation);
 
         modelMat = glm::scale(modelMat, glm::vec3(size)); // last scale
 

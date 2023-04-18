@@ -174,9 +174,8 @@ int main()
 
     InitCommonModels();
     InitCommonShaders();
-    BulletInstanceDispatch();
     cubeMap.BuildCubeBoxShaders();
-    cubeMap.UseSkyBoxShader();
+    BulletInstanceDispatch();
     
     ///////////////////////////////////////////////////////////
     ///                   FLOOR COLLIDERS                   ///
@@ -200,10 +199,10 @@ int main()
     rSlopeColliders.push_back(SlopeCollider(glm::vec3(2.2f, 4.9f, -25.8f), glm::vec3(13.7f, 10.0f, 5.4f), glm::vec3(0), glm::vec3(180.0f), rSlopeColliderModel, EAST));
     rSlopeColliders.push_back(SlopeCollider(glm::vec3(-13.86f, 14.8f, -8.5f), glm::vec3(13.5f, 9.61f, 3.0f), glm::vec3(0), glm::vec3(0.0f), rSlopeColliderModel, WEST));
 
-    grid.CreateGrid();  
+    grid.CreateGrid();
+    cubeMap.BuildCubeBox();  
     imguiSetup(window);
-    InitFrameBuffers();
-    cubeMap.BuildCubeBox();
+    InitFrameBuffers();  
 
     //UPDATE
     while (!glfwWindowShouldClose(window))
@@ -307,11 +306,9 @@ int main()
                 }
             }
 
-            // Render SkyBox
-            {
-                
-                cubeMap.DrawSkyBox();
-            }
+            
+             cubeMap.DrawSkyBox();
+            
         }
         
        
@@ -387,7 +384,7 @@ void processInput(GLFWwindow* window)
 
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && !player->isCrouched)
     {
-        player->Position += player->Velocity;
+        player->MoveForward(deltaTime);
         player->isMoving = true;
         if (player->isGrounded)
         {
@@ -407,12 +404,16 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && !player->isCrouched && player->isGrounded)
     {
         
-        player->Rotation.y -= 2.5;
+        glm::quat currentRotation = player->Rotation;
+        glm::quat deltaRotation = glm::angleAxis(glm::radians(-2.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        player->Rotation = currentRotation * deltaRotation;
     }
 
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && !player->isCrouched && player->isGrounded)
     {
-        player->Rotation.y += 2.5;
+        glm::quat currentRotation = player->Rotation;
+        glm::quat deltaRotation = glm::angleAxis(glm::radians(2.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        player->Rotation = currentRotation * deltaRotation;
     }
     
     // Crouch

@@ -5,9 +5,18 @@
 
 Player::Player()
 	: GameObject() {}
-Player::Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model objModel)
+Player::Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel)
 	: GameObject(pos, size, velocity, rotation, objModel), Keys(), KeysProcessed() {}
 
+
+void Player::MoveForward(float deltaTime) {
+	glm::quat forwardDirection = GetForwardDirection();
+	Position += forwardDirection * Velocity;
+}
+
+glm::quat Player::GetForwardDirection() {
+	return Rotation;
+}
 
 void Player::UpdatePlayer()
 {

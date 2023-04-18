@@ -21,7 +21,7 @@ class Collider : public GameObject
     public:
         Collider::Collider()
             : GameObject() {}
-        Collider::Collider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model objModel)
+        Collider::Collider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel)
             : GameObject(pos, size, velocity, rotation, objModel) {}
 
 };
@@ -29,21 +29,21 @@ class Wall : public Collider
 {
     public:
         Wall() : Collider() {}
-        Wall(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
+        Wall(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
 };
 
 class Floor : public Collider
 {
     public:
         Floor() : Collider() {}
-        Floor(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
+        Floor(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
 };
 
 class Ceiling : public Collider
 {
     public:
         Ceiling() : Collider() {}
-        Ceiling(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
+        Ceiling(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
 };
 
 class BoxCollider : public Collider
@@ -96,7 +96,7 @@ class BoxCollider : public Collider
             }
         }
         BoxCollider() : Collider() {}
-        BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
+        BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
 };
 
 class SphereCollider : public Collider
@@ -104,7 +104,7 @@ class SphereCollider : public Collider
     public:
         float Radius;
         SphereCollider() : Collider() {}
-        SphereCollider(glm::vec3 pos, float radius, glm::vec3 velocity, glm::vec3 rotation, Model colliderModel) : Collider(pos, glm::vec3(Radius * 2, Radius * 2, Radius * 2), velocity, rotation, colliderModel), Radius(radius) {}
+        SphereCollider(glm::vec3 pos, float radius, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : Collider(pos, glm::vec3(Radius * 2, Radius * 2, Radius * 2), velocity, rotation, colliderModel), Radius(radius) {}
 };
 class CylinderCollider : public Collider
 {
@@ -156,14 +156,14 @@ class CylinderCollider : public Collider
             }
         }
         CylinderCollider() : Collider() {}
-        CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
+        CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : Collider(pos, size, velocity, rotation, colliderModel) {}
 };
 class CircleFloor : public Collider
 {
     public:
         float Radius;
         CircleFloor() : Collider() {}
-        CircleFloor(glm::vec3 pos, float radius, glm::vec3 velocity, glm::vec3 rotation, Model colliderModel) : Collider(pos, glm::vec3(Radius * 2, Radius * 2, Radius * 2), velocity, rotation, colliderModel), Radius(radius) {}
+        CircleFloor(glm::vec3 pos, float radius, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : Collider(pos, glm::vec3(Radius * 2, Radius * 2, Radius * 2), velocity, rotation, colliderModel), Radius(radius) {}
 };
 
 class SlopeCollider : public Collider
@@ -177,7 +177,7 @@ class SlopeCollider : public Collider
         float slope2 = Size.y / Size.x;
         Direction direction;
         SlopeCollider() : Collider() {}
-        SlopeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model colliderModel, Direction slopeDirection) : Collider(pos, size, velocity, rotation, colliderModel) , direction(slopeDirection) {}
+        SlopeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel, Direction slopeDirection) : Collider(pos, size, velocity, rotation, colliderModel) , direction(slopeDirection) {}
 };
 
 bool AABB(GameObject& a, GameObject& b);

@@ -8,7 +8,7 @@
 class BobOmb : public Enemy
 {
 	public:
-		BobOmb(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model objModel);
+		BobOmb(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel);
 		BobOmb();
 		void Kaboom();
 

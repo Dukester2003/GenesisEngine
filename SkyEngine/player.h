@@ -28,7 +28,7 @@ class Player : public GameObject
 {
 	public:
 		Player();
-		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model objmodel);
+		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objmodel);
 		float timeAfterSpacebar;
 		float timeAfterfirstJump;
 		float timeAfterSecondJump;
@@ -52,6 +52,8 @@ class Player : public GameObject
 
 
 	public:
+		void MoveForward(float deltaTime);
+		glm::quat GetForwardDirection();
 		void UpdatePlayer();
 		void ProcessPlayerActions(float dt);	
 		void FirstJump(float dt);

@@ -8,7 +8,7 @@
 class Goomba : public Enemy
 {
 	public:
-		Goomba(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 rotation, Model objModel);
+		Goomba(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel);
 		Goomba();
 };
 
