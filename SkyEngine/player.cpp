@@ -9,6 +9,10 @@ Player::Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rota
 	: GameObject(pos, size, velocity, rotation, objModel), Keys(), KeysProcessed() {}
 
 
+void Player::MoveBackward(float deltaTime) {
+	glm::quat backwardDirection = -GetForwardDirection();
+	Position += backwardDirection * Velocity;
+}
 void Player::MoveForward(float deltaTime) {
 	glm::quat forwardDirection = GetForwardDirection();
 	Position += forwardDirection * Velocity;
@@ -60,6 +64,6 @@ void Player::BackJump(float dt)
 	timeAfterSpacebar += dt;
 	if (timeAfterSpacebar < .15f)
 	{
-		Position += Velocity;
+		MoveBackward(dt);
 	}
 }

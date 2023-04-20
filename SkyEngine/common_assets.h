@@ -8,8 +8,9 @@ glm::mat4 projection;
 glm::mat4 view;
 
 // Colliders
-std::vector<Collider> colliders;
+std::vector<ColliderShape> colliders;
 std::vector<BoxCollider> boxColliders;
+std::vector<SphereCollider> sphereColliders;
 std::vector<Ceiling> ceilingColliders;
 std::vector<SlopeCollider> slopeColliders;
 std::vector<SlopeCollider> rSlopeColliders;
@@ -23,6 +24,7 @@ Shader collisionShader;
 
 // Collider Models
 Model boxModel;
+Model sphereModel;
 Model floorColliderModel;
 Model circleFloorColliderModel;
 Model cylinderModel;
@@ -33,6 +35,7 @@ void InitCommonModels()
 {
     // Collider Models
     boxModel = Model("colliders/box.fbx");
+    sphereModel = Model("colliders/sphereCollider.obj");
     floorColliderModel = Model("colliders/floor.obj");
     circleFloorColliderModel = Model("colliders/CircleFloor.obj");
     cylinderModel = Model("colliders/CylinderCollider.obj");

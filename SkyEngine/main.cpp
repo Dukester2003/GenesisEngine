@@ -187,8 +187,10 @@ int main()
     floorColliders[4] = Floor(glm::vec3(1.624f, 19.45f, -8.5f), glm::vec3(3.5f, 0.1f, 3.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
     floorColliders[5] = Floor(glm::vec3(6.0f, 19.45f, -7.0f), glm::vec3(5.3f, 0.1f, 5.93f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
     circleFloorColliders[0] = CylinderCollider(glm::vec3(0.0f, -0.1f, 0.0f), glm::vec3(100.0f, 0.1f, 100.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
+    circleFloorColliders[0].massValue = 0.0f;
     circleFloorColliders[0].InitiateRigidBody(dynamicsWorld);
     circleFloorColliders[1] = CylinderCollider(glm::vec3(0.0f, 10.1f, 0.0f), glm::vec3(50.0f, 0.1, 50.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
+    circleFloorColliders[1].massValue = 0.0f;
     circleFloorColliders[1].InitiateRigidBody(dynamicsWorld);
     cylinderColliders.push_back(CylinderCollider(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(48.0f, 10.0f, 48.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel));
 
@@ -289,6 +291,10 @@ int main()
                 boxCollider.DrawModel(boxModel, modelShader);
                 boxCollider.UpdateRigidBody();
             }
+            for (auto& sphereCollider : sphereColliders) {
+                sphereCollider.DrawModel(sphereModel, modelShader);
+                sphereCollider.UpdateRigidBody();
+            }
             for (auto& floorCollider : floorColliders) { 
                 floorCollider.DrawModel(boxModel, modelShader);
                 
@@ -306,8 +312,9 @@ int main()
                 }
             }
 
-            
-             cubeMap.DrawSkyBox();
+            {
+                cubeMap.DrawSkyBox();
+            }
             
         }
         

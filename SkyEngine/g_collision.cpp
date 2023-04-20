@@ -133,26 +133,6 @@ bool AABB(GameObject& a, GameObject& b)
 /// <param name="gameObject"></param>
 /// <param name="collider"></param>
 /// <returns></returns>
-bool SphereCollide(GameObject& gameObject, SphereCollider& collider)
-{
-
-    // get center point circle first
-    glm::vec3 center(collider.Position + collider.Radius);
-    // calculate AABB info (center, half-extents)
-    glm::vec3 aabb_half_extents(gameObject.Size.x / 2.0f, gameObject.Size.y / 2.0f, gameObject.Size.z / 2.0f);
-    glm::vec3 aabb_center(gameObject.Position.x + aabb_half_extents.x,
-        gameObject.Position.y + aabb_half_extents.y, gameObject.Position.z + aabb_half_extents.z);
-    // get difference vector between both centers
-    glm::vec3 difference = center - aabb_center;
-    glm::vec3 clamped = glm::clamp(difference, -aabb_half_extents,
-        aabb_half_extents);
-    // add clamped value to AABB_center and get the value closest to circle
-    glm::vec3 closest = aabb_center + clamped;
-    // vector between center circle and closest point AABB
-    difference = closest;
-    return glm::length(difference) < collider.Radius;
-
-}
 
 
 // Same Thing As Cylinder, but only return if the GameObjects height is more than or equal to the colliders

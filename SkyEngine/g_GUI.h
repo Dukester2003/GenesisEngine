@@ -80,14 +80,25 @@ void GUI_INIT()
                 // Process only newly added BoxColliders
                 for (int i = lastProcessedIndex + 1; i < boxColliders.size(); ++i) {
                     auto& boxCollider = boxColliders[i];
+                    boxCollider.massValue = 5.0f;
                     boxCollider.InitiateRigidBody(dynamicsWorld);                 
                 }
 
                 lastProcessedIndex = boxColliders.size() - 1;
             }
             if (ImGui::MenuItem("Sphere"))
-            {
-                items.push_back(SphereCollider());
+            {            
+                sphereColliders.push_back(SphereCollider(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), sphereModel));
+                static int lastProcessedIndex = -1;
+                // Process only newly added BoxColliders
+                for (int i = lastProcessedIndex + 1; i < sphereColliders.size(); ++i) {
+                    auto& sphereCollider = sphereColliders[i];
+                    sphereCollider.massValue = 5.0f;
+                    sphereCollider.InitiateRigidBody(dynamicsWorld);
+                }
+
+                lastProcessedIndex = sphereColliders.size() - 1;
+                
             }
             if (ImGui::MenuItem("Cylinder"))
             {
@@ -270,27 +281,35 @@ void GUI_INIT()
                 i++;
                 n++;
                 box.Name = "Box";
-                std::string name = box.Name + std::to_string(n);
+                std::string _name = box.Name + std::to_string(n);
                 box.IsSelected = (current_index == i);
-                if (ImGui::Selectable(name.c_str(), box.IsSelected))
+                if (ImGui::Selectable(_name.c_str(), box.IsSelected))
                 {
                     current_index = i;
 
                 }
                 if (box.IsSelected)
                 {
-                    ImGui::SetItemDefaultFocus();
-                    // Bring this menu up if object is selected
+                    box.ObjMenu(_name);
 
-                    ImGui::Begin(name.c_str());
+                }
+            }
 
-                    if (ImGui::BeginChild("Child Window", ImVec2(500, 100), false))
-                    {
-                        ImGui::DragFloat3("Object Pos", (float*)&box.Position);
-                        ImGui::DragFloat3("Object Rot", (float*)&box.Rotation);
-                        ImGui::EndChild();
-                    }
-                    ImGui::End();  // handle selection
+            for (int n = 0; auto & sphere : sphereColliders)
+            {
+                i++;
+                n++;
+                sphere.Name = "Sphere";
+                std::string _name = sphere.Name + std::to_string(n);
+                sphere.IsSelected = (current_index == i);
+                if (ImGui::Selectable(_name.c_str(), sphere.IsSelected))
+                {
+                    current_index = i;
+
+                }
+                if (sphere.IsSelected)
+                {
+                    sphere.ObjMenu(_name);
 
                 }
             }

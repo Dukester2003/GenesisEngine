@@ -51,8 +51,9 @@ class Player : public GameObject
 		float crouchTransTime;
 
 
-	public:
+	public:	
 		void MoveForward(float deltaTime);
+		void MoveBackward(float deltaTime);
 		glm::quat GetForwardDirection();
 		void UpdatePlayer();
 		void ProcessPlayerActions(float dt);	
