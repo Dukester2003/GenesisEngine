@@ -70,6 +70,67 @@ class ColliderShape : public GameObject
             }
         }
 };
+
+class BoxCollider : public ColliderShape
+{
+public:
+    void createCollisionShape() override {
+        collisionShape = new btBoxShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)));
+    }
+    BoxCollider() : ColliderShape() {}
+    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
+};
+
+class SphereCollider : public ColliderShape
+{
+public:
+    void createCollisionShape() override {
+        btScalar radius = (Size.x / 6 + Size.y / 6 + Size.z / 6);
+        collisionShape = new btSphereShape(radius);
+    }
+    SphereCollider() : ColliderShape() {}
+    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
+};
+
+class CylinderCollider : public ColliderShape
+{
+public:
+    void createCollisionShape() override {
+        collisionShape = new btCylinderShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)));
+    }
+    CylinderCollider() : ColliderShape() {}
+    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
+};
+
+class CapsuleCollider : public ColliderShape
+{
+public:
+    void createCollisionShape() override {
+        btScalar radius = (Size.x + Size.z) / 4;
+        collisionShape = new btCapsuleShape(radius, Size.y);
+    }
+    CapsuleCollider() : ColliderShape() {}
+    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
+};
+
+class ConeCollider : public ColliderShape
+{
+public:
+    void createCollisionShape() override {
+        btScalar radius = (Size.x + Size.z) / 4;
+        collisionShape = new btConeShape(radius, Size.y);
+    }
+    ConeCollider() : ColliderShape() {}
+    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
+};
+class CircleFloor : public ColliderShape
+{
+public:
+    float Radius;
+    CircleFloor() : ColliderShape() {}
+    CircleFloor(glm::vec3 pos, float radius, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, glm::vec3(Radius * 2, Radius * 2, Radius * 2), velocity, rotation, colliderModel), Radius(radius) {}
+};
+
 class Wall : public ColliderShape
 {
     public:
@@ -94,42 +155,7 @@ class Ceiling : public ColliderShape
         Ceiling(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
 };
 
-class BoxCollider : public ColliderShape
-{
-    public:
-        void createCollisionShape() override {
-            collisionShape = new btBoxShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)));
-        }
-        BoxCollider() : ColliderShape() {}
-        BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
-};
 
-class SphereCollider : public ColliderShape
-{
-    public:
-        void createCollisionShape() override {
-            btScalar radius = (Size.x/6 + Size.y/6 + Size.z/6);
-            collisionShape = new btSphereShape(radius);
-        }
-        SphereCollider() : ColliderShape() {}
-        SphereCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
-};
-class CylinderCollider : public ColliderShape
-{
-    public:
-        void createCollisionShape() override {
-            collisionShape = new btCylinderShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)));
-        }
-        CylinderCollider() : ColliderShape() {}
-        CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
-};
-class CircleFloor : public ColliderShape
-{
-    public:
-        float Radius;
-        CircleFloor() : ColliderShape() {}
-        CircleFloor(glm::vec3 pos, float radius, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, glm::vec3(Radius * 2, Radius * 2, Radius * 2), velocity, rotation, colliderModel), Radius(radius) {}
-};
 
 class SlopeCollider : public ColliderShape
 {

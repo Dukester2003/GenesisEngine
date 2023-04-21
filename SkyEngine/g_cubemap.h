@@ -137,6 +137,12 @@ public:
 		glBindVertexArray(0);
 		glDepthFunc(GL_LESS); // set depth function back to default
 	}
+
+	void Deallocate()
+	{
+		glDeleteBuffers(1, &skyboxVAO);
+		glDeleteBuffers(1, &skyboxVBO);
+	}
 	
 };
 

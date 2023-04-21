@@ -192,7 +192,6 @@ int main()
     circleFloorColliders[1] = CylinderCollider(glm::vec3(0.0f, 10.1f, 0.0f), glm::vec3(50.0f, 0.1, 50.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
     circleFloorColliders[1].massValue = 0.0f;
     circleFloorColliders[1].InitiateRigidBody(dynamicsWorld);
-    cylinderColliders.push_back(CylinderCollider(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(48.0f, 10.0f, 48.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel));
 
     //////////////////////////////////////////////////
     ///             SLOPE COLLIDERS                ///
@@ -280,9 +279,13 @@ int main()
         
             /// COLLIDERS
             /// ---------
-            for (auto& cylinderCollider : cylinderColliders) { cylinderCollider.DrawModel(cylinderModel, modelShader); }
+            for (auto& cylinderCollider : cylinderColliders) { cylinderCollider.DrawModel(cylinderModel, modelShader); cylinderCollider.UpdateRigidBody(); }
             for (auto& slopeCollider : slopeColliders) { slopeCollider.DrawModel(slopeColliderModel, modelShader); }
             for (auto& rSlopeCollider : rSlopeColliders) { rSlopeCollider.DrawModel(rSlopeColliderModel, modelShader); }
+            for (auto& capsuleCollider : capsuleColliders) { 
+                capsuleCollider.DrawModel(capsuleModel, modelShader); 
+                capsuleCollider.UpdateRigidBody();
+            }
             for (auto& circleFloorCollider : circleFloorColliders) { 
                 circleFloorCollider.DrawModel(cylinderModel, modelShader); 
                 circleFloorCollider.UpdateRigidBody();
@@ -294,6 +297,10 @@ int main()
             for (auto& sphereCollider : sphereColliders) {
                 sphereCollider.DrawModel(sphereModel, modelShader);
                 sphereCollider.UpdateRigidBody();
+            }
+            for (auto& coneCollider : coneColliders) {
+                coneCollider.DrawModel(coneModel, modelShader);
+                coneCollider.UpdateRigidBody();
             }
             for (auto& floorCollider : floorColliders) { 
                 floorCollider.DrawModel(boxModel, modelShader);
@@ -348,6 +355,7 @@ int main()
     glDeleteRenderbuffers(1, &rbo);
     glDeleteFramebuffers(1, &fbo);
     grid.Deallocate();
+    cubeMap.Deallocate();
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();

@@ -11,10 +11,12 @@ glm::mat4 view;
 std::vector<ColliderShape> colliders;
 std::vector<BoxCollider> boxColliders;
 std::vector<SphereCollider> sphereColliders;
+std::vector<CylinderCollider> cylinderColliders;
+std::vector<CapsuleCollider> capsuleColliders;
+std::vector<ConeCollider> coneColliders;
 std::vector<Ceiling> ceilingColliders;
 std::vector<SlopeCollider> slopeColliders;
 std::vector<SlopeCollider> rSlopeColliders;
-std::vector<CylinderCollider> cylinderColliders;
 
 Shader gridShader;
 Shader modelShader;
@@ -25,6 +27,8 @@ Shader collisionShader;
 // Collider Models
 Model boxModel;
 Model sphereModel;
+Model capsuleModel;
+Model coneModel;
 Model floorColliderModel;
 Model circleFloorColliderModel;
 Model cylinderModel;
@@ -41,6 +45,8 @@ void InitCommonModels()
     cylinderModel = Model("colliders/CylinderCollider.obj");
     slopeColliderModel = Model("colliders/SlopeCollider.obj");
     rSlopeColliderModel = Model("colliders/RightSlopeCollider.obj");
+    capsuleModel = Model("colliders/capsuleCollider.obj");
+    coneModel = Model("colliders/coneCollider.obj");
 }
 
 void InitCommonShaders()

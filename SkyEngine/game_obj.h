@@ -20,6 +20,7 @@ class GameObject
 		glm::vec3 Position, Size, Velocity;
 		glm::quat Rotation;
 		void GLPosToBulletPos();
+		int objID;
 		bool isDynamic;
 		// mass of gameObject, 0 mass means the object will be static.
 		btScalar massValue;
