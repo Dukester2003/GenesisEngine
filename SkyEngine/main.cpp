@@ -105,8 +105,7 @@ Level lvl_1;
 Animator animator;
 
 
-CylinderCollider circleFloorColliders[3];
-Floor floorColliders[8];
+
 CollisionCallback collisionCallback;
 
 
@@ -155,15 +154,6 @@ int main()
     longJumpAnimation = Animation("player/luigiLongJump.dae", &playerIdleModel);
    
 
-
-    
-    
-    player = new Player(glm::vec3(-41.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f), playerIdleModel);
-    items.push_back(Player(player->Position, player->Size, player->Velocity, player->Rotation, player->model));
-    
-
-    
-
     // Level Models
     // ------------
     Model lvl_1_model("levels/stoneBurg/Stoneburg.obj");
@@ -171,12 +161,14 @@ int main()
     // Level Element Models/Animation
     // ------------
 
-
+    CollisionCallback collisionCallback;
     InitCommonModels();
     InitCommonShaders();
     cubeMap.BuildCubeBoxShaders();
-    BulletInstanceDispatch();
-    
+    collisionCallback.BulletInstanceDispatch();
+
+    player = new Player(glm::vec3(-41.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f), playerIdleModel);
+    items.push_back(Player(player->Position, player->Size, player->Velocity, player->Rotation, player->model));
     ///////////////////////////////////////////////////////////
     ///                   FLOOR COLLIDERS                   ///
     ///////////////////////////////////////////////////////////
@@ -216,12 +208,11 @@ int main()
         
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) 
         {
-
             glViewport(0, 0, 400, 300);
             // render
             // ------
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); // also clear the depth buffer now!
 
             player->UpdatePlayer();
             DoCollisions();
@@ -241,7 +232,7 @@ int main()
         
             
             animator.UpdateAnimation(deltaTime);
-            UpdateBtSimulation(deltaTime);
+            collisionCallback.UpdateBtSimulation(deltaTime);
 
             
 
@@ -273,40 +264,14 @@ int main()
             /// ------
             lvl_1.DrawLevel(lvl_1_model, modelShader);
 
+            
 
-
-    
-        
-            /// COLLIDERS
-            /// ---------
-            for (auto& cylinderCollider : cylinderColliders) { cylinderCollider.DrawModel(cylinderModel, modelShader); cylinderCollider.UpdateRigidBody(); }
-            for (auto& slopeCollider : slopeColliders) { slopeCollider.DrawModel(slopeColliderModel, modelShader); }
-            for (auto& rSlopeCollider : rSlopeColliders) { rSlopeCollider.DrawModel(rSlopeColliderModel, modelShader); }
-            for (auto& capsuleCollider : capsuleColliders) { 
-                capsuleCollider.DrawModel(capsuleModel, modelShader); 
-                capsuleCollider.UpdateRigidBody();
-            }
-            for (auto& circleFloorCollider : circleFloorColliders) { 
-                circleFloorCollider.DrawModel(cylinderModel, modelShader); 
-                circleFloorCollider.UpdateRigidBody();
-            }
-            for (auto& boxCollider : boxColliders) { 
-                boxCollider.DrawModel(boxModel, modelShader);
-                boxCollider.UpdateRigidBody();
-            }
-            for (auto& sphereCollider : sphereColliders) {
-                sphereCollider.DrawModel(sphereModel, modelShader);
-                sphereCollider.UpdateRigidBody();
-            }
-            for (auto& coneCollider : coneColliders) {
-                coneCollider.DrawModel(coneModel, modelShader);
-                coneCollider.UpdateRigidBody();
-            }
-            for (auto& floorCollider : floorColliders) { 
-                floorCollider.DrawModel(boxModel, modelShader);
-                
-            }
-
+            UpdateCommonObjects();
+            
+            diffuseShader.use();
+            diffuseShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+            diffuseShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+            diffuseShader.setVec3("lightPos", glm::vec3(0.0f,4.0f,0.0f));
             // Render Grid
             {
                 // Grid Shader

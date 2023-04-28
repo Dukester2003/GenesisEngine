@@ -74,11 +74,11 @@ void GUI_INIT()
         if (ImGui::BeginMenu("Options"))
         {
             if (ImGui::MenuItem("Quality")) { /*Do Things */ }
-            if (ImGui::MenuItem("Toggle Grid", "Ctrl+G"))
+            if (ImGui::MenuItem("Toggle Grid", "Ctrl+G")) {  }
+            if (ImGui::MenuItem("Scene Options"))
             {
-
+                
             }
-
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Add"))
@@ -265,11 +265,31 @@ void GUI_INIT()
     }
     if (ImGui::CollapsingHeader("Level Elements"))
     {
-        if (ImGui::TreeNode("Climbables"))
+        if (ImGui::TreeNode("Terrain"))
         {
-            if (ImGui::Button("Bowser Flag"))
+            if (ImGui::Button("Grass Block"))
+            {
+                grassBlocks.push_back(GrassBlock(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), grassBlockModel));
+                static int lastProcessedIndex = -1;
+                // Process only newly added BoxColliders
+                for (int i = lastProcessedIndex + 1; i < grassBlocks.size(); ++i) {
+                    auto& grassBlock = grassBlocks[i];
+                    grassBlock.massValue = 0.0f;
+                    grassBlock.InitiateRigidBody(dynamicsWorld);
+                }
+
+                lastProcessedIndex = grassBlocks.size() - 1;
+            }
+            if (ImGui::Button("Stone Block"))
             {
 
+            }
+            if (ImGui::Button("Grass Ramp"))
+            {
+
+            }
+            if (ImGui::Button("Wood Crate"))
+            {
 
             }
             ImGui::TreePop();
@@ -304,6 +324,7 @@ void GUI_INIT()
         for (itemIndex = 0;auto& item : items)
         {
             itemIndex++;
+            
             // Spawn Data for Player
             player->Name = "Player";
             player->IsSelected = (current_index == itemIndex);
@@ -326,98 +347,69 @@ void GUI_INIT()
             }
 
             for (int n = 0; auto & box : boxColliders)
-            {
-                itemIndex++;
-                n++;
+            {                          
                 box.Name = "Box";
                 std::string _name = box.Name + std::to_string(n);
                 box.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), box.IsSelected))
-                {
-                    current_index = itemIndex;
-
-                }
-                if (box.IsSelected)
-                {
-                    box.ObjMenu(_name);
-
-                }
+                if (ImGui::Selectable(_name.c_str(), box.IsSelected)) { current_index = itemIndex;}
+                if (box.IsSelected) {box.ObjMenu(_name); }
+                itemIndex++;   
+                n++;
             }
 
             for (int n = 0; auto & sphere : sphereColliders)
-            {
-                itemIndex++;
-                n++;
+            {             
                 sphere.Name = "Sphere";
                 std::string _name = sphere.Name + std::to_string(n);
                 sphere.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), sphere.IsSelected))
-                {
-                    current_index = itemIndex;
-
-                }
-                if (sphere.IsSelected)
-                {
-                    sphere.ObjMenu(_name);
-
-                }
+                if (ImGui::Selectable(_name.c_str(), sphere.IsSelected)) { current_index = itemIndex;}
+                if (sphere.IsSelected) { sphere.ObjMenu(_name); }
+                itemIndex++;
+                n++;
             }
 
             for (int n = 0; auto & cylinder : cylinderColliders)
-            {
-                itemIndex++;
-                n++;
+            {                        
                 cylinder.Name = "Cylinder";
                 std::string _name = cylinder.Name + std::to_string(n);
                 cylinder.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), cylinder.IsSelected))
-                {
-                    current_index = itemIndex;
-
-                }
-                if (cylinder.IsSelected)
-                {
-                    cylinder.ObjMenu(_name);
-
-                }
+                if (ImGui::Selectable(_name.c_str(), cylinder.IsSelected)) { current_index = itemIndex; }
+                if (cylinder.IsSelected) { cylinder.ObjMenu(_name);}
+                itemIndex++;   
+                n++;
             }
 
             for (int n = 0; auto & capsule : capsuleColliders)
-            {
-                itemIndex++;
-                n++;
+            {        
                 capsule.Name = "Capsule";
                 std::string _name = capsule.Name + std::to_string(n);
                 capsule.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), capsule.IsSelected))
-                {
-                    current_index = itemIndex;
-
-                }
-                if (capsule.IsSelected)
-                {
-                    capsule.ObjMenu(_name);
-
-                }
+                if (ImGui::Selectable(_name.c_str(), capsule.IsSelected)) { current_index = itemIndex; }
+                if (capsule.IsSelected) { capsule.ObjMenu(_name); }
+                itemIndex++;
+                n++;
             }
 
             for (int n = 0; auto & cone : coneColliders)
-            {
-                itemIndex++;
-                n++;
+            {                
                 cone.Name = "Cone";
                 std::string _name = cone.Name + std::to_string(n);
                 cone.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), cone.IsSelected))
-                {
-                    current_index = itemIndex;
-
-                }
-                if (cone.IsSelected)
-                {
-                    cone.ObjMenu(_name);
-
-                }
+                if (ImGui::Selectable(_name.c_str(), cone.IsSelected)) { current_index = itemIndex;}
+                if (cone.IsSelected) { cone.ObjMenu(_name); }
+                itemIndex++;
+                n++;
+            }
+            for (int n = 0; auto & grassBlock : grassBlocks)
+            {
+                itemIndex++;
+                grassBlock.Name = "Grass Block";
+                std::string _name = grassBlock.Name + std::to_string(n);
+                grassBlock.IsSelected = (current_index == itemIndex);
+                if (ImGui::Selectable(_name.c_str(), grassBlock.IsSelected)) { current_index = itemIndex; }
+                if (grassBlock.IsSelected) { grassBlock.ObjMenu(_name); }
+                
+                n++;
             }
         }
         ImGui::EndListBox();

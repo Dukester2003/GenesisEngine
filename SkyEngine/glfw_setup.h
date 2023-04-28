@@ -60,6 +60,11 @@ int GLFWSetup(GLFWwindow* window)
     // configure global opengl state	
     // -----------------------------	
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE); // enabled by default on some drivers, but not all so always enable to make sure
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glEnable(GL_LIGHTING);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

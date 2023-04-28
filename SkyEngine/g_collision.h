@@ -24,8 +24,6 @@ class ColliderShape : public GameObject
         ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel)
             : GameObject(pos, size, velocity, rotation, objModel) {}
 
-        virtual void createCollisionShape() = 0;
-
         void InitiateRigidBody(btDiscreteDynamicsWorld* dynamicsWorld)
         {
             createCollisionShape();

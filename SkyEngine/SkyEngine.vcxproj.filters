@@ -28,6 +28,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{83baebc0-0807-4869-bf74-02092ccb5edb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene">
+      <UniqueIdentifier>{650ea3f5-5809-46d7-8fd8-6da585cdb64c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bob-omb.cpp">
@@ -90,21 +93,15 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="levels\terrain\Grass Block\grass_block.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="euler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="g_animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="g_animator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="g_animdata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="g_bone.h">
@@ -117,9 +114,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="g_cubemap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="g_GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
@@ -141,9 +135,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="obj_renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager.h">
@@ -186,7 +177,28 @@
       <Filter>Header Files\common</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
-      <Filter>Header Files\common</Filter>
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="frustum_culling.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="g_animation.h">
+      <Filter>Header Files\actors</Filter>
+    </ClInclude>
+    <ClInclude Include="g_animator.h">
+      <Filter>Header Files\actors</Filter>
+    </ClInclude>
+    <ClInclude Include="g_animdata.h">
+      <Filter>Header Files\actors</Filter>
+    </ClInclude>
+    <ClInclude Include="g_GUI.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Header Files\actors</Filter>
+    </ClInclude>
+    <ClInclude Include="levels\terrain\Grass Block\grass_block.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

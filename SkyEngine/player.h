@@ -52,6 +52,7 @@ class Player : public GameObject
 
 
 	public:	
+		void createCollisionShape() override { /* Do nothing */ };
 		void MoveForward(float deltaTime);
 		void MoveBackward(float deltaTime);
 		glm::quat GetForwardDirection();

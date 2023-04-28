@@ -152,6 +152,7 @@
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="levels\terrain\Grass Block\grass_block.cpp" />
     <ClCompile Include="lvl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="engine.h" />
     <ClInclude Include="euler.h" />
     <ClInclude Include="framebuffers.h" />
+    <ClInclude Include="frustum_culling.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_obj.h" />
     <ClInclude Include="glfw_setup.h" />
@@ -183,6 +185,7 @@
     <ClInclude Include="g_mesh.h" />
     <ClInclude Include="g_model.h" />
     <ClInclude Include="g_shader.h" />
+    <ClInclude Include="levels\terrain\Grass Block\grass_block.h" />
     <ClInclude Include="lvl.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="obj_renderer.h" />

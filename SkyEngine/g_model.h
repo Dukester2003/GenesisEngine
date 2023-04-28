@@ -29,6 +29,17 @@ using namespace std;
 
 inline unsigned int TextureFromFile(const char* path, const string& directory, bool gamma = false);
 
+struct Transform
+{
+    /*SPACE INFORMATION*/
+    //Local space information
+    glm::vec3 pos = { 0.0f, 0.0f, 0.0f };
+    glm::vec3 eulerRot = { 0.0f, 0.0f, 0.0f };
+    glm::vec3 scale = { 1.0f, 1.0f, 1.0f };
+
+    //Global space information concatenate in matrix
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+};
 
 class Model
 {
