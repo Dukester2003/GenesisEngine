@@ -26,7 +26,7 @@
 #include "g_cubemap.h"
 #include "Common_Assets.h"
 #include "framebuffers.h"
-#include "surface_collision.h"
+#include "init_collision.h"
 #include "grid.h"
 #include <Windows.h>
 
@@ -214,7 +214,7 @@ int main()
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); // also clear the depth buffer now!
 
-            player->UpdatePlayer();
+            player->UpdatePlayer(deltaTime);
             DoCollisions();
             UpdatePlayerAnimation();
             

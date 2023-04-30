@@ -26,7 +26,7 @@ class ColliderShape : public GameObject
 
         void InitiateRigidBody(btDiscreteDynamicsWorld* dynamicsWorld)
         {
-            createCollisionShape();
+             createCollisionShape();
             // Add boxShape to the collisionShapes array
             collisionShapes.push_back(collisionShape);
 
@@ -39,8 +39,7 @@ class ColliderShape : public GameObject
             isDynamic = (massValue != 0.f);
 
             localInertia = btVector3(1.0, 1.0, 1.0);
-            if (isDynamic)
-                collisionShape->calculateLocalInertia(massValue, localInertia);
+
 
             //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
             btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
@@ -55,7 +54,12 @@ class ColliderShape : public GameObject
         {
             if (rigidBody) {
                 btTransform btTrans;
-                rigidBody->getMotionState()->getWorldTransform(btTrans);
+
+                if (isDynamic) {
+                    rigidBody->getMotionState()->getWorldTransform(btTrans);
+                } else {
+                    btTrans = rigidBody->getWorldTransform();
+                }
 
                 // Update position
                 btVector3 btPos = btTrans.getOrigin();

@@ -1,5 +1,5 @@
-#ifndef SURFACE_COLLISION_H
-#define SURFACE_COLLISION_H
+#ifndef INIT_COLLISION_H
+#define INIT_COLLISION_H
 
 #include <glad/glad.h> 
 
@@ -106,8 +106,9 @@ public:
             }
 
             std::string* objectName = static_cast<std::string*>(obj->getUserPointer());
-
+            
         }
+        
     }
 
     void btCleanUp()

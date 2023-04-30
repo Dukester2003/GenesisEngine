@@ -79,40 +79,62 @@ void GameObject::ObjMenu(std::string name)
         btScalar newMass = massValue;
 
 
-        btVector3 currentPosition = rigidBody->getWorldTransform().getOrigin();
-        Position = bulletToGlm(currentPosition);
-        if (ImGui::DragFloat3("Object Pos", (float*)&Position)) {
+        btTransform currentTransform = rigidBody->getWorldTransform();
+
+        glm::vec3 currentPosition = bulletToGlm(currentTransform.getOrigin());
+
+        if (ImGui::DragFloat3("Object Pos", (float*)&currentPosition, .5f)) {
             // Update the object's position
-            btTransform newTransform = rigidBody->getWorldTransform();
-            newTransform.setOrigin(btVector3(glmToBullet(Position)));
-            rigidBody->setWorldTransform(newTransform);
+            if (isDynamic && rigidBodyEnabled)
+            {
+                rigidBody->setActivationState(DISABLE_SIMULATION);
+                btTransform newTransform = currentTransform;
+                newTransform.setOrigin(glmToBullet(currentPosition));
+                rigidBody->setWorldTransform(newTransform);
+                setRigidBodyEnabled(rigidBodyEnabled);
+            }
+            else if (!isDynamic)
+            {
+                btTransform newTransform = currentTransform;
+                newTransform.setOrigin(glmToBullet(currentPosition));
+                rigidBody->setWorldTransform(newTransform);
+            }
         }
 
         ScaleUniform("Object Size", (float*)&Size, 1.0f, 0.0f, 100.0f);
 
-        btQuaternion currentRotation = rigidBody->getWorldTransform().getRotation();
-        Rotation = bulletToGlm(currentRotation);
-        if(ImGui::DragFloat4("Object Rot", (float*)&Rotation, .05, -1.0f, 1.0f)) { 
+        glm::quat currentRotation = bulletToGlm(currentTransform.getRotation());
+
+        if(ImGui::DragFloat4("Object Rot", (float*)&currentRotation, .05, -1.0f, 1.0f)) { 
             // Update the object's rotation
-            Rotation = glm::normalize(Rotation);
-            btTransform newTransform = rigidBody->getWorldTransform();
-            newTransform.setRotation(btQuaternion(glmToBullet(Rotation)));
-            rigidBody->setWorldTransform(newTransform);
+            if (isDynamic && rigidBodyEnabled)
+            {
+                rigidBody->setActivationState(DISABLE_SIMULATION);  
+                currentRotation = glm::normalize(currentRotation);
+                btTransform newTransform = rigidBody->getWorldTransform();
+                newTransform.setRotation(glmToBullet(currentRotation));
+                rigidBody->setWorldTransform(newTransform);            
+                setRigidBodyEnabled(rigidBodyEnabled);
+            }
+            else if (!isDynamic)
+            {
+                btTransform newTransform = currentTransform;
+                newTransform.setRotation(glmToBullet(currentRotation));
+                rigidBody->setWorldTransform(newTransform);
+            }
         }
 
-        ImGui::DragFloat("Object Mass", &newMass);
-
-        if (newMass != massValue) {
-            massValue = newMass;
-            // Update the rigid body with the new mass
-            collisionShape->calculateLocalInertia(massValue, localInertia);
-            rigidBody->setMassProps(massValue, localInertia);
-            rigidBody->updateInertiaTensor();
+        if(ImGui::DragFloat("Object Mass", &massValue)) { setMass(massValue); }
+        if (ImGui::Button("Copy"))
+        {
+            canPaste = true;
+            copy();
         }
         if (ImGui::Button("Delete"))
         {
             Destroyed = true;
         }
+        
         ImGui::EndChild();
     }
     ImGui::End();  // handle selection
@@ -150,4 +172,44 @@ void GameObject::updateSize(const btVector3& newSize) {
 
     // Add the updated rigid body back to the dynamics world
     _dynamicsWorld->addRigidBody(rigidBody);
+}
+
+void GameObject::setMass(float newMass) {
+    // Remove the rigid body from the dynamics world
+    _dynamicsWorld->removeRigidBody(rigidBody);
+
+    // Update mass value
+    massValue = newMass;
+
+    // Update isDynamic status
+    isDynamic = (massValue != 0.f);
+
+    // Update local inertia based on the new mass
+    if (isDynamic) {
+        collisionShape->calculateLocalInertia(massValue, localInertia);
+    }
+    else {
+        localInertia = btVector3(0, 0, 0);
+    }
+
+    // Update the rigid body construction info
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(massValue, rigidBody->getMotionState(), collisionShape, localInertia);
+
+    // Replace the existing rigid body with a new one
+    delete rigidBody;
+    rigidBody = new btRigidBody(rbInfo);
+
+    // Add the new rigid body back to the dynamics world
+    _dynamicsWorld->addRigidBody(rigidBody);
+}
+
+void GameObject::copy() {
+    _copy->copyPosition = getPosition();
+    _copy->copyRotation = getRotation();
+    _copy->copyVelocity = getVelocity();
+    _copy->copySize = getSize();
+    _copy->copyMass = getMass();
+    _copy->copyFriction = getFrictionValue();
+    _copy->copyInertia = getLocalIntertia();
+
 }

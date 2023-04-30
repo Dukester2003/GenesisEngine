@@ -1,7 +1,7 @@
 #ifndef COMMON_ASSETS
 #define COMMON_ASSETS
 
-#include "surface_collision.h"
+#include "init_collision.h"
 #include "g_collision.h"
 #include "levels/terrain/Grass Block/grass_block.h"
 

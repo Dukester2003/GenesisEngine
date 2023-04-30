@@ -11,7 +11,7 @@
 
 #include "scene.h"
 #include "Common_Assets.h"
-#include "surface_collision.h"
+#include "init_collision.h"
 
 #include <dirent.h>
 #include <sys/stat.h>
@@ -319,6 +319,10 @@ void GUI_INIT()
     {
 
     }
+    if (ImGui::Button("Paste"))
+    {
+
+    }
     if (ImGui::BeginListBox("Objects in Scene:", ImVec2(250, 1500)))
     {
         for (itemIndex = 0;auto& item : items)
@@ -346,15 +350,19 @@ void GUI_INIT()
 
             }
 
-            for (int n = 0; auto & box : boxColliders)
-            {                          
+            for (size_t i = 0; i < boxColliders.size(); i++) {
+                auto& box = boxColliders[i];
+                itemIndex++;
+
                 box.Name = "Box";
-                std::string _name = box.Name + std::to_string(n);
+                std::string _name = box.Name + std::to_string(i + 1);
                 box.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), box.IsSelected)) { current_index = itemIndex;}
-                if (box.IsSelected) {box.ObjMenu(_name); }
-                itemIndex++;   
-                n++;
+                if (ImGui::Selectable(_name.c_str(), box.IsSelected)) { 
+                    current_index = itemIndex;
+                }
+                if (box.IsSelected) { 
+                    box.ObjMenu(_name);
+                }
             }
 
             for (int n = 0; auto & sphere : sphereColliders)
@@ -400,16 +408,17 @@ void GUI_INIT()
                 itemIndex++;
                 n++;
             }
-            for (int n = 0; auto & grassBlock : grassBlocks)
-            {
+            for (size_t i = 0; i < grassBlocks.size(); i++) {
+                auto& grassBlock = grassBlocks[i];
                 itemIndex++;
+
                 grassBlock.Name = "Grass Block";
-                std::string _name = grassBlock.Name + std::to_string(n);
+                std::string _name = grassBlock.Name + std::to_string(i + 1);
                 grassBlock.IsSelected = (current_index == itemIndex);
                 if (ImGui::Selectable(_name.c_str(), grassBlock.IsSelected)) { current_index = itemIndex; }
-                if (grassBlock.IsSelected) { grassBlock.ObjMenu(_name); }
-                
-                n++;
+                if (grassBlock.IsSelected) { 
+                    grassBlock.ObjMenu(_name); 
+                }
             }
         }
         ImGui::EndListBox();

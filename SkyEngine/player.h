@@ -29,6 +29,7 @@ class Player : public GameObject
 	public:
 		Player();
 		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objmodel);
+		Player(btDiscreteDynamicsWorld* dynamicsWorld, const glm::vec3& position);
 		float timeAfterSpacebar;
 		float timeAfterfirstJump;
 		float timeAfterSecondJump;
@@ -56,7 +57,7 @@ class Player : public GameObject
 		void MoveForward(float deltaTime);
 		void MoveBackward(float deltaTime);
 		glm::quat GetForwardDirection();
-		void UpdatePlayer();
+		void UpdatePlayer(float deltaTime);
 		void ProcessPlayerActions(float dt);	
 		void FirstJump(float dt);
 		void SecondJump(float dt);
@@ -67,6 +68,8 @@ class Player : public GameObject
 		void LongJump();
 		void GroundSlam();
 		void Punch();
+	private:
+		glm::vec3 currentPosition;
 };
 
 #endif // !PLAYER_H

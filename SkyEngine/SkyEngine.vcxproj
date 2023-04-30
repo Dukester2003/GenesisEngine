@@ -192,7 +192,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="scene.h" />
-    <ClInclude Include="surface_collision.h" />
+    <ClInclude Include="init_collision.h" />
     <ClInclude Include="whomp.h" />
   </ItemGroup>
   <ItemGroup>

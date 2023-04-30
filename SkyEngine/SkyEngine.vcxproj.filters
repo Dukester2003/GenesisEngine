@@ -140,7 +140,7 @@
     <ClInclude Include="resource_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="surface_collision.h">
+    <ClInclude Include="init_collision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="animFlag.h">
