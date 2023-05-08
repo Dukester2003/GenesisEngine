@@ -38,6 +38,11 @@ Direction VectorDirection(glm::vec3 target)
 // Defines a Collision typedef that represents collision data
 typedef std::tuple<bool, Direction, glm::vec3> Collision; // <collision?, what direction?, difference vector center - closest point>
 
+int BoxCollider::next_id = 0;
+int SphereCollider::next_id = 0;
+int CylinderCollider::next_id = 0;
+int CapsuleCollider::next_id = 0;
+int ConeCollider::next_id = 0;
 
 /// <summary>
 /// Axis-Aligned Bounding Box (AABB)

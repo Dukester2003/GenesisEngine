@@ -5,7 +5,7 @@
 #include "g_model.h"
 #include "g_shader.h"
 
-enum CollisionShapeTypes
+enum class ShapeType
 {
 	BOX,
 	SPHERE,
@@ -21,8 +21,8 @@ class GameObject
 	public:
 		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objmodel);
 		GameObject();
-		~GameObject();
-		static int collisionShapeType;
+		virtual ~GameObject() = default;
+		ShapeType type;
 		btDynamicsWorld* _dynamicsWorld;
 		btCollisionShape* collisionShape;
 		btCollisionObject* collisionObject;
@@ -62,8 +62,13 @@ class GameObject
 		void copy();
 		void paste();
 
+		virtual void InitModel() {}
 		void DrawModel(Model modelRender,Shader modelShader);
-		virtual void ObjMenu(std::string name);
+		virtual void InitiateRigidBody(btDynamicsWorld* dynamicsWorld) {}
+		virtual void UpdateRigidBody() {}
+		virtual void InitiateGUI() {}
+		virtual void UpdateObject(Model model, Shader shader, btDynamicsWorld* dynamicsWorld);
+		virtual void ObjMenu(string name);
 		void setRigidBodyEnabled(bool enabled);
 		void updateSize(const btVector3& newSize);
 		void setMass(float newMass);

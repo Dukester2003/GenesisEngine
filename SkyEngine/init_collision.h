@@ -15,7 +15,7 @@
 #include <iostream>
 #include "scene.h"
 
-inline btDiscreteDynamicsWorld* dynamicsWorld; 
+inline btDynamicsWorld* dynamicsWorld; 
 inline btBroadphaseInterface* broadphase;
 inline btCollisionDispatcher* dispatcher;
 inline btSequentialImpulseConstraintSolver* solver;

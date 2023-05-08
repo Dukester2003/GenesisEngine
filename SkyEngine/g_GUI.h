@@ -41,16 +41,108 @@ void imguiSetup(GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 450");
 }
-void GUI_INIT()
+void GUI_INIT();
+
+bool IsMouseHoveringOverWindow(const char* window_name)
 {
-    
-    
-    
+    // Get the window by name
+    ImGui::SetNextWindowFocus();
+    if (ImGui::Begin(window_name, nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoInputs))
+    {
+        ImGui::End();
+        return false; // If the window is not found, the mouse is not hovering over it
+    }
+
+    // Check if the mouse is hovering over the current window
+    bool is_hovered = ImGui::IsWindowHovered();
+
+    ImGui::End();
+
+    return is_hovered;
+}
+
+bool ListFiles(const std::string& path, std::vector<std::string>& files, std::vector<std::string>& directories) {
+    DIR* dir;
+    struct dirent* ent;
+    struct stat sb;
+
+    if ((dir = opendir(path.c_str())) != nullptr) {
+        while ((ent = readdir(dir)) != nullptr) {
+            std::string entry_name = ent->d_name;
+            std::string full_path = path + "/" + entry_name;
+            if (stat(full_path.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
+                if (entry_name != "." && entry_name != "..") {
+                    directories.push_back(entry_name);
+                }
+            }
+            else {
+                files.push_back(entry_name);
+            }
+        }
+        closedir(dir);
+        return true;
+    }
+    return false;
+}
+
+void FileExplorer(const std::string& title, std::string& current_path) {
+    ImGui::Begin(title.c_str());
+
+    // Change directory by clicking on the folder name
+    if (ImGui::BeginCombo("Current Directory", current_path.c_str())) {
+        std::vector<std::string> directories;
+        ListFiles(current_path, std::vector<std::string>(), directories);
+        for (const std::string& dir : directories) {
+            if (ImGui::Selectable(dir.c_str())) {
+                current_path += "/" + dir;
+            }
+        }
+        ImGui::EndCombo();
+    }
+
+    // List files and directories
+    ImGui::Text("Files:");
+    ImGui::Separator();
+    if (ImGui::Button("Go Up")) {
+        if (current_path != ".") {
+            std::filesystem::path parent_path = std::filesystem::path(current_path).parent_path();
+            current_path = parent_path.string();
+        }
+        
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Close")) { show_file_explorer = false; }
+    ImGui::BeginChild("FileList", ImVec2(0, ImGui::GetWindowHeight() * 0.75f), true);
+
+    std::vector<std::string> files, directories;
+    if (ListFiles(current_path, files, directories)) {
+        for (const std::string& dir : directories) {
+            ImGui::Text("[DIR] %s", dir.c_str());
+        }
+        for (const std::string& file : files) {
+            ImGui::Text("%s", file.c_str());
+        }
+    }
+
+    ImGui::EndChild();
+    ImGui::End();
+}
+
+void AddItem(std::shared_ptr<GameObject> item, btDynamicsWorld* dynamicsWorld) {
+    item->massValue = 5.0f;
+    item->InitiateRigidBody(dynamicsWorld);
+}
+
+inline void GUI_INIT()
+{
+
+
+
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Open..", "Ctrl+O")) 
+            if (ImGui::MenuItem("Open..", "Ctrl+O"))
             {
                 // Set a flag to show the file explorer
                 show_file_explorer = true;
@@ -74,10 +166,10 @@ void GUI_INIT()
         if (ImGui::BeginMenu("Options"))
         {
             if (ImGui::MenuItem("Quality")) { /*Do Things */ }
-            if (ImGui::MenuItem("Toggle Grid", "Ctrl+G")) {  }
+            if (ImGui::MenuItem("Toggle Grid", "Ctrl+G")) {}
             if (ImGui::MenuItem("Scene Options"))
             {
-                
+
             }
             ImGui::EndMenu();
         }
@@ -85,74 +177,38 @@ void GUI_INIT()
         {
             if (ImGui::MenuItem("Box"))
             {
+                auto boxCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
+                items.push_back(boxCollider);
+                AddItem(boxCollider, dynamicsWorld);
                 
-                boxColliders.push_back(BoxCollider(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel));
-                static int lastProcessedIndex = -1;
-                // Process only newly added BoxColliders
-                for (int i = lastProcessedIndex + 1; i < boxColliders.size(); ++i) {
-                    auto& boxCollider = boxColliders[i];
-                    boxCollider.massValue = 5.0f;
-                    boxCollider.InitiateRigidBody(dynamicsWorld);                 
-                }
-
-                lastProcessedIndex = boxColliders.size() - 1;
             }
 
             if (ImGui::MenuItem("Sphere"))
-            {            
-                sphereColliders.push_back(SphereCollider(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), sphereModel));
-                static int lastProcessedIndex = -1;
-                // Process only newly added SphereColliders
-                for (int i = lastProcessedIndex + 1; i < sphereColliders.size(); ++i) {
-                    auto& sphereCollider = sphereColliders[i];
-                    sphereCollider.massValue = 5.0f;
-                    sphereCollider.InitiateRigidBody(dynamicsWorld);
-                }
-
-                lastProcessedIndex = sphereColliders.size() - 1;
-                
+            {
+                auto sphereCollider = std::make_shared<SphereCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), sphereModel);
+                AddItem(sphereCollider, dynamicsWorld);
+                items.push_back(sphereCollider);
             }
 
             if (ImGui::MenuItem("Cylinder"))
             {
-                cylinderColliders.push_back(CylinderCollider(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel));
-                static int lastProcessedIndex = -1;
-                // Process only newly added CylinderColliders
-                for (int i = lastProcessedIndex + 1; i < cylinderColliders.size(); ++i) {
-                    auto& cylinderCollider = cylinderColliders[i];
-                    cylinderCollider.massValue = 5.0f;
-                    cylinderCollider.InitiateRigidBody(dynamicsWorld);
-                }
-
-                lastProcessedIndex = cylinderColliders.size() - 1;
+                auto cylinderCollider = std::make_shared<CylinderCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
+                AddItem(cylinderCollider, dynamicsWorld);
+                items.push_back(cylinderCollider);
             }
 
             if (ImGui::MenuItem("Capsule"))
             {
-                capsuleColliders.push_back(CapsuleCollider(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), capsuleModel));
-                static int lastProcessedIndex = -1;
-                // Process only newly added CapsuleColliders
-                for (int i = lastProcessedIndex + 1; i < capsuleColliders.size(); ++i) {
-                    auto& capsuleCollider = capsuleColliders[i];
-                    capsuleCollider.massValue = 5.0f;
-                    capsuleCollider.InitiateRigidBody(dynamicsWorld);
-                }
-
-                lastProcessedIndex = capsuleColliders.size() - 1;
+                auto capsuleCollider = std::make_shared<CapsuleCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), capsuleModel);
+                AddItem(capsuleCollider, dynamicsWorld);
+                items.push_back(capsuleCollider);
             }
 
             if (ImGui::MenuItem("Cone"))
             {
-                coneColliders.push_back(ConeCollider(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), coneModel));
-                static int lastProcessedIndex = -1;
-                // Process only newly added ConeColliders
-                for (int i = lastProcessedIndex + 1; i < coneColliders.size(); ++i) {
-                    auto& coneCollider = coneColliders[i];
-                    coneCollider.massValue = 5.0f;
-                    coneCollider.InitiateRigidBody(dynamicsWorld);
-                }
-
-                lastProcessedIndex = coneColliders.size() - 1;
+                auto coneCollider = std::make_shared<ConeCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), coneModel);
+                AddItem(coneCollider, dynamicsWorld);
+                items.push_back(coneCollider);
             }
             ImGui::EndMenu();
         }
@@ -162,7 +218,7 @@ void GUI_INIT()
     if (show_file_explorer) {
         FileExplorer("File Explorer", current_path);
     }
-    
+
     ImGui::Begin("Assets", NULL, flags);
     ////////////////////////////////////////////////////////
     ///                   SPAWN MENU                     ///
@@ -269,13 +325,13 @@ void GUI_INIT()
         {
             if (ImGui::Button("Grass Block"))
             {
-                grassBlocks.push_back(GrassBlock(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), grassBlockModel));
+                grassBlocks.push_back(std::make_shared<GrassBlock>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), grassBlockModel));
                 static int lastProcessedIndex = -1;
                 // Process only newly added BoxColliders
                 for (int i = lastProcessedIndex + 1; i < grassBlocks.size(); ++i) {
                     auto& grassBlock = grassBlocks[i];
-                    grassBlock.massValue = 0.0f;
-                    grassBlock.InitiateRigidBody(dynamicsWorld);
+                    grassBlock->massValue = 0.0f;
+                    grassBlock->InitiateRigidBody(dynamicsWorld);
                 }
 
                 lastProcessedIndex = grassBlocks.size() - 1;
@@ -325,194 +381,62 @@ void GUI_INIT()
     }
     if (ImGui::BeginListBox("Objects in Scene:", ImVec2(250, 1500)))
     {
-        for (itemIndex = 0;auto& item : items)
+        // Add counters for each shape type
+        int boxCounter = 0;
+        int sphereCounter = 0;
+        int cylinderCounter = 0;
+        int capsuleCounter = 0;
+        int coneCounter = 0;
+
+        static int selectedItem = 0;
+        itemIndex = 0;
+        for (auto& item : items)
         {
-            itemIndex++;
             
-            // Spawn Data for Player
-            player->Name = "Player";
-            player->IsSelected = (current_index == itemIndex);
-            if (ImGui::Selectable(player->Name.c_str(), player->IsSelected)) { current_index = itemIndex; }
-            if (player->IsSelected)
-            {
-                ImGui::SetItemDefaultFocus();
-                // Bring this menu up if object is selected
-
-                ImGui::Begin(player->Name.c_str());
-
-                if (ImGui::BeginChild("Child Window", ImVec2(500, 20), false))
-                {
-                    ImGui::DragFloat3("Object Pos", (float*)&player->Position);
-                    ImGui::EndChild();
-                }
-                ImGui::End();  // handle selection
-
-
+            std::string name;
+            switch (item->type) {
+            case ShapeType::BOX:
+                name = "Box " + std::to_string(static_cast<BoxCollider*>(item.get())->id);
+                break;
+            case ShapeType::SPHERE:
+                name = "Sphere " + std::to_string(static_cast<SphereCollider*>(item.get())->id);
+                break;
+            case ShapeType::CYLINDER:
+                name = "Cylinder " + std::to_string(static_cast<CylinderCollider*>(item.get())->id);
+                break;
+            case ShapeType::CAPSULE:
+                name = "Capsule " + std::to_string(static_cast<CapsuleCollider*>(item.get())->id);
+                break;
+            case ShapeType::CONE:
+                name = "Cone " + std::to_string(static_cast<ConeCollider*>(item.get())->id);
+                break;
+            default:
+                name = "Unkown";
+                break;
+                // Add more cases for other shape types if needed
             }
-
-            for (size_t i = 0; i < boxColliders.size(); i++) {
-                auto& box = boxColliders[i];
-                itemIndex++;
-
-                box.Name = "Box";
-                std::string _name = box.Name + std::to_string(i + 1);
-                box.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), box.IsSelected)) { 
-                    current_index = itemIndex;
-                }
-                if (box.IsSelected) { 
-                    box.ObjMenu(_name);
-                }
+            item->IsSelected = (selectedItem == itemIndex);
+            if (ImGui::Selectable(name.c_str(), item->IsSelected)) {
+                selectedItem = itemIndex;
             }
-
-            for (int n = 0; auto & sphere : sphereColliders)
-            {             
-                sphere.Name = "Sphere";
-                std::string _name = sphere.Name + std::to_string(n);
-                sphere.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), sphere.IsSelected)) { current_index = itemIndex;}
-                if (sphere.IsSelected) { sphere.ObjMenu(_name); }
-                itemIndex++;
-                n++;
+            if (item->IsSelected) {
+                // Call the item menu function for the selected object
+                item->ObjMenu(name);
             }
+            itemIndex++;
+            // ... Use the 'name' string to display the object in ImGui ...
 
-            for (int n = 0; auto & cylinder : cylinderColliders)
-            {                        
-                cylinder.Name = "Cylinder";
-                std::string _name = cylinder.Name + std::to_string(n);
-                cylinder.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), cylinder.IsSelected)) { current_index = itemIndex; }
-                if (cylinder.IsSelected) { cylinder.ObjMenu(_name);}
-                itemIndex++;   
-                n++;
-            }
-
-            for (int n = 0; auto & capsule : capsuleColliders)
-            {        
-                capsule.Name = "Capsule";
-                std::string _name = capsule.Name + std::to_string(n);
-                capsule.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), capsule.IsSelected)) { current_index = itemIndex; }
-                if (capsule.IsSelected) { capsule.ObjMenu(_name); }
-                itemIndex++;
-                n++;
-            }
-
-            for (int n = 0; auto & cone : coneColliders)
-            {                
-                cone.Name = "Cone";
-                std::string _name = cone.Name + std::to_string(n);
-                cone.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), cone.IsSelected)) { current_index = itemIndex;}
-                if (cone.IsSelected) { cone.ObjMenu(_name); }
-                itemIndex++;
-                n++;
-            }
-            for (size_t i = 0; i < grassBlocks.size(); i++) {
-                auto& grassBlock = grassBlocks[i];
-                itemIndex++;
-
-                grassBlock.Name = "Grass Block";
-                std::string _name = grassBlock.Name + std::to_string(i + 1);
-                grassBlock.IsSelected = (current_index == itemIndex);
-                if (ImGui::Selectable(_name.c_str(), grassBlock.IsSelected)) { current_index = itemIndex; }
-                if (grassBlock.IsSelected) { 
-                    grassBlock.ObjMenu(_name); 
-                }
-            }
+            
         }
         ImGui::EndListBox();
+        // After the ImGui::EndListBox() line
+        
     }
     ImGui::End();
 
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-bool IsMouseHoveringOverWindow(const char* window_name)
-{
-    // Get the window by name
-    ImGui::SetNextWindowFocus();
-    if (ImGui::Begin(window_name, nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoInputs))
-    {
-        ImGui::End();
-        return false; // If the window is not found, the mouse is not hovering over it
-    }
-
-    // Check if the mouse is hovering over the current window
-    bool is_hovered = ImGui::IsWindowHovered();
-
-    ImGui::End();
-
-    return is_hovered;
-}
-
-bool ListFiles(const std::string& path, std::vector<std::string>& files, std::vector<std::string>& directories) {
-    DIR* dir;
-    struct dirent* ent;
-    struct stat sb;
-
-    if ((dir = opendir(path.c_str())) != nullptr) {
-        while ((ent = readdir(dir)) != nullptr) {
-            std::string entry_name = ent->d_name;
-            std::string full_path = path + "/" + entry_name;
-            if (stat(full_path.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
-                if (entry_name != "." && entry_name != "..") {
-                    directories.push_back(entry_name);
-                }
-            }
-            else {
-                files.push_back(entry_name);
-            }
-        }
-        closedir(dir);
-        return true;
-    }
-    return false;
-}
-
-void FileExplorer(const std::string& title, std::string& current_path) {
-    ImGui::Begin(title.c_str());
-
-    // Change directory by clicking on the folder name
-    if (ImGui::BeginCombo("Current Directory", current_path.c_str())) {
-        std::vector<std::string> directories;
-        ListFiles(current_path, std::vector<std::string>(), directories);
-        for (const std::string& dir : directories) {
-            if (ImGui::Selectable(dir.c_str())) {
-                current_path += "/" + dir;
-            }
-        }
-        ImGui::EndCombo();
-    }
-
-    // List files and directories
-    ImGui::Text("Files:");
-    ImGui::Separator();
-    if (ImGui::Button("Go Up")) {
-        if (current_path != ".") {
-            std::filesystem::path parent_path = std::filesystem::path(current_path).parent_path();
-            current_path = parent_path.string();
-        }
-        
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Close")) { show_file_explorer = false; }
-    ImGui::BeginChild("FileList", ImVec2(0, ImGui::GetWindowHeight() * 0.75f), true);
-
-    std::vector<std::string> files, directories;
-    if (ListFiles(current_path, files, directories)) {
-        for (const std::string& dir : directories) {
-            ImGui::Text("[DIR] %s", dir.c_str());
-        }
-        for (const std::string& file : files) {
-            ImGui::Text("%s", file.c_str());
-        }
-    }
-
-    ImGui::EndChild();
-    ImGui::End();
 }
 
 

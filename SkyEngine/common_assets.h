@@ -4,17 +4,13 @@
 #include "init_collision.h"
 #include "g_collision.h"
 #include "levels/terrain/Grass Block/grass_block.h"
+#include "scene.h"
 
 glm::mat4 projection;
 glm::mat4 view;
 
 // Colliders
 std::vector<ColliderShape> colliders;
-std::vector<BoxCollider> boxColliders;
-std::vector<SphereCollider> sphereColliders;
-std::vector<CylinderCollider> cylinderColliders;
-std::vector<CapsuleCollider> capsuleColliders;
-std::vector<ConeCollider> coneColliders;
 std::vector<Ceiling> ceilingColliders;
 std::vector<SlopeCollider> slopeColliders;
 std::vector<SlopeCollider> rSlopeColliders;
@@ -22,7 +18,7 @@ CylinderCollider circleFloorColliders[3];
 Floor floorColliders[8];
 
 // Terrain
-std::vector<GrassBlock> grassBlocks;
+std::vector<std::shared_ptr<GrassBlock>> grassBlocks;
 
 
 Shader gridShader;
@@ -50,6 +46,7 @@ Model stoneBlockModel;
 void InitCommonModels()
 {
     // Collider Models
+    for (auto& item : items) { item->InitModel(); }
     boxModel = Model("colliders/box.fbx");
     sphereModel = Model("colliders/sphereCollider.obj");
     floorColliderModel = Model("colliders/floor.obj");
@@ -100,62 +97,12 @@ void UpdateCommonObjects()
 {
     /// COLLIDERS
             /// ---------
-
-    for (auto& cylinderCollider : cylinderColliders) {
-        cylinderCollider._dynamicsWorld = dynamicsWorld;
-        cylinderCollider.DrawModel(cylinderModel, modelShader);
-        cylinderCollider.UpdateRigidBody();
-    }
-
+    for (auto& item : items) { item->UpdateObject(item->model, modelShader, dynamicsWorld); }
     for (auto& slopeCollider : slopeColliders) { slopeCollider.DrawModel(slopeColliderModel, modelShader); }
     for (auto& rSlopeCollider : rSlopeColliders) { rSlopeCollider.DrawModel(rSlopeColliderModel, modelShader); }
-    for (auto& capsuleCollider : capsuleColliders) {
-        if (!capsuleCollider.Destroyed)
-        {
-            capsuleCollider._dynamicsWorld = dynamicsWorld;
-            capsuleCollider.DrawModel(capsuleModel, modelShader);
-            capsuleCollider.UpdateRigidBody();
-        }
-
-    }
-    for (auto& circleFloorCollider : circleFloorColliders) {
-        if (!circleFloorCollider.Destroyed)
-        {
-            circleFloorCollider._dynamicsWorld = dynamicsWorld;
-            circleFloorCollider.DrawModel(cylinderModel, modelShader);
-            circleFloorCollider.UpdateRigidBody();
-        }
-    }
-    for (int i = 0; auto& boxCollider : boxColliders) {
-        boxCollider._dynamicsWorld = dynamicsWorld;
-        boxCollider.DrawModel(boxModel, modelShader);
-        boxCollider.UpdateRigidBody();
-    }
-    for (auto& sphereCollider : sphereColliders) {
-            sphereCollider._dynamicsWorld = dynamicsWorld;
-            sphereCollider.DrawModel(sphereModel, modelShader);
-            sphereCollider.UpdateRigidBody();
-    }
-    for (auto& coneCollider : coneColliders) {
-        if (!coneCollider.Destroyed)
-        {
-            coneCollider._dynamicsWorld = dynamicsWorld;
-            coneCollider.DrawModel(coneModel, modelShader);
-            coneCollider.UpdateRigidBody();
-        }
-
-    }
-    for (auto& floorCollider : floorColliders) {
-        floorCollider._dynamicsWorld = dynamicsWorld;
-        floorCollider.DrawModel(boxModel, modelShader);
-
-    }
-
-    for (auto& grassBlock : grassBlocks) {
-        grassBlock._dynamicsWorld = dynamicsWorld;
-        grassBlock.DrawModel(grassBlockModel, diffuseShader);
-        grassBlock.UpdateRigidBody();
-    }
+    for (auto& circleFloorCollider : circleFloorColliders) { circleFloorCollider.UpdateObject(circleFloorColliderModel, modelShader, dynamicsWorld); }
+    for (auto& floorCollider : floorColliders) { floorCollider.UpdateObject(boxModel, modelShader, dynamicsWorld); }
+    for (auto& grassBlock : grassBlocks) { grassBlock->UpdateObject(grassBlockModel, diffuseShader, dynamicsWorld); }
 }
 #endif // !COMMON_ASSETS
 

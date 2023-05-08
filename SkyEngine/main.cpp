@@ -168,7 +168,7 @@ int main()
     collisionCallback.BulletInstanceDispatch();
 
     player = new Player(glm::vec3(-41.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f), playerIdleModel);
-    items.push_back(Player(player->Position, player->Size, player->Velocity, player->Rotation, player->model));
+    items.push_back(std::make_shared<Player>(player->Position, player->Size, player->Velocity, player->Rotation, player->model));
     ///////////////////////////////////////////////////////////
     ///                   FLOOR COLLIDERS                   ///
     ///////////////////////////////////////////////////////////
@@ -608,15 +608,6 @@ void DoCollisions()
         }
     }
 
-
-
-    for (auto& bCollider : boxColliders)
-    {
-        if (AABB(*player , bCollider))
-        {
-            player->Velocity = -player->Velocity;
-        }
-    }
     
     
     for (auto& circleFloorCollider : circleFloorColliders)

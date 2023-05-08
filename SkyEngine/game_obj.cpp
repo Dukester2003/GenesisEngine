@@ -52,16 +52,19 @@ GameObject::GameObject()
     collisionShape = NULL;
 }
 
-GameObject::~GameObject() {
-    
-}
 
 void GameObject::DrawModel(Model modelRender, Shader modelShader)
 {
 	modelRender.Draw(modelShader, this->Position, this->Size, this->Rotation, this->model);
 }
 
-void GameObject::ObjMenu(std::string name)
+void GameObject::UpdateObject(Model model, Shader shader, btDynamicsWorld* dynamicsWorld)
+{
+    _dynamicsWorld = dynamicsWorld;
+    DrawModel(model, shader);
+    UpdateRigidBody();
+}
+void GameObject::ObjMenu(string name)
 {
 
     ImGui::SetItemDefaultFocus();
@@ -71,7 +74,7 @@ void GameObject::ObjMenu(std::string name)
 
     if (ImGui::BeginChild("Child Window", ImVec2(600, 200), false))
     {
-        rigidBodyEnabled = rigidBody->getActivationState() != DISABLE_SIMULATION;
+        if (rigidBody) { rigidBodyEnabled = rigidBody->getActivationState() != DISABLE_SIMULATION; }
         if (ImGui::Checkbox("Rigidbody Enabled?", &rigidBodyEnabled))
         {
             setRigidBodyEnabled(rigidBodyEnabled);
@@ -79,9 +82,14 @@ void GameObject::ObjMenu(std::string name)
         btScalar newMass = massValue;
 
 
-        btTransform currentTransform = rigidBody->getWorldTransform();
+        btTransform currentTransform;
 
-        glm::vec3 currentPosition = bulletToGlm(currentTransform.getOrigin());
+        glm::vec3 currentPosition;
+
+        if (rigidBody != nullptr) {
+            currentTransform = rigidBody->getWorldTransform();
+            currentPosition = bulletToGlm(currentTransform.getOrigin());
+        }
 
         if (ImGui::DragFloat3("Object Pos", (float*)&currentPosition, .5f)) {
             // Update the object's position
