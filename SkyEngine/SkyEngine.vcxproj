@@ -152,10 +152,11 @@
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="levels\terrain\Grass Block\grass_block.cpp" />
+    <ClCompile Include="levels\terrain\Grass Block\blocks.cpp" />
     <ClCompile Include="lvl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="scene.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="whomp.cpp" />
   </ItemGroup>
@@ -185,7 +186,7 @@
     <ClInclude Include="g_mesh.h" />
     <ClInclude Include="g_model.h" />
     <ClInclude Include="g_shader.h" />
-    <ClInclude Include="levels\terrain\Grass Block\grass_block.h" />
+    <ClInclude Include="levels\terrain\Grass Block\blocks.h" />
     <ClInclude Include="lvl.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="obj_renderer.h" />

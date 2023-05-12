@@ -2,8 +2,8 @@
 #define PLAYER_H
 
 #include "game_obj.h"
-
-
+#include "g_animation.h"
+#include "g_animator.h"
 
 struct JumpActions
 {
@@ -28,7 +28,7 @@ class Player : public GameObject
 {
 	public:
 		Player();
-		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objmodel);
+		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel);
 		Player(btDiscreteDynamicsWorld* dynamicsWorld, const glm::vec3& position);
 		float timeAfterSpacebar;
 		float timeAfterfirstJump;
@@ -54,6 +54,7 @@ class Player : public GameObject
 
 	public:	
 		void createCollisionShape() override { /* Do nothing */ };
+		std::shared_ptr<GameObject> clone() const override { return NULL; };
 		void MoveForward(float deltaTime);
 		void MoveBackward(float deltaTime);
 		glm::quat GetForwardDirection();

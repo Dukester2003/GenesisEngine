@@ -6,7 +6,7 @@
 class Enemy : public GameObject 
 {
 	public:
-		Enemy(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objmodel);
+		Enemy(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel);
 		Enemy();
 };
 

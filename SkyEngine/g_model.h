@@ -56,7 +56,7 @@ public:
     {
         loadModel(path);
     }
-    Model()
+    Model() : gammaCorrection(true)
     {
 
     }

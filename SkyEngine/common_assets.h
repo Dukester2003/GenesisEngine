@@ -3,7 +3,7 @@
 
 #include "init_collision.h"
 #include "g_collision.h"
-#include "levels/terrain/Grass Block/grass_block.h"
+#include "levels/terrain/Grass Block/blocks.h"
 #include "scene.h"
 
 glm::mat4 projection;
@@ -47,7 +47,7 @@ void InitCommonModels()
 {
     // Collider Models
     for (auto& item : items) { item->InitModel(); }
-    boxModel = Model("colliders/box.fbx");
+    boxModel = Model("colliders/boxCollider.obj");
     sphereModel = Model("colliders/sphereCollider.obj");
     floorColliderModel = Model("colliders/floor.obj");
     circleFloorColliderModel = Model("colliders/CircleFloor.obj");
@@ -100,9 +100,8 @@ void UpdateCommonObjects()
     for (auto& item : items) { item->UpdateObject(item->model, modelShader, dynamicsWorld); }
     for (auto& slopeCollider : slopeColliders) { slopeCollider.DrawModel(slopeColliderModel, modelShader); }
     for (auto& rSlopeCollider : rSlopeColliders) { rSlopeCollider.DrawModel(rSlopeColliderModel, modelShader); }
-    for (auto& circleFloorCollider : circleFloorColliders) { circleFloorCollider.UpdateObject(circleFloorColliderModel, modelShader, dynamicsWorld); }
-    for (auto& floorCollider : floorColliders) { floorCollider.UpdateObject(boxModel, modelShader, dynamicsWorld); }
-    for (auto& grassBlock : grassBlocks) { grassBlock->UpdateObject(grassBlockModel, diffuseShader, dynamicsWorld); }
+    for (auto& circleFloorCollider : circleFloorColliders) { circleFloorCollider.UpdateObject(cylinderModel, modelShader, dynamicsWorld); }
+    for (auto& floorCollider : floorColliders) { floorCollider.UpdateObject(boxModel,modelShader, dynamicsWorld); }
 }
 #endif // !COMMON_ASSETS
 

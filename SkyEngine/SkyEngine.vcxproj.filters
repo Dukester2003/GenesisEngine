@@ -31,6 +31,15 @@
     <Filter Include="Header Files\scene">
       <UniqueIdentifier>{650ea3f5-5809-46d7-8fd8-6da585cdb64c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\physics">
+      <UniqueIdentifier>{57275145-7156-476c-8631-0e068e963d3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene">
+      <UniqueIdentifier>{e1525056-5ebb-403e-bd13-3f30adf088de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{7bd856f0-82c2-4596-b124-fe8f89c35379}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bob-omb.cpp">
@@ -39,13 +48,7 @@
     <ClCompile Include="enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="g_collision.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="game_obj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="goomba.cpp">
@@ -93,8 +96,17 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="levels\terrain\Grass Block\grass_block.cpp">
+    <ClCompile Include="levels\terrain\Grass Block\blocks.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="game_obj.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="g_collision.cpp">
+      <Filter>Source Files\common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,16 +122,10 @@
     <ClInclude Include="g_camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="g_collision.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="g_cubemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game_obj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="glfw_setup.h">
@@ -140,13 +146,7 @@
     <ClInclude Include="resource_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="init_collision.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="animFlag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="common_assets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bob-omb.h">
@@ -197,8 +197,20 @@
     <ClInclude Include="player.h">
       <Filter>Header Files\actors</Filter>
     </ClInclude>
-    <ClInclude Include="levels\terrain\Grass Block\grass_block.h">
+    <ClInclude Include="levels\terrain\Grass Block\blocks.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common_assets.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="g_collision.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="init_collision.h">
+      <Filter>Header Files\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="game_obj.h">
+      <Filter>Header Files\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

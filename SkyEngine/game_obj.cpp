@@ -37,6 +37,7 @@ void GameObject::ScaleUniform(const char* label, float* values, float speed = 1.
     ImGui::PopID();
 }
 
+// Quaternion Constructers
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel) 
 : Position(pos), Size(size), Velocity(velocity), Rotation(rotation), Destroyed(false), model(objModel) 
 {
@@ -44,6 +45,51 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::q
     rigidBody = NULL;
     collisionShape = NULL;
 }
+
+GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation)
+    : Position(pos), Size(size), Velocity(velocity), Rotation(rotation), Destroyed(false)
+{
+    _dynamicsWorld = NULL;
+    rigidBody = NULL;
+    collisionShape = NULL;
+}
+
+GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
+    : Position(pos), Size(size), Velocity(0.0f), Rotation(rotation), Destroyed(false)
+{
+    _dynamicsWorld = NULL;
+    rigidBody = NULL;
+    collisionShape = NULL;
+}
+
+// Euler Constructers
+GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation, Model objModel)
+    : Position(pos), Size(size), Velocity(velocity), Rotation(eulerRotation), Destroyed(false), model(objModel)
+{
+    Rotation = glm::quat(eulerRotation);
+    _dynamicsWorld = NULL;
+    rigidBody = NULL;
+    collisionShape = NULL;
+}
+
+GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation)
+    : Position(pos), Size(size), Velocity(velocity), Rotation(eulerRotation), Destroyed(false)
+{
+    Rotation = glm::quat(eulerRotation);
+    _dynamicsWorld = NULL;
+    rigidBody = NULL;
+    collisionShape = NULL;
+}
+
+GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation)
+    : Position(pos), Size(size), Velocity(0.0f), Rotation(eulerRotation), Destroyed(false)
+{
+    Rotation = glm::quat(eulerRotation);
+    _dynamicsWorld = NULL;
+    rigidBody = NULL;
+    collisionShape = NULL;
+}
+
 GameObject::GameObject() 
 : Position(0.0f), Size(1.0f), Velocity(0.0f), Rotation(glm::identity<glm::quat>()), Destroyed(false), model() 
 {
@@ -66,7 +112,6 @@ void GameObject::UpdateObject(Model model, Shader shader, btDynamicsWorld* dynam
 }
 void GameObject::ObjMenu(string name)
 {
-
     ImGui::SetItemDefaultFocus();
     // Bring this menu up if object is selected
 
@@ -133,11 +178,7 @@ void GameObject::ObjMenu(string name)
         }
 
         if(ImGui::DragFloat("Object Mass", &massValue)) { setMass(massValue); }
-        if (ImGui::Button("Copy"))
-        {
-            canPaste = true;
-            copy();
-        }
+        
         if (ImGui::Button("Delete"))
         {
             Destroyed = true;
@@ -215,7 +256,7 @@ void GameObject::copy() {
     _copy->copyPosition = getPosition();
     _copy->copyRotation = getRotation();
     _copy->copyVelocity = getVelocity();
-    _copy->copySize = getSize();
+    _copy->copySize = getScale();
     _copy->copyMass = getMass();
     _copy->copyFriction = getFrictionValue();
     _copy->copyInertia = getLocalIntertia();

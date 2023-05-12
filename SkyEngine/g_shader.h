@@ -99,7 +99,7 @@ public:
             glDeleteShader(geometry);
 
     }
-    Shader()
+    Shader() : ID(0)
     {
 
     }
