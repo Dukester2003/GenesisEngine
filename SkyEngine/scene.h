@@ -37,14 +37,20 @@ inline Copy* _copy = new Copy;
 
 class Scene
 {   
-    public:
-    // Function to save the current scene
-        void SaveScene(const std::string& filename, const std::vector<std::shared_ptr<GameObject>>& items);
 
-    // Function to load a scene
-		void LoadScene(const std::string& filename, std::vector<std::shared_ptr<GameObject>>& items);
-    
-};
+public:
+	Scene();
+	~Scene();
+	// Function to save the current scene
+    void SaveScene(const std::string& filename, const std::vector<std::shared_ptr<GameObject>>& items);
+
+	// Function to load a scene
+	void LoadScene(const std::string& filename, std::vector<std::shared_ptr<GameObject>>& items);
+
+
+	// Function to get the files to load in the directory
+	std::vector<std::string> getFilesInDirectory(const std::string& directory); 
+}; 
 
 
 
