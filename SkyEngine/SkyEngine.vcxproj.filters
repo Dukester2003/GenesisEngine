@@ -212,6 +212,9 @@
     <ClInclude Include="game_obj.h">
       <Filter>Header Files\common</Filter>
     </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="skybox.vs">

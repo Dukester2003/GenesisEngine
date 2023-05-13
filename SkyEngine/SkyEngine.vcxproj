@@ -194,6 +194,7 @@
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="init_collision.h" />
+    <ClInclude Include="types.h" />
     <ClInclude Include="whomp.h" />
   </ItemGroup>
   <ItemGroup>

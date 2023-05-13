@@ -1,6 +1,16 @@
 #include "scene.h"
 #include "g_collision.h"
 
+Scene::Scene()
+{
+    // constructor implementation
+}
+
+Scene::~Scene()
+{
+    // constructor implementation
+}
+
 void Scene::SaveScene(const std::string& filename, const std::vector<std::shared_ptr<GameObject>>& items) {
     json j;
 
@@ -15,16 +25,34 @@ void Scene::SaveScene(const std::string& filename, const std::vector<std::shared
 
         j.push_back(itemJson);
     }
+    std::string path = "..\\..\\SkyEngine\\SkyEngine\\saves\\" + std::string(filename);
+    std::ofstream o(path);
 
-    std::ofstream o(filename);
+    if (!o) {
+        // Handle the error here.
+        // For example, print an error message and exit the function.
+        std::cerr << "Error: Could not open file for writing: " << path << '\n';
+        return;
+    }
+
     o << std::setw(4) << j << std::endl;
 }
 
 // Function to load a scene
 void Scene::LoadScene(const std::string& filename, std::vector<std::shared_ptr<GameObject>>& items) {
-    std::ifstream i(filename);
+    std::string path = "..\\..\\SkyEngine\\SkyEngine\\saves\\" + std::string(filename);
+    std::ifstream i(path);
     json j;
     i >> j;
+
+    if (!i) {
+        // Handle the error here.
+        // For example, print an error message and exit the function.
+        std::cerr << "Error: Could not open file for reading: " << path << '\n';
+        return;
+    }
+
+    
 
     items.clear();
 
@@ -37,6 +65,25 @@ void Scene::LoadScene(const std::string& filename, std::vector<std::shared_ptr<G
         if (type == "Box") {
             items.push_back(std::make_shared<BoxCollider>(position, scale, rotation));
         }
+        if (type == "Sphere") {
+            items.push_back(std::make_shared<SphereCollider>(position, scale, rotation));
+        }
+        if (type == "Cylinder") {
+            items.push_back(std::make_shared<CylinderCollider>(position, scale, rotation));
+        }
+        if (type == "Capsule") {
+            items.push_back(std::make_shared<CapsuleCollider>(position, scale, rotation));
+        }
+        if (type == "Cone") {
+            items.push_back(std::make_shared<ConeCollider>(position, scale, rotation));
+        }
         // add other types as necessary
     }
+}
+std::vector<std::string> Scene::getFilesInDirectory(const std::string& directory) {
+    std::vector<std::string> files;
+    for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+        files.push_back(entry.path().string());
+    }
+    return files;
 }
