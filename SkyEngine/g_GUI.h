@@ -16,14 +16,22 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <filesystem> // Include this for std::filesystem::path
+
+
 ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove + ImGuiWindowFlags_NoCollapse; // by ex
 ImGuiWindowFlags sceneFlags = ImGuiWindowFlags_NoMove + ImGuiWindowFlags_NoCollapse + ImGuiWindowFlags_NoScrollWithMouse;
 btVector3 _btPosition = btVector3(0.0f, 0.0f, 0.0f);
 bool pushedBack;
 bool show_file_explorer;
+static bool showSaveWindow = false;
+static bool showLoadWindow = false;
 std::string current_path = "."; // Set an initial path, e.g., the current working directory
 void FileExplorer(const std::string& title, std::string& current_path);
+void ShowSaveWindow();
+void ShowLoadWindow();
 bool isSceneHovered = false; 
+static char filename[64] = "scene.json";
+Scene scene;
 void imguiSetup(GLFWwindow* window)
 {
     // Setup Dear ImGui context
@@ -134,26 +142,34 @@ void AddItem(std::shared_ptr<GameObject> item, btDynamicsWorld* dynamicsWorld) {
 }
 
 inline void GUI_INIT()
-{
-
-
-
+{   
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
+            
             if (ImGui::MenuItem("Open..", "Ctrl+O"))
             {
                 // Set a flag to show the file explorer
                 show_file_explorer = true;
             }
+
             if (ImGui::MenuItem("Save", "Ctrl+S"))
             {
-
+                showSaveWindow = true;   
             }
+
+            if (ImGui::MenuItem("Load", "Ctrl+O"))
+            {
+                showLoadWindow = true;
+            }
+
             if (ImGui::MenuItem("Close", "Ctrl+W")) { /*menuActive = false; */ }
             ImGui::EndMenu();
         }
+
+        if (showSaveWindow) { ShowSaveWindow(); }
+        if (showLoadWindow) { ShowLoadWindow(); }
         if (ImGui::BeginMenu("Edit"))
         {
             if (ImGui::MenuItem("Undo", "Ctrl+Z")) { /* Do Things */ }
@@ -249,21 +265,11 @@ inline void GUI_INIT()
             }
             if (ImGui::Button("Big Goomba"))
             {
-                /*
-                items.push_back(Goomba());
-                bigGoombas.push_back(Goomba(glm::vec3(0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), goombaModel));
-                */
+                
             }
             if (ImGui::Button("Bomb-Omb"))
             {
-                /*
-                bobOmbs.push_back(BobOmb(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f, 45.0f, 0.0f), bobOmbModel));
-                items.push_back(BobOmb());
-                for (auto& bobOmb : bobOmbs)
-                {
-
-                }
-                */
+                
             }
             if (ImGui::Button("Boo"))
             {
@@ -275,10 +281,7 @@ inline void GUI_INIT()
             }
             if (ImGui::Button("Goomba"))
             {
-                /*
-                items.push_back(Goomba());
-                goombas.push_back(Goomba(glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f), goombaModel));
-                */
+               
             }
             if (ImGui::Button("Hammer Bro"))
             {
@@ -302,10 +305,7 @@ inline void GUI_INIT()
             }
             if (ImGui::Button("Whomp"))
             {
-                /*
-                items.push_back(Whomp());
-                whomps.push_back(Whomp(glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f), whompModel));
-                */
+                
             }
             ImGui::TreePop();
         }
@@ -443,5 +443,54 @@ inline void GUI_INIT()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void ShowSaveWindow() {
+    if (ImGui::Begin("Name File"))  // The window will close when showSaveWindow is set to false
+    {
+        if (ImGui::InputText("Filename", filename, IM_ARRAYSIZE(filename), ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            // This block is executed when the text in the input box changes.
+            // Check if filename is not empty before saving the scene.
+            if (strlen(filename) > 0)
+            {
+                scene.SaveScene(filename, items);
+                showSaveWindow = false; // Close the dialog when the scene is saved.
+            }
+            else
+            {
+                // Display an error message or handle the error appropriately
+                std::cerr << "Error: Filename cannot be empty.\n";
+            }
+        }
 
+        if (ImGui::Button("Cancel")) {
+            showSaveWindow = false; // Close the dialog without saving
+        }
+    } ImGui::End();
+}
+
+void ShowLoadWindow()
+{
+    if (ImGui::Begin("Load File"))
+    {
+        if (ImGui::InputText("Filenam", filename, IM_ARRAYSIZE(filename), ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            // This block is executed when the text in the input box changes.
+            // Check if filename is not empty before saving the scene.
+            if (strlen(filename) > 0)
+            {
+                scene.SaveScene(filename, items);
+                showLoadWindow = false; // Close the dialog when the scene is saved.
+            }
+            else
+            {
+                // Display an error message or handle the error appropriately
+                std::cerr << "Error: Filename cannot be empty.\n";
+            }
+        }
+
+        if (ImGui::Button("Cancel")) {
+            showLoadWindow = false; // Close the dialog without saving
+        }
+    } ImGui::End();
+}
 #endif

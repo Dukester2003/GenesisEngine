@@ -25,17 +25,21 @@ class GameObject
 
 	public:
 		// Constructers that uses quaternion roation,
-		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objmodel);
+		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel);
 		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation);
-		GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation);
+		GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model objModel);
+		GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation);		
+
 
 		// Constructers that allows for euler angles, though quaternions are more recommended
 		// eulers should only be used for less computationally expensive tasks, UI design, and very simple rotations.
 		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation, Model objmodel);
 		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation);
-		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation);
+		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation, Model objmodel);
+		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation);	
 
 		GameObject();
+		
 		virtual ~GameObject() = default;
 		ShapeType type;
 		BlockType blockType;
@@ -49,6 +53,8 @@ class GameObject
 		bool rigidBodyEnabled;
 		int objID;
 		bool isDynamic;
+		bool hasVelocity;
+		bool isEuler;
 		// mass of gameObject, 0 mass means the object will be static.
 		btScalar massValue;
 		btVector3 localInertia;
@@ -64,6 +70,7 @@ class GameObject
 		// Getters
 		glm::vec3 getPosition() const { return Position; }
 		glm::quat getRotation() const { return Rotation; }
+		glm::vec3 getEulerRotation() const { return glm::eulerAngles(Rotation); }
 		glm::vec3 getVelocity() const { return Velocity; }
 		glm::vec3 getScale() const { return Size; }
 		ShapeType getType() const { return type; }

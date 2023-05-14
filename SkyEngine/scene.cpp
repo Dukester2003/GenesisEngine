@@ -19,9 +19,12 @@ void Scene::SaveScene(const std::string& filename, const std::vector<std::shared
         itemJson["type"] = item->getType();
         itemJson["position"] = { item->getPosition().x, item->getPosition().y, item->getPosition().z };
         itemJson["scale"] = { item->getScale().x, item->getScale().y, item->getScale().z };
-
+        itemJson["velocity"] = { item->getVelocity().x, item->getVelocity().y, item->getVelocity().z };
         glm::quat rotation = item->getRotation();
         itemJson["rotation"] = { rotation.w, rotation.x, rotation.y, rotation.z };
+        glm::vec3 eulerRotation = item->getEulerRotation();
+        itemJson["eulerRotation"] = { eulerRotation.x, };
+
 
         j.push_back(itemJson);
     }
@@ -60,7 +63,7 @@ void Scene::LoadScene(const std::string& filename, std::vector<std::shared_ptr<G
         glm::vec3 position = glm::vec3(itemJson["position"][0], itemJson["position"][1], itemJson["position"][2]);
         glm::vec3 scale = glm::vec3(itemJson["scale"][0], itemJson["scale"][1], itemJson["scale"][2]);
         glm::quat rotation = glm::quat(itemJson["rotation"][0], itemJson["rotation"][1], itemJson["rotation"][2], itemJson["rotation"][3]);
-
+        glm::vec3 velocity = glm::vec3(itemJson["velocity"][0], itemJson["velocity"][1], itemJson["velocity"][2]);
         std::string type = itemJson["type"];
         if (type == "Box") {
             items.push_back(std::make_shared<BoxCollider>(position, scale, rotation));

@@ -22,7 +22,7 @@ void GameObject::ScaleUniform(const char* label, float* values, float speed = 1.
     float uniform = 0.0f;
     if (ImGui::SliderFloat("Uniform", &uniform, min_value, max_value))
     {
-        for (int i = 0; i < 3; ++i)
+        for (size_t i = 0; i < 3; ++i)
         {
             // Update the object's size and recreate the collision shape
             btVector3 newSize(values[0], values[1], values[2]);
@@ -37,9 +37,12 @@ void GameObject::ScaleUniform(const char* label, float* values, float speed = 1.
     ImGui::PopID();
 }
 
+// For the game objects with vs without the 'Model' argument at the end of the constructor, use the constructer with Model argument if the object model is static, 
+// use the constructer without the Model argument if the object model is dynamic.
+
 // Quaternion Constructers
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel) 
-: Position(pos), Size(size), Velocity(velocity), Rotation(rotation), Destroyed(false), model(objModel) 
+: Position(pos), Size(size), Velocity(velocity), hasVelocity(true) ,Rotation(rotation), Destroyed(false), model(objModel)
 {
     _dynamicsWorld = NULL;
     rigidBody = NULL;
@@ -47,7 +50,15 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::q
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation)
-    : Position(pos), Size(size), Velocity(velocity), Rotation(rotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(rotation), Destroyed(false)
+{
+    _dynamicsWorld = NULL;
+    rigidBody = NULL;
+    collisionShape = NULL;
+}
+
+GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model objModel)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(rotation), Destroyed(false), model(objModel)
 {
     _dynamicsWorld = NULL;
     rigidBody = NULL;
@@ -55,7 +66,7 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::q
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
-    : Position(pos), Size(size), Velocity(0.0f), Rotation(rotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(rotation), Destroyed(false)
 {
     _dynamicsWorld = NULL;
     rigidBody = NULL;
@@ -64,7 +75,7 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
 
 // Euler Constructers
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation, Model objModel)
-    : Position(pos), Size(size), Velocity(velocity), Rotation(eulerRotation), Destroyed(false), model(objModel)
+    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(eulerRotation), Destroyed(false), model(objModel)
 {
     Rotation = glm::quat(eulerRotation);
     _dynamicsWorld = NULL;
@@ -73,7 +84,16 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::v
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation)
-    : Position(pos), Size(size), Velocity(velocity), Rotation(eulerRotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(eulerRotation), Destroyed(false)
+{
+    Rotation = glm::quat(eulerRotation);
+    _dynamicsWorld = NULL;
+    rigidBody = NULL;
+    collisionShape = NULL;
+}
+
+GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation, Model objModel)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(eulerRotation), Destroyed(false)
 {
     Rotation = glm::quat(eulerRotation);
     _dynamicsWorld = NULL;
@@ -82,7 +102,7 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::v
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation)
-    : Position(pos), Size(size), Velocity(0.0f), Rotation(eulerRotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(eulerRotation), Destroyed(false)
 {
     Rotation = glm::quat(eulerRotation);
     _dynamicsWorld = NULL;
@@ -91,13 +111,12 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation)
 }
 
 GameObject::GameObject() 
-: Position(0.0f), Size(1.0f), Velocity(0.0f), Rotation(glm::identity<glm::quat>()), Destroyed(false), model() 
+: Position(0.0f), Size(1.0f), Velocity(0.0f), hasVelocity(false), Rotation(glm::identity<glm::quat>()), Destroyed(false), model() 
 {
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
 }
-
 
 void GameObject::DrawModel(Model modelRender, Shader modelShader)
 {

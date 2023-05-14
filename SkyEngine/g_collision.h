@@ -29,6 +29,8 @@ class ColliderShape : public GameObject
             : GameObject(pos, size, velocity, rotation, objModel) {}
         ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation)
             : GameObject(pos, size, velocity, rotation) {}
+        ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model objModel)
+            : GameObject(pos, size, rotation, objModel) {}
         ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
             : GameObject(pos, size, rotation) {}
         void InitiateRigidBody(btDynamicsWorld* dynamicsWorld)
@@ -109,6 +111,10 @@ public:
         type = ShapeType::BOX;
         id = next_id++;
     }
+    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        type = ShapeType::BOX;
+        id = next_id++;
+    }
 
     virtual std::shared_ptr<GameObject> clone() const override {
         auto clonedBox = std::make_shared<BoxCollider>(*this);
@@ -148,6 +154,10 @@ public:
         type = ShapeType::SPHERE;
         id = next_id++;
     }
+    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        type = ShapeType::SPHERE;
+        id = next_id++;
+    }
 };
 
 class CylinderCollider : public ColliderShape
@@ -169,6 +179,18 @@ public:
 
     CylinderCollider() : ColliderShape() {}
     CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        type = ShapeType::CYLINDER;
+        id = next_id++;
+    }
+    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        type = ShapeType::CYLINDER;
+        id = next_id++;
+    }
+    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        type = ShapeType::CYLINDER;
+        id = next_id++;
+    }
+    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
         type = ShapeType::CYLINDER;
         id = next_id++;
     }
@@ -198,6 +220,18 @@ public:
         type = ShapeType::CAPSULE;
         id = next_id++;
     }
+    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        type = ShapeType::CAPSULE;
+        id = next_id++;
+    }
+    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        type = ShapeType::CAPSULE;
+        id = next_id++;
+    }
+    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        type = ShapeType::CAPSULE;
+        id = next_id++;
+    }
 };
 
 class ConeCollider : public ColliderShape
@@ -219,6 +253,18 @@ public:
 
     ConeCollider() : ColliderShape() {}
     ConeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        type = ShapeType::CONE;
+        id = next_id++;
+    }
+    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        type = ShapeType::CONE;
+        id = next_id++;
+    }
+    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        type = ShapeType::CONE;
+        id = next_id++;
+    }
+    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
         type = ShapeType::CONE;
         id = next_id++;
     }
