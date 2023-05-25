@@ -10,10 +10,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <btBulletDynamicsCommon.h>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #include "g_shader.h"
 
 #include <string>
 #include <vector>
+#include <json.hpp>
 using namespace std;
 
 #define MAX_BONE_INFLUENCE 4
@@ -22,6 +28,16 @@ extern btTriangleMesh* bulletMesh;
 extern btBvhTriangleMeshShape* colliderShape;
 
 struct Vertex {
+    Vertex() :
+    Position(0.0f), 
+    Normal(0.0f),
+    TexCoords(0.0f),
+    Tangent(0.0f),
+    AlphaColor(0.0f),
+    Bitangent(0.0f),
+    m_BoneIDs(),
+    m_Weights()
+    {}
     // position
     glm::vec3 Position;
     // normal
@@ -32,10 +48,17 @@ struct Vertex {
     glm::vec3 Tangent;
     // bitangent
     glm::vec3 Bitangent;
+    // color
+    glm::vec4 AlphaColor;
     //bone indexes which will influence this vertex
     int m_BoneIDs[MAX_BONE_INFLUENCE];
     //weights from each bone
     float m_Weights[MAX_BONE_INFLUENCE];
+
+    glm::vec3 getPosition() const { return Position; }
+    glm::vec3 getNormal() const { return Normal; }
+    glm::vec3 getTangent() const { return Tangent; }
+    glm::vec3 getBitangent() const { return Bitangent; }
 };
 
 struct Texture {
@@ -165,6 +188,10 @@ private:
         glEnableVertexAttribArray(6);
         glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
         glBindVertexArray(0);
+
+        glEnableVertexAttribArray(7);
+        glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, AlphaColor));
+
     }
 };
 #endif

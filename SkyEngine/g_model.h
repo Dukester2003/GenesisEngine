@@ -5,9 +5,7 @@
 
 #include "math.h"
 #include <stb_image.h>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+
 
 #include "g_mesh.h"
 #include "g_shader.h"
@@ -26,8 +24,6 @@
 
 
 using namespace std;
-
-inline unsigned int TextureFromFile(const char* path, const string& directory, bool gamma = false);
 
 struct Transform
 {
@@ -62,7 +58,7 @@ public:
     }
 
     // draws the model, and thus all its meshes
-    void Draw(Shader& shader, glm::vec3 position, glm::vec3 size, glm::quat rotation, Model model)
+    void Draw(Shader& shader, glm::vec3 position, glm::vec3 size, glm::quat rotation)
     {
         shader.use();
         glm::mat4 modelMat = glm::mat4(1.0f);
@@ -175,6 +171,16 @@ private:
         }
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
+        // Get the diffuse color from the material
+        aiColor4D diffuse;
+        if (AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse)) {
+            // Use 'diffuse' to set a color value in your Vertex objects
+            // For example:
+            for (auto& vertex : vertices) {
+                vertex.AlphaColor = glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+            }
+        }
+
         vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
         vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
@@ -183,6 +189,7 @@ private:
         textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
         std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
         textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+
 
         ExtractBoneWeightForVertices(vertices, mesh, scene);
 

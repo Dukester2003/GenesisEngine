@@ -18,9 +18,6 @@
 #include "g_collision.h"
 #include "game_obj.h"
 #include "enemy.h"
-#include "bob-omb.h"
-#include "goomba.h"
-#include "whomp.h"
 #include "engine.h"
 #include "scene.h"
 #include "g_cubemap.h"
@@ -32,8 +29,6 @@
 
 using namespace irrklang;
 bool gameWindowCreated;
-
-bool isPlaying;
 bool jumpKeyHeld;
 bool isJumping;
 
@@ -73,13 +68,6 @@ glm::vec3 gravity = glm::vec3(0.0f, -0.1f, 0.0f);
 float gravityAccel;
 
 
-
-
-bool anotherPopUp;
-bool menuActive;
-bool showCollisionBox;
-
-
 // grid slices
 Grid grid;
 
@@ -90,9 +78,6 @@ Grid grid;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-
-// Euler location
-glm::vec3 eulerLocation;
 
 
 
@@ -156,7 +141,7 @@ int main()
 
     // Level Models
     // ------------
-    Model lvl_1_model("levels/stoneBurg/Stoneburg.obj");
+    Model lvl_1_model("levels/warehouse/foundry.obj");
 
     // Level Element Models/Animation
     // ------------
@@ -167,30 +152,14 @@ int main()
     cubeMap.BuildCubeBoxShaders();
     collisionCallback.BulletInstanceDispatch();
 
-    player = new Player(glm::vec3(-41.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f), playerIdleModel);
-    items.push_back(std::make_shared<Player>(player->Position, player->Size, player->Velocity, player->Rotation, player->model));
+    player = new Player(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f), playerIdleModel);
     ///////////////////////////////////////////////////////////
     ///                   FLOOR COLLIDERS                   ///
     ///////////////////////////////////////////////////////////
-    floorColliders[0] = Floor(glm::vec3(-7.0905f, 9.6f, -25.8f), glm::vec3(5.0f, .1f, 5.4f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
-    floorColliders[1] = Floor(glm::vec3(-21.0f, 9.6f, -10.0f), glm::vec3(10.0f, .1f, 10.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
-    floorColliders[2] = Floor(glm::vec3(-5.38f, 19.45f, -8.5f), glm::vec3(3.5f, 0.1f, 3.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
-    floorColliders[3] = Floor(glm::vec3(-1.8773f, 19.45f, -8.5f), glm::vec3(3.5f, 0.1f, 3.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
-    floorColliders[4] = Floor(glm::vec3(1.624f, 19.45f, -8.5f), glm::vec3(3.5f, 0.1f, 3.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
-    floorColliders[5] = Floor(glm::vec3(6.0f, 19.45f, -7.0f), glm::vec3(5.3f, 0.1f, 5.93f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
-    circleFloorColliders[0] = CylinderCollider(glm::vec3(0.0f, -0.1f, 0.0f), glm::vec3(100.0f, 0.1f, 100.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
-    circleFloorColliders[0].massValue = 0.0f;
-    circleFloorColliders[0].InitiateRigidBody(dynamicsWorld);
-    circleFloorColliders[1] = CylinderCollider(glm::vec3(0.0f, 10.1f, 0.0f), glm::vec3(50.0f, 0.1, 50.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
-    circleFloorColliders[1].massValue = 0.0f;
-    circleFloorColliders[1].InitiateRigidBody(dynamicsWorld);
-
-    //////////////////////////////////////////////////
-    ///             SLOPE COLLIDERS                ///
-    ////////////////////////////////////////////////// 
-
-    rSlopeColliders.push_back(SlopeCollider(glm::vec3(2.2f, 4.9f, -25.8f), glm::vec3(13.7f, 10.0f, 5.4f), glm::vec3(0), glm::vec3(180.0f), rSlopeColliderModel, EAST));
-    rSlopeColliders.push_back(SlopeCollider(glm::vec3(-13.86f, 14.8f, -8.5f), glm::vec3(13.5f, 9.61f, 3.0f), glm::vec3(0), glm::vec3(0.0f), rSlopeColliderModel, WEST));
+    auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, -0.5f, 48.8), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
+    FloorCollider->InitiateRigidBody(dynamicsWorld);
+    FloorCollider->massValue = 0.0f;
+    floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,48.8), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
 
     grid.CreateGrid();
     cubeMap.BuildCubeBox();  
@@ -267,11 +236,8 @@ int main()
             
 
             UpdateCommonObjects();
-            
-            diffuseShader.use();
-            diffuseShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-            diffuseShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-            diffuseShader.setVec3("lightPos", glm::vec3(0.0f,4.0f,0.0f));
+            UpdateLight();
+
             // Render Grid
             {
                 // Grid Shader

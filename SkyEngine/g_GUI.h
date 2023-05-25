@@ -22,6 +22,7 @@ ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove + ImGuiWindowFlags_NoCollapse; 
 ImGuiWindowFlags sceneFlags = ImGuiWindowFlags_NoMove + ImGuiWindowFlags_NoCollapse + ImGuiWindowFlags_NoScrollWithMouse;
 btVector3 _btPosition = btVector3(0.0f, 0.0f, 0.0f);
 bool pushedBack;
+bool isPlaying = false;
 bool show_file_explorer;
 static bool showSaveWindow = false;
 static bool showLoadWindow = false;
@@ -191,39 +192,63 @@ inline void GUI_INIT()
         }
         if (ImGui::BeginMenu("Add"))
         {
-            if (ImGui::MenuItem("Box"))
+            if (ImGui::BeginMenu("Shape"))
             {
-                auto boxCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);               
-                AddItem(boxCollider, dynamicsWorld);
-                items.push_back(boxCollider);
-            }
+                if (ImGui::MenuItem("Box"))
+                {
+                    auto boxCollider = std::make_shared<BoxCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);               
+                    AddItem(boxCollider, dynamicsWorld);
+                    items.push_back(boxCollider);
+                }
 
-            if (ImGui::MenuItem("Sphere"))
-            {
-                auto sphereCollider = std::make_shared<SphereCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), sphereModel);
-                AddItem(sphereCollider, dynamicsWorld);
-                items.push_back(sphereCollider);
-            }
+                if (ImGui::MenuItem("Sphere"))
+                {
+                    auto sphereCollider = std::make_shared<SphereCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), sphereModel);
+                    AddItem(sphereCollider, dynamicsWorld);
+                    items.push_back(sphereCollider);
+                }
 
-            if (ImGui::MenuItem("Cylinder"))
-            {
-                auto cylinderCollider = std::make_shared<CylinderCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
-                AddItem(cylinderCollider, dynamicsWorld);
-                items.push_back(cylinderCollider);
-            }
+                if (ImGui::MenuItem("Cylinder"))
+                {
+                    auto cylinderCollider = std::make_shared<CylinderCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
+                    AddItem(cylinderCollider, dynamicsWorld);
+                    items.push_back(cylinderCollider);
+                }
 
-            if (ImGui::MenuItem("Capsule"))
-            {
-                auto capsuleCollider = std::make_shared<CapsuleCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), capsuleModel);
-                AddItem(capsuleCollider, dynamicsWorld);
-                items.push_back(capsuleCollider);
-            }
+                if (ImGui::MenuItem("Capsule"))
+                {
+                    auto capsuleCollider = std::make_shared<CapsuleCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), capsuleModel);
+                    AddItem(capsuleCollider, dynamicsWorld);
+                    items.push_back(capsuleCollider);
+                }
 
-            if (ImGui::MenuItem("Cone"))
+                if (ImGui::MenuItem("Cone"))
+                {
+                    auto coneCollider = std::make_shared<ConeCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f) , coneModel);
+                    AddItem(coneCollider, dynamicsWorld);
+                    items.push_back(coneCollider);
+                }
+
+                if (ImGui::MenuItem("Compound Shape"))
+                {
+                    auto compoundShape = std::make_shared<CompoundShape>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+                    AddItem(compoundShape, dynamicsWorld);
+                    items.push_back(compoundShape);
+                }
+                if (ImGui::MenuItem("Monke"))
+                {
+
+                }
+                ImGui::EndMenu();
+            }         
+            if (ImGui::BeginMenu("Light Source"))
             {
-                auto coneCollider = std::make_shared<ConeCollider>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f) , coneModel);
-                AddItem(coneCollider, dynamicsWorld);
-                items.push_back(coneCollider);
+                if (ImGui::MenuItem("Point Light"))
+                {
+                    auto lightSource = std::make_shared<Light>(glm::vec3(spawnPosition));
+                    lights.push_back(lightSource);
+                }             
+                ImGui::EndMenu();
             }
             ImGui::EndMenu();
         }
@@ -324,7 +349,7 @@ inline void GUI_INIT()
         {
             if (ImGui::Button("Grass Block"))
             {
-                auto grassBlock = std::make_shared<GrassBlock>(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), grassBlockModel);
+                auto grassBlock = std::make_shared<GrassBlock>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), grassBlockModel);
                 AddItem(grassBlock, dynamicsWorld);
                 items.push_back(grassBlock);
             }
@@ -350,95 +375,152 @@ inline void GUI_INIT()
     }
     ImGui::End();
 
-    static int current_index = 0;
 
-    ImGui::Begin("Objects In Scene", NULL, flags);
-    if (ImGui::Button("Play"))
+    if (ImGui::Begin("Objects In Scene", NULL, flags))
     {
-
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Stop"))
-    {
-
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Pause"))
-    {
-
-    }
-    if (ImGui::Button("Paste"))
-    {
-        if (copiedObject) {
-            items.push_back(copiedObject->clone());
-        }
-    }
-    if (ImGui::BeginListBox("Objects in Scene:", ImVec2(250, 1500)))
-    {
-        // Add counters for each shape type
-        int boxCounter = 0;
-        int sphereCounter = 0;
-        int cylinderCounter = 0;
-        int capsuleCounter = 0;
-        int coneCounter = 0;
-
-        static int selectedItem = 0;
-        itemIndex = 0;
-        for (auto& item : items)
+        if (ImGui::Button("Play"))
         {
-            switch (item->type) {
-            case ShapeType::BOX:
-               item->Name = "Box " + std::to_string(static_cast<BoxCollider*>(item.get())->id);
-                break;
-            case ShapeType::SPHERE:
-                item->Name = "Sphere " + std::to_string(static_cast<SphereCollider*>(item.get())->id);
-                break;
-            case ShapeType::CYLINDER:
-                item->Name = "Cylinder " + std::to_string(static_cast<CylinderCollider*>(item.get())->id);
-                break;
-            case ShapeType::CAPSULE:
-                item->Name = "Capsule " + std::to_string(static_cast<CapsuleCollider*>(item.get())->id);
-                break;
-            case ShapeType::CONE:
-                item->Name = "Cone " + std::to_string(static_cast<ConeCollider*>(item.get())->id);
-                break;
-            default:
-                item->Name = "Unkown";
-                break;
-                // Add more cases for other shape types if needed
-            }
 
-            switch (item->blockType) {
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Stop"))
+        {
+
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Pause"))
+        {
+
+        }
+        if (ImGui::Button("Paste"))
+        {
+            if (copiedObject) {
+                items.push_back(copiedObject->clone());
+            }
+        }
+        if (ImGui::BeginListBox("Objects in Scene:", ImVec2(250, 1500)))
+        {
+            // Add counters for each shape type
+            int boxCounter = 0;
+            int sphereCounter = 0;
+            int cylinderCounter = 0;
+            int capsuleCounter = 0;
+            int coneCounter = 0;
+
+            static int selectedItem = 0;
+            itemIndex = 0;
+            for (auto& item : items)
+            {
+                switch (item->type) {
+                case ShapeType::PLANE:
+                    item->Name = "Plane " + std::to_string(static_cast<Plane*>(item.get())->id);
+                case ShapeType::BOX:
+                    item->Name = "Box " + std::to_string(static_cast<BoxCollider*>(item.get())->id);
+                    break;
+                case ShapeType::SPHERE:
+                    item->Name = "Sphere " + std::to_string(static_cast<SphereCollider*>(item.get())->id);
+                    break;
+                case ShapeType::CYLINDER:
+                    item->Name = "Cylinder " + std::to_string(static_cast<CylinderCollider*>(item.get())->id);
+                    break;
+                case ShapeType::CAPSULE:
+                    item->Name = "Capsule " + std::to_string(static_cast<CapsuleCollider*>(item.get())->id);
+                    break;
+                case ShapeType::CONE:
+                    item->Name = "Cone " + std::to_string(static_cast<ConeCollider*>(item.get())->id);
+                    break;
+                case ShapeType::COMPOUND:
+                    item->Name = "Compound Shape " + std::to_string(static_cast<CompoundShape*>(item.get())->id);
+                    break;
+                case ShapeType::CONVEXHULL:
+                    item->Name = "Convex Shape " + std::to_string(static_cast<ConvexHull*>(item.get())->id);
+                    break;
+                case ShapeType::TRIANGLEMESH:
+                    item->Name = "Triangle Mesh " + std::to_string(static_cast<TriangleMesh*>(item.get())->id);
+                    break;
+                case ShapeType::HEIGHTFIELD:
+                    item->Name = "HeightField " + std::to_string(static_cast<HeightField*>(item.get())->id);
+                default:
+                    item->Name = "Unkown";
+                    break;
+                    // Add more cases for other shape types if needed
+                }
+
+                switch (item->blockType) {
                 case BlockType::GRASS:
                     item->Name = "GrassBlock " + std::to_string(static_cast<GrassBlock*>(item.get())->id);
+                }
+                item->IsSelected = (selectedItem == itemIndex);
+                if (ImGui::Selectable(item->Name.c_str(), item->IsSelected)) {
+                    selectedItem = itemIndex;
+                }
+                if (item->IsSelected) {
+                    // Call the item menu function for the selected object
+                    item->ObjMenu(item->Name);
+                }
+
+
+
+                itemIndex++;
+                // ... Use the 'name' string to display the object in ImGui ...
+
+
             }
-            item->IsSelected = (selectedItem == itemIndex);
-            if (ImGui::Selectable(item->Name.c_str(), item->IsSelected)) {
-                selectedItem = itemIndex;
+            for (auto it = items.begin(); it != items.end(); /* no increment here */) {
+                if ((*it)->Destroyed) {
+                    it = items.erase(it);  // erase returns the new iterator position
+                }
+                else {
+                    ++it;
+                }
             }
-            if (item->IsSelected) {
-                // Call the item menu function for the selected object
-                item->ObjMenu(item->Name);
+            if (ImGui::Button("Copy"))
+            {
+                if (selectedItem >= 0 && selectedItem < items.size()) {
+                    copiedObject = items[selectedItem]->clone();
+                }
             }
-            itemIndex++;
-            // ... Use the 'name' string to display the object in ImGui ...
+            ImGui::EndListBox();
+            // After the ImGui::EndListBox() line
+
+        }       
+        ImGui::End();
+    } 
+    
+
+    if (ImGui::Begin("Light Sources In Scene"), NULL ,flags)
+    {
+        if (ImGui::BeginListBox("Light Scene In Scene", ImVec2(250,1500)))
+        {
+            size_t lightIndex = 0;
+            int pointCounter = 0;
+            int ambientCounter = 0;
+            int directionalCounter = 0;
+            int spotlightCounter = 0;
+            static int selectedItem = 0;
+
+            for (auto& light : lights)
+            {             
+                light->Name = "Light " + std::to_string(static_cast<Light*>(light.get())->id);  
+                light->IsSelected = (selectedItem == lightIndex);
+                if (ImGui::Selectable(light->Name.c_str(), light->IsSelected)) {
+                    selectedItem = lightIndex;
+                }
+                if (light->IsSelected) {
+                    // Call the item menu function for the selected object
+                    light->ShowMenu(light->Name);
+                }
+
+            }
 
             
+            lightIndex++;
+            ImGui::EndListBox();
         }
-
-        if (ImGui::Button("Copy"))
-        {
-            if (selectedItem >= 0 && selectedItem < items.size()) {
-                copiedObject = items[selectedItem]->clone();
-            }
-        }
-        ImGui::EndListBox();
-        // After the ImGui::EndListBox() line
-        
+        ImGui::End();
     }
-    ImGui::End();
 
-
+   
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

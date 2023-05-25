@@ -4,7 +4,7 @@
 #include "math.h"
 #include "game_obj.h"
 #include "scene.h"
-
+#include "imgui/imgui.h"
 using namespace glm;
 
 enum Direction
@@ -18,7 +18,7 @@ enum Direction
 };
 
 
-
+// Objects with physics in them, probably should've came up with a better way do this.
 class ColliderShape : public GameObject
 {
     public:
@@ -82,6 +82,17 @@ class ColliderShape : public GameObject
         }
 };
 
+// Planes will always be static, meaning they are non-moving, use only for demo purposes
+class Plane : public ColliderShape
+{
+public:
+    int id = 0;
+    static int next_id;
+    void createCollisionShape() override {
+        collisionShape = new btStaticPlaneShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)), 10.0f);
+    }
+};
+
 class BoxCollider : public ColliderShape
 {
 public:
@@ -114,6 +125,23 @@ public:
     BoxCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
         type = ShapeType::BOX;
         id = next_id++;
+    }
+
+    ~BoxCollider() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
     }
 
     virtual std::shared_ptr<GameObject> clone() const override {
@@ -158,6 +186,23 @@ public:
         type = ShapeType::SPHERE;
         id = next_id++;
     }
+
+    ~SphereCollider() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
+    }
 };
 
 class CylinderCollider : public ColliderShape
@@ -193,6 +238,23 @@ public:
     CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
         type = ShapeType::CYLINDER;
         id = next_id++;
+    }
+
+    ~CylinderCollider() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
     }
 };
 
@@ -232,6 +294,22 @@ public:
         type = ShapeType::CAPSULE;
         id = next_id++;
     }
+    ~CapsuleCollider() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
+    }
 };
 
 class ConeCollider : public ColliderShape
@@ -268,7 +346,253 @@ public:
         type = ShapeType::CONE;
         id = next_id++;
     }
+    ~ConeCollider() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
+    }
 };
+
+// Since the compound shape is going to have multiple objects, multiple models, the models are not going to be static
+class CompoundShape : public ColliderShape
+{
+public:
+    Model monkeModel;
+
+    int id = 0;
+    static int next_id;
+    void InitModel() override { monkeModel = Model("colliders/monke.obj"); }
+    void createCollisionShape() override {
+        btCompoundShape* compound = new btCompoundShape();
+
+        for (ColliderShape* childShape : childShapes) {
+            childShape->createCollisionShape();
+            btTransform childTransform; // set this as necessary
+            compound->addChildShape(childTransform, childShape->getBtCollisionShape());
+        }
+
+        // Store 'compound' somewhere safe where it can be deleted later
+        setBtCollisionShape(compound);
+    }
+
+    // Add a child shape to the compound shape
+    void AddChildShape(ColliderShape* shape) {
+        childShapes.push_back(shape);
+    }
+
+    // Remove a child shape from the compound shape
+    void RemoveChildShape(ColliderShape* shape) {
+        //... implement this
+    }
+
+    virtual std::shared_ptr<GameObject> clone() const override {
+        return std::make_shared<CompoundShape>(*this);
+    }
+
+    void ObjMenu(string name) override;
+        
+    
+    CompoundShape() : ColliderShape() {}
+    CompoundShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        type = ShapeType::COMPOUND;
+        id = next_id++;
+    }
+    CompoundShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        type = ShapeType::COMPOUND;
+        id = next_id++;
+    }
+
+private:
+    std::vector<ColliderShape*> childShapes;
+};
+
+class ConvexHull : public ColliderShape
+{
+public:
+
+    int id = 0;
+    static int next_id;
+    ConvexHull() : ColliderShape() {}
+    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        type = ShapeType::CONVEXHULL;
+        id = next_id++;
+    }
+    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        type = ShapeType::CONVEXHULL;
+        id = next_id++;
+    }
+    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        type = ShapeType::CONVEXHULL;
+        id = next_id++;
+    }
+    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        type = ShapeType::CONVEXHULL;
+        id = next_id++;
+    }
+    ~ConvexHull() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
+    }
+    
+};
+
+class TriangleMesh : public ColliderShape
+{
+public:
+
+    int id = 0;
+    static int next_id;
+    TriangleMesh() : ColliderShape() {}
+    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        type = ShapeType::TRIANGLEMESH;
+        id = next_id++;
+    }
+    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        type = ShapeType::TRIANGLEMESH;
+        id = next_id++;
+    }
+    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        type = ShapeType::TRIANGLEMESH;
+        id = next_id++;
+    }
+    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        type = ShapeType::TRIANGLEMESH;
+        id = next_id++;
+    }
+    ~TriangleMesh() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
+    }
+
+};
+
+class HeightField : public ColliderShape
+{
+public:
+    int id = 0;
+    static int next_id;
+    HeightField() : ColliderShape() {}
+    HeightField(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        type = ShapeType::HEIGHTFIELD;
+        id = next_id++;
+    }
+    HeightField(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        type = ShapeType::HEIGHTFIELD;
+        id = next_id++;
+    }
+    HeightField(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        type = ShapeType::HEIGHTFIELD;
+        id = next_id++;
+    }
+    HeightField(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        type = ShapeType::HEIGHTFIELD;
+        id = next_id++;
+    }
+    ~HeightField() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
+    }
+};
+
+class SoftBody : public ColliderShape
+{
+public:
+    int id = 0;
+    static int next_id;
+    SoftBody() : ColliderShape() {}
+    SoftBody(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        type = ShapeType::SOFTBODY;
+        id = next_id++;
+    }
+    SoftBody(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        type = ShapeType::SOFTBODY;
+        id = next_id++;
+    }
+    SoftBody(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        type = ShapeType::SOFTBODY;
+        id = next_id++;
+    }
+    SoftBody(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        type = ShapeType::SOFTBODY;
+        id = next_id++;
+    }
+    ~SoftBody() override {
+        if (rigidBody) {
+            if (rigidBody->getMotionState()) {
+                delete rigidBody->getMotionState();
+            }
+
+            // Assuming you have access to the dynamicsWorld instance here
+            _dynamicsWorld->removeRigidBody(rigidBody);
+            delete rigidBody;
+        }
+
+        // Delete the shape if it's not shared with other bodies
+        if (collisionShape) {
+            delete collisionShape;
+        }
+    }
+};
+
+class MultiSphere : public ColliderShape
+{
+public:
+
+};
+
+class ConvexPointCloud : public ColliderShape
+{
+public:
+
+};
+
 class CircleFloor : public ColliderShape
 {
 public:

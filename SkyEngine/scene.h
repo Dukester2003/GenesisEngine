@@ -1,6 +1,7 @@
 #ifndef SCENE
 #define SCENE
 
+#include "light.h"
 #include "game_obj.h"
 #include "player.h"
 #include "g_camera.h"
@@ -11,9 +12,10 @@
 #include <json.hpp>
 
 using json = nlohmann::json;
-inline glm::vec3 startingSpawnPosition = glm::vec3(0.0f, 5.0f, 0.0f);
+inline glm::vec3 spawnPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 inline btAlignedObjectArray<btCollisionShape*> collisionShapes;
 inline std::vector<std::shared_ptr<GameObject>> items;
+inline std::vector<std::shared_ptr<Light>> lights;
 inline std::shared_ptr<GameObject> copiedObject;
 inline size_t itemIndex;
 inline Player* player;

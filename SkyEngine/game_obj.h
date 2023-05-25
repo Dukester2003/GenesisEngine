@@ -4,14 +4,23 @@
 
 #include "g_model.h"
 #include "g_shader.h"
+#include "light.h"
 
 enum class ShapeType
 {
+	PLANE,
 	BOX,
 	SPHERE,
 	CYLINDER,
 	CAPSULE,
-	CONE
+	CONE,
+	COMPOUND,
+	CONVEXHULL,
+	TRIANGLEMESH,
+	HEIGHTFIELD,
+	SOFTBODY,
+	MULTISPHERE,
+	CONVEX_POINT_CLOUD
 };
 
 enum class BlockType
@@ -38,9 +47,15 @@ class GameObject
 		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation, Model objmodel);
 		GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation);	
 
+		// A non-rotating, non-scalable constructer, best for light sources.
+		GameObject(glm::vec3 pos);
+		// Okay... moving light sources exist to ya know.
+		GameObject(glm::vec3 pos, glm::vec3 velocity);
 		GameObject();
 		
-		virtual ~GameObject() = default;
+		virtual ~GameObject() {};
+		// ...
+		std::shared_ptr<Light> lightSource;  // Light emitted by this object, if any
 		ShapeType type;
 		BlockType blockType;
 		btDynamicsWorld* _dynamicsWorld;
@@ -55,6 +70,7 @@ class GameObject
 		bool isDynamic;
 		bool hasVelocity;
 		bool isEuler;
+		bool modelDynamic;
 		// mass of gameObject, 0 mass means the object will be static.
 		btScalar massValue;
 		btVector3 localInertia;
@@ -68,6 +84,8 @@ class GameObject
 
 	public:
 		// Getters
+		btCollisionShape* getBtCollisionShape() const { return collisionShape; }
+		btCollisionObject* getBtCollisionObject() const { return collisionObject; }
 		glm::vec3 getPosition() const { return Position; }
 		glm::quat getRotation() const { return Rotation; }
 		glm::vec3 getEulerRotation() const { return glm::eulerAngles(Rotation); }
@@ -78,12 +96,18 @@ class GameObject
 		float getFrictionValue() const { return frictionValue; }
 		btVector3 getLocalIntertia() const { return localInertia; }
 		virtual Shader getShader() const { return Shader(); };
+		Model getModel() const { return model; }
 
 		// Setters
+		void setBtCollisionShape(btCollisionShape* newCollisionShape) { collisionShape = newCollisionShape; }
+		void setBtCollisionObject(btCollisionObject* newCollisionObject) { collisionObject = newCollisionObject; }
 		void setPosition(const glm::vec3& newPosition) { Position = newPosition; }
 		void setRotation(const glm::quat& newRotation) { Rotation = newRotation; }
 		void setVelocity(const glm::vec3& newVelocity) { Velocity = newVelocity; }
-		void setSize(const glm::vec3& newSize) { Size = newSize; }
+		void setScale(const glm::vec3& newSize) { Size = newSize; }
+		void setType(const ShapeType newType) { type = newType; }
+		void setFrictionValue(const float newFrictionValue) { frictionValue = newFrictionValue; }
+		void setLocalInertiaValue(const btVector3 newInertiaValue) { localInertia = newInertiaValue; }
 		virtual void setShader() {}
 
 
@@ -103,11 +127,8 @@ class GameObject
 		void setRigidBodyEnabled(bool enabled);
 		void updateSize(const btVector3& newSize);
 		void setMass(float newMass);
-		void updatePosition(const btVector3& newPosition);
-		void updateRotation(const btQuaternion& newRotation);
 		void ScaleUniform(const char* label, float* values, float speed, float min_value, float max_value);		
 		virtual void createCollisionShape() { }
-		void GLPosToBulletPos();
 };
 
 #endif // !GAMEOBJECT

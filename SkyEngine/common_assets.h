@@ -6,6 +6,7 @@
 #include "levels/terrain/Grass Block/blocks.h"
 #include "scene.h"
 
+
 glm::mat4 projection;
 glm::mat4 view;
 
@@ -33,6 +34,7 @@ Model boxModel;
 Model sphereModel;
 Model capsuleModel;
 Model coneModel;
+Model monkeModel;
 Model floorColliderModel;
 Model circleFloorColliderModel;
 Model cylinderModel;
@@ -47,6 +49,7 @@ void InitCommonModels()
 {
     // Collider Models
     for (auto& item : items) { item->InitModel(); }
+    for (auto& light : lights) { light->InitGizmo(); }
     boxModel = Model("colliders/boxCollider.obj");
     sphereModel = Model("colliders/sphereCollider.obj");
     floorColliderModel = Model("colliders/floor.obj");
@@ -56,6 +59,7 @@ void InitCommonModels()
     rSlopeColliderModel = Model("colliders/RightSlopeCollider.obj");
     capsuleModel = Model("colliders/capsuleCollider.obj");
     coneModel = Model("colliders/coneCollider.obj");
+    monkeModel = Model("colliders/monke.obj");
 
     // Level Models
     grassBlockModel = Model("levels/terrain/Grass Block/grass_block.obj");
@@ -97,11 +101,25 @@ void UpdateCommonObjects()
 {
     /// COLLIDERS
             /// ---------
-    for (auto& item : items) { item->UpdateObject(item->model, modelShader, dynamicsWorld); }
+    for (auto& item : items) { item->UpdateObject(item->model, diffuseShader, dynamicsWorld); }
     for (auto& slopeCollider : slopeColliders) { slopeCollider.DrawModel(slopeColliderModel, modelShader); }
     for (auto& rSlopeCollider : rSlopeColliders) { rSlopeCollider.DrawModel(rSlopeColliderModel, modelShader); }
     for (auto& circleFloorCollider : circleFloorColliders) { circleFloorCollider.UpdateObject(cylinderModel, modelShader, dynamicsWorld); }
     for (auto& floorCollider : floorColliders) { floorCollider.UpdateObject(boxModel,modelShader, dynamicsWorld); }
+}
+
+void UpdateLight()
+{
+    for (const auto& light : lights) {
+        diffuseShader.use();
+        diffuseShader.setVec3("objectColor", light->getColor());
+        diffuseShader.setVec3("lightColor", light->getColor());
+        diffuseShader.setVec3("lightPos", light->getPosition());
+
+        diffuseShader.setVec3("viewPos", camera.Position);
+
+        light->DrawGizmo(diffuseShader);
+    }
 }
 #endif // !COMMON_ASSETS
 

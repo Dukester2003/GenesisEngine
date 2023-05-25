@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\imgui;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\includes;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\lib;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\build_cmake\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -117,7 +117,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;user32.lib;Ws2_32.lib;opengl32.lib;assimp.lib;Irrklang.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;BulletSoftBody_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;user32.lib;Ws2_32.lib;opengl32.lib;assimp-vc143-mtd.lib;Irrklang.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;LinearMath_Debug.lib;BulletSoftBody_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,12 +128,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;user32.lib;Ws2_32.lib;opengl32.lib;assimp.lib;Irrklang.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -153,6 +155,9 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="levels\terrain\Grass Block\blocks.cpp" />
+    <ClCompile Include="levels\warehouse\Gate.cpp" />
+    <ClCompile Include="levels\warehouse\Klaxon.cpp" />
+    <ClCompile Include="light.cpp" />
     <ClCompile Include="lvl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
@@ -187,6 +192,9 @@
     <ClInclude Include="g_model.h" />
     <ClInclude Include="g_shader.h" />
     <ClInclude Include="levels\terrain\Grass Block\blocks.h" />
+    <ClInclude Include="levels\warehouse\Gate.h" />
+    <ClInclude Include="levels\warehouse\Klaxon.h" />
+    <ClInclude Include="light.h" />
     <ClInclude Include="lvl.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="obj_renderer.h" />

@@ -1,6 +1,8 @@
 #include "scene.h"
 #include "g_collision.h"
 
+
+
 Scene::Scene()
 {
     // constructor implementation
@@ -8,7 +10,7 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    // constructor implementation
+    // destructor implementation
 }
 
 void Scene::SaveScene(const std::string& filename, const std::vector<std::shared_ptr<GameObject>>& items) {
@@ -19,13 +21,19 @@ void Scene::SaveScene(const std::string& filename, const std::vector<std::shared
         itemJson["type"] = item->getType();
         itemJson["position"] = { item->getPosition().x, item->getPosition().y, item->getPosition().z };
         itemJson["scale"] = { item->getScale().x, item->getScale().y, item->getScale().z };
-        itemJson["velocity"] = { item->getVelocity().x, item->getVelocity().y, item->getVelocity().z };
-        glm::quat rotation = item->getRotation();
-        itemJson["rotation"] = { rotation.w, rotation.x, rotation.y, rotation.z };
-        glm::vec3 eulerRotation = item->getEulerRotation();
-        itemJson["eulerRotation"] = { eulerRotation.x, };
 
+        if(item->hasVelocity) {itemJson["velocity"] = { item->getVelocity().x, item->getVelocity().y, item->getVelocity().z };}   
 
+        if (!item->isEuler) {
+            glm::quat rotation = item->getRotation();
+            itemJson["rotation"] = { rotation.w, rotation.x, rotation.y, rotation.z };
+        }
+        else {
+            glm::vec3 eulerRotation = item->getEulerRotation();
+            itemJson["eulerRotation"] = { eulerRotation.x, eulerRotation.y, eulerRotation.z };
+        }
+        
+       
         j.push_back(itemJson);
     }
     std::string path = "..\\..\\SkyEngine\\SkyEngine\\saves\\" + std::string(filename);

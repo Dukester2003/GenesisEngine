@@ -3,54 +3,26 @@
 #include "imgui/imgui.h"
 #include "scene.h"
 
-void GameObject::ScaleUniform(const char* label, float* values, float speed = 1.0f, float min_value = 0.0f, float max_value = 0.0f)
-{
-    ImGui::PushID(label);
-    // Display the drag float 3 as usual
-    if (ImGui::DragFloat3(label, values, speed, min_value, max_value))
-    {
-        // Update the object's size and recreate the collision shape
-        btVector3 newSize(values[0], values[1], values[2]);
-        Size = bulletToGlm(newSize);
-        updateSize(newSize);
-    }
-    
-
-    // Add a uniform slider to modify all three values simultaneously
-    ImGui::SameLine();
-    ImGui::PushID("Uniform");
-    float uniform = 0.0f;
-    if (ImGui::SliderFloat("Uniform", &uniform, min_value, max_value))
-    {
-        for (size_t i = 0; i < 3; ++i)
-        {
-            // Update the object's size and recreate the collision shape
-            btVector3 newSize(values[0], values[1], values[2]);
-            Size = bulletToGlm(newSize);
-            updateSize(newSize);
-            values[i] = uniform;
-
-        }
-    }
-    ImGui::PopID();
-
-    ImGui::PopID();
-}
-
 // For the game objects with vs without the 'Model' argument at the end of the constructor, use the constructer with Model argument if the object model is static, 
 // use the constructer without the Model argument if the object model is dynamic.
 
 // Quaternion Constructers
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel) 
-: Position(pos), Size(size), Velocity(velocity), hasVelocity(true) ,Rotation(rotation), Destroyed(false), model(objModel)
+: Position(pos), Size(size), Velocity(velocity), hasVelocity(true) ,Rotation(rotation), 
+  isEuler(false), Destroyed(false), model(objModel), modelDynamic(false)
+
 {
+
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    massValue = 0.0f;
+
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation)
-    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(rotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(rotation), 
+      isEuler(false), Destroyed(false) , model(), modelDynamic(true)
 {
     _dynamicsWorld = NULL;
     rigidBody = NULL;
@@ -58,7 +30,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::q
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model objModel)
-    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(rotation), Destroyed(false), model(objModel)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(rotation), 
+      isEuler(false), Destroyed(false), model(objModel), modelDynamic(false)
 {
     _dynamicsWorld = NULL;
     rigidBody = NULL;
@@ -66,7 +39,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model 
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
-    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(rotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(rotation), 
+      isEuler(false), Destroyed(false), model(), modelDynamic(true)
 {
     _dynamicsWorld = NULL;
     rigidBody = NULL;
@@ -75,7 +49,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
 
 // Euler Constructers
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation, Model objModel)
-    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(eulerRotation), Destroyed(false), model(objModel)
+    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(eulerRotation), 
+      isEuler(true), Destroyed(false), model(objModel), modelDynamic(false)
 {
     Rotation = glm::quat(eulerRotation);
     _dynamicsWorld = NULL;
@@ -84,7 +59,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::v
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation)
-    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(eulerRotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(velocity), hasVelocity(true), Rotation(eulerRotation), 
+      isEuler(true), Destroyed(false), model(), modelDynamic(true)
 {
     Rotation = glm::quat(eulerRotation);
     _dynamicsWorld = NULL;
@@ -93,7 +69,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::v
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation, Model objModel)
-    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(eulerRotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(eulerRotation), 
+      isEuler(true), Destroyed(false), model(objModel), modelDynamic(false)
 {
     Rotation = glm::quat(eulerRotation);
     _dynamicsWorld = NULL;
@@ -102,7 +79,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation, M
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation)
-    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(eulerRotation), Destroyed(false)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(eulerRotation), 
+      isEuler(true), Destroyed(false), model(), modelDynamic(true)
 {
     Rotation = glm::quat(eulerRotation);
     _dynamicsWorld = NULL;
@@ -110,8 +88,21 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation)
     collisionShape = NULL;
 }
 
+GameObject::GameObject(glm::vec3 pos)
+    : Position(pos), Size(1.0f), Velocity(0.0f), hasVelocity(false), Rotation(glm::identity<glm::quat>()),
+    isEuler(false), Destroyed(false), model(), modelDynamic(false)
+{
+}
+
+GameObject::GameObject(glm::vec3 pos, glm::vec3 velocity)
+    : Position(pos), Size(1.0f), Velocity(velocity), hasVelocity(false), Rotation(glm::identity<glm::quat>()),
+    isEuler(false), Destroyed(false), model(), modelDynamic(false)
+{
+}
+
 GameObject::GameObject() 
-: Position(0.0f), Size(1.0f), Velocity(0.0f), hasVelocity(false), Rotation(glm::identity<glm::quat>()), Destroyed(false), model() 
+: Position(0.0f), Size(1.0f), Velocity(0.0f), hasVelocity(false), Rotation(glm::identity<glm::quat>()), 
+  isEuler(false), Destroyed(false), model() , modelDynamic(false)
 {
     _dynamicsWorld = NULL;
     rigidBody = NULL;
@@ -120,7 +111,7 @@ GameObject::GameObject()
 
 void GameObject::DrawModel(Model modelRender, Shader modelShader)
 {
-	modelRender.Draw(modelShader, this->Position, this->Size, this->Rotation, this->model);
+	modelRender.Draw(modelShader, this->Position, this->Size, this->Rotation);
 }
 
 void GameObject::UpdateObject(Model model, Shader shader, btDynamicsWorld* dynamicsWorld)
@@ -280,4 +271,38 @@ void GameObject::copy() {
     _copy->copyFriction = getFrictionValue();
     _copy->copyInertia = getLocalIntertia();
 
+}
+
+void GameObject::ScaleUniform(const char* label, float* values, float speed = 1.0f, float min_value = 0.0f, float max_value = 0.0f)
+{
+    ImGui::PushID(label);
+    // Display the drag float 3 as usual
+    if (ImGui::DragFloat3(label, values, speed, min_value, max_value))
+    {
+        // Update the object's size and recreate the collision shape
+        btVector3 newSize(values[0], values[1], values[2]);
+        Size = bulletToGlm(newSize);
+        updateSize(newSize);
+    }
+
+
+    // Add a uniform slider to modify all three values simultaneously
+    ImGui::SameLine();
+    ImGui::PushID("Uniform");
+    float uniform = 0.0f;
+    if (ImGui::SliderFloat("Uniform", &uniform, min_value, max_value))
+    {
+        for (size_t i = 0; i < 3; ++i)
+        {
+            // Update the object's size and recreate the collision shape
+            btVector3 newSize(values[0], values[1], values[2]);
+            Size = bulletToGlm(newSize);
+            updateSize(newSize);
+            values[i] = uniform;
+
+        }
+    }
+    ImGui::PopID();
+
+    ImGui::PopID();
 }

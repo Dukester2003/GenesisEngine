@@ -40,6 +40,12 @@
     <Filter Include="Source Files\common">
       <UniqueIdentifier>{7bd856f0-82c2-4596-b124-fe8f89c35379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\warehouse">
+      <UniqueIdentifier>{8729c0f4-070d-46a1-8456-b8a8759b24bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\warehouse">
+      <UniqueIdentifier>{5811ff57-7fa4-4b36-8a40-f47feeb7a47c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bob-omb.cpp">
@@ -107,6 +113,15 @@
     </ClCompile>
     <ClCompile Include="g_collision.cpp">
       <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="levels\warehouse\Klaxon.cpp">
+      <Filter>Source Files\warehouse</Filter>
+    </ClCompile>
+    <ClCompile Include="levels\warehouse\Gate.cpp">
+      <Filter>Source Files\warehouse</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +229,15 @@
     </ClInclude>
     <ClInclude Include="types.h">
       <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="light.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="levels\warehouse\Klaxon.h">
+      <Filter>Header Files\warehouse</Filter>
+    </ClInclude>
+    <ClInclude Include="levels\warehouse\Gate.h">
+      <Filter>Header Files\warehouse</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

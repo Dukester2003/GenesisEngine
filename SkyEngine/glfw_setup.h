@@ -65,6 +65,8 @@ int GLFWSetup(GLFWwindow* window)
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     glEnable(GL_LIGHTING);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
