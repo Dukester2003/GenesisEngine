@@ -49,7 +49,6 @@ void InitCommonModels()
 {
     // Collider Models
     for (auto& item : items) { item->InitModel(); }
-    for (auto& light : lights) { light->InitGizmo(); }
     boxModel = Model("colliders/boxCollider.obj");
     sphereModel = Model("colliders/sphereCollider.obj");
     floorColliderModel = Model("colliders/floor.obj");
@@ -108,17 +107,29 @@ void UpdateCommonObjects()
     for (auto& floorCollider : floorColliders) { floorCollider.UpdateObject(boxModel,modelShader, dynamicsWorld); }
 }
 
-void UpdateLight()
+void InitMaterial()
 {
-    for (const auto& light : lights) {
+    for (auto& item : items) {
         diffuseShader.use();
-        diffuseShader.setVec3("objectColor", light->getColor());
-        diffuseShader.setVec3("lightColor", light->getColor());
-        diffuseShader.setVec3("lightPos", light->getPosition());
+        diffuseShader.setFloat("material.shininess", item->material.shininess);
+        diffuseShader.setVec3("material.ambient", item->material.ambient);
+        diffuseShader.setVec3("material.diffuse", item->material.diffuse);
+        diffuseShader.setVec3("material.specular", item->material.specular);
+    }
+}
+void UpdateLight(Scene& scene)
+{
+    diffuseShader.use();
+    scene.UpdateDirLights(diffuseShader);
+    scene.UpdatePointLights(diffuseShader);
+    scene.UpdateSpotLights(diffuseShader);
 
-        diffuseShader.setVec3("viewPos", camera.Position);
+    diffuseShader.setVec3("viewPos", camera.Position);
 
-        light->DrawGizmo(diffuseShader);
+    for(auto& item: items) {
+        diffuseShader.use();      
+        diffuseShader.setFloat("material.shininess", item->material.shininess);
+
     }
 }
 #endif // !COMMON_ASSETS

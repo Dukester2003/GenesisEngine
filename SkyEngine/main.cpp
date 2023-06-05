@@ -111,7 +111,6 @@ CubeMap cubeMap;
 
 int main()
 {
-    
     InitiateGLFW();
 
 
@@ -141,7 +140,7 @@ int main()
 
     // Level Models
     // ------------
-    Model lvl_1_model("levels/warehouse/foundry.obj");
+    Model lvl_1_model("levels/warehouse/compound.glb");
 
     // Level Element Models/Animation
     // ------------
@@ -156,16 +155,16 @@ int main()
     ///////////////////////////////////////////////////////////
     ///                   FLOOR COLLIDERS                   ///
     ///////////////////////////////////////////////////////////
-    auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, -0.5f, 48.8), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
+    auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
     FloorCollider->InitiateRigidBody(dynamicsWorld);
     FloorCollider->massValue = 0.0f;
-    floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,48.8), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
 
+    floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
     grid.CreateGrid();
     cubeMap.BuildCubeBox();  
     imguiSetup(window);
     InitFrameBuffers();  
-
+    InitMaterial();
     //UPDATE
     while (!glfwWindowShouldClose(window))
     {
@@ -231,12 +230,15 @@ int main()
 
             /// LEVELS
             /// ------
-            lvl_1.DrawLevel(lvl_1_model, modelShader);
-
+            lvl_1.DrawLevel(lvl_1_model, diffuseShader);
+            diffuseShader.setFloat("material.shininess", lvl_1.material.shininess);
+            diffuseShader.setVec3("material.ambient", lvl_1.material.ambient);
+            diffuseShader.setVec3("material.diffuse", lvl_1.material.diffuse);
+            diffuseShader.setVec3("material.specular", lvl_1.material.specular); // specular lighting doesn't have full effect on this object's material
             
 
             UpdateCommonObjects();
-            UpdateLight();
+            UpdateLight(scene);
 
             // Render Grid
             {

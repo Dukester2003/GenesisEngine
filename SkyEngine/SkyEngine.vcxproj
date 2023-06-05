@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\imgui;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\includes;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\lib;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\build_cmake\lib\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\imgui;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\includes;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\src;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\vulkan;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\lib;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\build_cmake\lib\Debug;$(LibraryPath);C:\Users\qduke\source\repos\SkyEngine\SkyEngine\vulkan\Lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\imgui;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\includes;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\lib;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\build_cmake\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\imgui;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\includes;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\src;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\vulkan;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\qduke\source\repos\SkyEngine\SkyEngine\OpenGL\lib;C:\Users\qduke\source\repos\SkyEngine\SkyEngine\bullet3\build_cmake\lib\Release;$(LibraryPath);C:\Users\qduke\source\repos\SkyEngine\SkyEngine\vulkan\Lib</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,8 +126,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;dSINGLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -135,7 +135,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;user32.lib;Ws2_32.lib;opengl32.lib;assimp.lib;Irrklang.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;user32.lib;Ws2_32.lib;opengl32.lib;assimp-vc143-mtd.lib;Irrklang.lib;BulletDynamics.lib;BulletCollision.lib;LinearMath.lib;BulletSoftBody.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

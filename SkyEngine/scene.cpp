@@ -98,3 +98,129 @@ std::vector<std::string> Scene::getFilesInDirectory(const std::string& directory
     }
     return files;
 }
+
+
+
+// Directions
+void Scene::DefaultDirLights(Shader& shader)
+{
+    for (int i = 0; i < dirLights.size(); ++i)
+    {
+        std::string lightName = "dirLights[" + std::to_string(i) + "]";
+
+        shader.setVec3(lightName + ".direction",  0.0f, 0.0f, 0.0f);
+        shader.setVec3(lightName + ".ambient",    0.0f, 0.0f, 0.0f);
+        shader.setVec3(lightName + ".diffuse",    0.0f, 0.0f, 0.0f);
+        shader.setVec3(lightName + ".specular",   0.0f, 0.0f, 0.0f);
+    }
+}
+
+void Scene::ActivateDirLights(Shader& shader)
+{
+    for (int i = 0; i < dirLights.size(); ++i)
+    {
+        std::string lightName = "dirLights[" + std::to_string(i) + "]";
+
+        shader.setVec3(lightName + ".direction", dirLights[i].Direction);
+        shader.setVec3(lightName + ".ambient",   dirLights[i].Ambient);
+        shader.setVec3(lightName + ".diffuse",   dirLights[i].Diffuse);
+        shader.setVec3(lightName + ".specular",  dirLights[i].Specular);
+    }
+}
+
+void Scene::UpdateDirLights(Shader& shader)
+{
+    if (dirLightPresent) {
+        ActivateDirLights(shader);
+    }
+    else DefaultDirLights(shader);
+}
+
+// Point Lights
+void Scene::DefaultPointLights(Shader& shader)
+{
+    for (int i = 0; i < pointLights.size(); ++i)
+    {
+        std::string lightName = "lights[" + std::to_string(i) + "]";
+
+        
+        shader.setVec3(lightName  +  ".position",   0.0f,0.0f,0.0f);
+        shader.setVec3(lightName  +  ".ambient",    0.0f,0.0f,0.0f);
+        shader.setVec3(lightName  +  ".diffuse",    0.0f,0.0f,0.0f);
+        shader.setVec3(lightName  +  ".specular",   0.0f,0.0f,0.0f);
+        shader.setFloat(lightName +  ".constant",   0.0f);
+        shader.setFloat(lightName +  ".linear",     0.0f);
+        shader.setFloat(lightName +  ".quadratic",  0.0f);
+    }
+}
+
+void Scene::ActivatePointLights(Shader& shader)
+{
+    for (int i = 0; i < pointLights.size(); ++i)
+    {
+        std::string lightName = "lights[" + std::to_string(i) + "]";
+
+        shader.setVec3(lightName  +  ".position",  pointLights[i].Position);
+        shader.setVec3(lightName  +  ".ambient",   pointLights[i].Ambient);
+        shader.setVec3(lightName  +  ".diffuse",   pointLights[i].Diffuse);
+        shader.setVec3(lightName  +  ".specular",  pointLights[i].Specular);
+        shader.setFloat(lightName + ".constant",   pointLights[i].Constant);
+        shader.setFloat(lightName + ".linear",     pointLights[i].Linear);
+        shader.setFloat(lightName + ".quadratic",  pointLights[i].Quadratic);
+    }
+}
+
+void Scene::UpdatePointLights(Shader& shader)
+{
+    if (pointLightPresent) {
+        ActivatePointLights(shader);
+    }
+    else DefaultPointLights(shader);
+}
+
+
+// SpotLights
+void Scene::DefaultSpotLights(Shader& shader)
+{
+    for (int i = 0; i < spotLights.size(); ++i)
+    {
+        std::string lightName = "spotLights[" + std::to_string(i) + "]";
+
+        shader.setVec3(lightName + ".position",     0.0f, 0.0f, 0.0f);
+        shader.setVec3(lightName + ".ambient",      0.0f, 0.0f, 0.0f);
+        shader.setVec3(lightName + ".diffuse",      0.0f, 0.0f, 0.0f);
+        shader.setVec3(lightName + ".specular",     0.0f, 0.0f, 0.0f);
+        shader.setFloat(lightName + ".constant",    0.0f);
+        shader.setFloat(lightName + ".linear",      0.0f);
+        shader.setFloat(lightName + ".quadratic",   0.0f);
+        shader.setFloat(lightName + ".cutOff",      glm::cos(glm::radians(0.0f)));
+        shader.setFloat(lightName + ".outerCutOff", glm::cos(glm::radians(0.0f)));
+    }
+}
+
+void Scene::ActivateSpotLights(Shader& shader)
+{
+    std::cout << "spotLight";
+    for (int i = 0; i < spotLights.size(); ++i)
+    {
+        std::string lightName = "spotLights[" + std::to_string(i) + "]";
+
+        shader.setVec3(lightName + ".position",  spotLights[i].Position);
+        shader.setVec3(lightName + ".ambient",   spotLights[i].Ambient);
+        shader.setVec3(lightName + ".diffuse",   spotLights[i].Diffuse);
+        shader.setVec3(lightName + ".specular",  spotLights[i].Specular);
+        shader.setFloat(lightName + ".constant", spotLights[i].Constant);
+        shader.setFloat(lightName + ".linear",   spotLights[i].Linear);
+        shader.setFloat(lightName + ".quadratic",spotLights[i].Quadratic);
+        shader.setFloat(lightName + ".cutOff", glm::cos(glm::radians(spotLights[i].CutOff)));
+        shader.setFloat(lightName + ".outerCutOff", glm::cos(glm::radians(spotLights[i].OuterCutOff)));
+    }
+}
+
+void Scene::UpdateSpotLights(Shader& shader)
+{
+    if (spotLightPresent) {
+        ActivateSpotLights(shader);
+    }
+    else DefaultSpotLights(shader);
+}

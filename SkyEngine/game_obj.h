@@ -29,6 +29,24 @@ enum class BlockType
 	STONE,
 };
 
+struct Material
+{
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+	float shininess;
+
+	Material() : ambient(0.3f), diffuse(0.3f), specular(0.3f), shininess(32.0f) {}
+	glm::vec3 getAmbient() { return ambient; }
+	glm::vec3 getDiffuse() { return diffuse; }
+	glm::vec3 getSpecular() { return specular; }
+	float getShininess() { return shininess; }
+
+	void setAmbient(glm::vec3 newAmbient) { ambient = newAmbient; }
+	void setDiffuse(glm::vec3 newDiffuse) { diffuse = newDiffuse; }
+	void setSpecular(glm::vec3 newSpecular) { specular = newSpecular; }
+	void setShininess(float newShininess) { shininess = newShininess; }
+};
 class GameObject 
 {
 
@@ -75,7 +93,7 @@ class GameObject
 		btScalar massValue;
 		btVector3 localInertia;
 		float frictionValue;
-		
+		Material material;
 		string Name;
 		bool IsSelected;
 		bool Destroyed;
@@ -106,8 +124,7 @@ class GameObject
 		void setVelocity(const glm::vec3& newVelocity) { Velocity = newVelocity; }
 		void setScale(const glm::vec3& newSize) { Size = newSize; }
 		void setType(const ShapeType newType) { type = newType; }
-		void setFrictionValue(const float newFrictionValue) { frictionValue = newFrictionValue; }
-		void setLocalInertiaValue(const btVector3 newInertiaValue) { localInertia = newInertiaValue; }
+		void setFrictionValue(const float newFrictionValue);
 		virtual void setShader() {}
 
 

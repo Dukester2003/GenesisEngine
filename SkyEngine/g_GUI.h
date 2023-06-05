@@ -9,7 +9,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "scene.h"
 #include "Common_Assets.h"
 #include "init_collision.h"
 
@@ -245,9 +244,21 @@ inline void GUI_INIT()
             {
                 if (ImGui::MenuItem("Point Light"))
                 {
-                    auto lightSource = std::make_shared<Light>(glm::vec3(spawnPosition));
-                    lights.push_back(lightSource);
-                }             
+                    scene.pointLights.push_back(PointLight(glm::vec3(spawnPosition)));
+                    scene.pointLightPresent = true;
+                }        
+
+                if (ImGui::MenuItem("Directional Light"))
+                {
+                    scene.dirLights.push_back(DirectionalLight(glm::vec3(0.0f)));
+                    scene.dirLightPresent = true;
+                }
+
+                if (ImGui::MenuItem("Spot Light"))
+                {
+                    scene.spotLights.push_back(SpotLight(glm::vec3(spawnPosition), glm::vec3(0.0f)));
+                    scene.spotLightPresent = true;
+                }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -277,71 +288,7 @@ inline void GUI_INIT()
     }
     if (ImGui::CollapsingHeader("Entities"))
     {
-        /// <summary>
-        /// Enemies
-        /// </summary>
-        /// <returns></returns>
-        if (ImGui::TreeNode("Enemies"))
-        {
-
-            if (ImGui::Button("Big Bob-Omb"))
-            {
-
-            }
-            if (ImGui::Button("Big Goomba"))
-            {
-                
-            }
-            if (ImGui::Button("Bomb-Omb"))
-            {
-                
-            }
-            if (ImGui::Button("Boo"))
-            {
-
-            }
-            if (ImGui::Button("Chain-Chomp"))
-            {
-
-            }
-            if (ImGui::Button("Goomba"))
-            {
-               
-            }
-            if (ImGui::Button("Hammer Bro"))
-            {
-
-            }
-            if (ImGui::Button("Koopa"))
-            {
-
-            }
-            if (ImGui::Button("Piranha Plant"))
-            {
-
-            }
-            if (ImGui::Button("Shy Guy"))
-            {
-
-            }
-            if (ImGui::Button("Thwomp"))
-            {
-
-            }
-            if (ImGui::Button("Whomp"))
-            {
-                
-            }
-            ImGui::TreePop();
-        }
-        if (ImGui::TreeNode("Bosses"))
-        {
-            if (ImGui::Button("Bob-Omb King"))
-            {
-
-            }
-            ImGui::TreePop();
-        }
+       
     }
     if (ImGui::CollapsingHeader("Level Elements"))
     {
@@ -352,18 +299,6 @@ inline void GUI_INIT()
                 auto grassBlock = std::make_shared<GrassBlock>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), grassBlockModel);
                 AddItem(grassBlock, dynamicsWorld);
                 items.push_back(grassBlock);
-            }
-            if (ImGui::Button("Stone Block"))
-            {
-
-            }
-            if (ImGui::Button("Grass Ramp"))
-            {
-
-            }
-            if (ImGui::Button("Wood Crate"))
-            {
-
             }
             ImGui::TreePop();
         }
@@ -398,6 +333,10 @@ inline void GUI_INIT()
                 items.push_back(copiedObject->clone());
             }
         }
+
+        /////////////////////////////////////
+        ///             OBJECTS           ///
+        /////////////////////////////////////
         if (ImGui::BeginListBox("Objects in Scene:", ImVec2(250, 1500)))
         {
             // Add counters for each shape type
@@ -414,6 +353,7 @@ inline void GUI_INIT()
                 switch (item->type) {
                 case ShapeType::PLANE:
                     item->Name = "Plane " + std::to_string(static_cast<Plane*>(item.get())->id);
+                    break;
                 case ShapeType::BOX:
                     item->Name = "Box " + std::to_string(static_cast<BoxCollider*>(item.get())->id);
                     break;
@@ -488,33 +428,70 @@ inline void GUI_INIT()
     } 
     
 
+    ///////////////////////////////////
+    ///           LIGHTS            ///
+    ///////////////////////////////////
     if (ImGui::Begin("Light Sources In Scene"), NULL ,flags)
     {
         if (ImGui::BeginListBox("Light Scene In Scene", ImVec2(250,1500)))
         {
             size_t lightIndex = 0;
-            int pointCounter = 0;
-            int ambientCounter = 0;
-            int directionalCounter = 0;
-            int spotlightCounter = 0;
             static int selectedItem = 0;
 
-            for (auto& light : lights)
-            {             
-                light->Name = "Light " + std::to_string(static_cast<Light*>(light.get())->id);  
-                light->IsSelected = (selectedItem == lightIndex);
-                if (ImGui::Selectable(light->Name.c_str(), light->IsSelected)) {
+
+            for (int i = 0; i < scene.dirLights.size(); i++)
+            {
+                auto& dirLight = scene.dirLights[i];
+
+                dirLight.Name = "DirLight ";
+                std::string name = dirLight.Name + std::to_string(i);
+                dirLight.IsSelected = (selectedItem == lightIndex);
+                if (ImGui::Selectable(name.c_str(), dirLight.IsSelected)) {
                     selectedItem = lightIndex;
                 }
-                if (light->IsSelected) {
+                if (dirLight.IsSelected) {
                     // Call the item menu function for the selected object
-                    light->ShowMenu(light->Name);
+                    dirLight.ShowMenu(dirLight.Name);
                 }
+                lightIndex++;
+            }
+            for (int i = 0; i < scene.pointLights.size(); i++)
+            {
+                auto& pointLight = scene.pointLights[i];
+                
+                pointLight.Name = "PointLight ";
+                std::string name = pointLight.Name + std::to_string(i);
+                pointLight.IsSelected = (selectedItem == lightIndex);
+                if (ImGui::Selectable(name.c_str(), pointLight.IsSelected)) {
+                    selectedItem = lightIndex;
+                    
+                }
+                if (pointLight.IsSelected) {
+                    // Call the item menu function for the selected object
+                    pointLight.ShowMenu(pointLight.Name);
+                }
+                lightIndex++;
+            }
 
+            for (int i = 0; i < scene.spotLights.size(); i++)
+            {
+                auto& spotLight = scene.spotLights[i];
+
+                spotLight.Name = "SpotLight ";
+                std::string name = spotLight.Name + std::to_string(i);
+                spotLight.IsSelected = (selectedItem == lightIndex);
+                if (ImGui::Selectable(name.c_str(), spotLight.IsSelected)) {
+                    selectedItem = lightIndex;
+                }
+                if (spotLight.IsSelected) {
+                    // Call the item menu function for the selected object
+                    spotLight.ShowMenu(spotLight.Name);
+                }
+                lightIndex++;
             }
 
             
-            lightIndex++;
+            
             ImGui::EndListBox();
         }
         ImGui::End();

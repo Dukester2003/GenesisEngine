@@ -149,9 +149,6 @@
     <ClInclude Include="grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lvl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -238,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="levels\warehouse\Gate.h">
       <Filter>Header Files\warehouse</Filter>
+    </ClInclude>
+    <ClInclude Include="lvl.h">
+      <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

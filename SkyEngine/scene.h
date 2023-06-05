@@ -15,13 +15,13 @@ using json = nlohmann::json;
 inline glm::vec3 spawnPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 inline btAlignedObjectArray<btCollisionShape*> collisionShapes;
 inline std::vector<std::shared_ptr<GameObject>> items;
-inline std::vector<std::shared_ptr<Light>> lights;
 inline std::shared_ptr<GameObject> copiedObject;
 inline size_t itemIndex;
 inline Player* player;
 inline Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
 inline bool enableVisibleColliders;
 inline bool canPaste;
+
 
 struct Copy
 {
@@ -52,6 +52,26 @@ public:
 
 	// Function to get the files to load in the directory
 	std::vector<std::string> getFilesInDirectory(const std::string& directory); 
+
+	std::vector<PointLight> pointLights;
+	std::vector<DirectionalLight> dirLights;
+	std::vector<SpotLight> spotLights;
+
+	void DefaultPointLights(Shader& shader);
+	void ActivatePointLights(Shader& shader);
+	void UpdatePointLights(Shader& shader);
+
+	void DefaultDirLights(Shader& shader);
+	void ActivateDirLights(Shader& shader);
+	void UpdateDirLights(Shader& shader);
+
+	void DefaultSpotLights(Shader& shader);
+	void ActivateSpotLights(Shader& shader);
+	void UpdateSpotLights(Shader& shader);
+
+	bool dirLightPresent;
+	bool pointLightPresent;
+	bool spotLightPresent;
 }; 
 
 

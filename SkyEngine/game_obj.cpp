@@ -10,14 +10,14 @@
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel) 
 : Position(pos), Size(size), Velocity(velocity), hasVelocity(true) ,Rotation(rotation), 
   isEuler(false), Destroyed(false), model(objModel), modelDynamic(false)
-
 {
 
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
     massValue = 0.0f;
-
+    frictionValue = 0.0f;
+    localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation)
@@ -27,6 +27,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::q
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    frictionValue = 0.0f;
+    localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model objModel)
@@ -36,6 +38,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model 
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    frictionValue = 0.0f;
+    localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
@@ -45,6 +49,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    frictionValue = 0.0f;
+    localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
 
 // Euler Constructers
@@ -56,6 +62,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::v
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    frictionValue = 0.0f;
+    localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::vec3 eulerRotation)
@@ -66,6 +74,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::v
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    frictionValue = 0.0f;
+    localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation, Model objModel)
@@ -76,6 +86,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation, M
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    frictionValue = 0.0f;
+    localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
 
 GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation)
@@ -86,6 +98,8 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 eulerRotation)
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    frictionValue = 0.0f;
+    localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
 
 GameObject::GameObject(glm::vec3 pos)
@@ -187,8 +201,14 @@ void GameObject::ObjMenu(string name)
             }
         }
 
-        if(ImGui::DragFloat("Object Mass", &massValue)) { setMass(massValue); }
+        if (ImGui::DragFloat("Object Mass", &massValue)) { setMass(massValue); }
+        if (ImGui::DragFloat("Object Friction", &frictionValue)) { setFrictionValue(frictionValue); }
+        if (ImGui::DragFloat("Ambient", (float*) & material.ambient, 0.05f, 0.0f, 1.0f)) { material.setAmbient(material.ambient); }
+        if (ImGui::DragFloat("Diffuse", (float*) & material.diffuse, 0.05f, 0.0f, 1.0f)) { material.setDiffuse(material.diffuse); }
+        if (ImGui::DragFloat("Specular", (float*) & material.specular, 0.05f, 0.0f, 1.0f)) { material.setSpecular(material.specular); }
+        if (ImGui::DragFloat("Shininess", &material.shininess, 0.5f, 0.01f, 255.0f)) { material.setShininess(material.shininess); }
         
+        if (ImGui::InputFloat3("Local Inertia (READ ONLY)", (float*) & localInertia, "%.3f", ImGuiInputTextFlags_ReadOnly)) { }
         if (ImGui::Button("Delete"))
         {
             Destroyed = true;
@@ -260,6 +280,32 @@ void GameObject::setMass(float newMass) {
 
     // Add the new rigid body back to the dynamics world
     _dynamicsWorld->addRigidBody(rigidBody);
+}
+
+void GameObject::setFrictionValue(float newFriction)
+{
+    _dynamicsWorld->removeRigidBody(rigidBody);
+
+    frictionValue = newFriction;
+
+    // Update local inertia based on the new mass
+    if (isDynamic) {
+        collisionShape->calculateLocalInertia(massValue, localInertia);
+    }
+    else {
+        localInertia = btVector3(0, 0, 0);
+    }
+
+    // Update the rigid body construction info
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(massValue, rigidBody->getMotionState(), collisionShape, localInertia);
+
+    // Replace the existing rigid body with a new one
+    delete rigidBody;
+    rigidBody = new btRigidBody(rbInfo);
+
+    // Add the new rigid body back to the dynamics world
+    _dynamicsWorld->addRigidBody(rigidBody);
+
 }
 
 void GameObject::copy() {
