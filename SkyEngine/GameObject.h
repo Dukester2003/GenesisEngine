@@ -2,9 +2,9 @@
 #define GAMEOBJECT_H
 
 
-#include "g_model.h"
-#include "g_shader.h"
-#include "light.h"
+#include "Model.h"
+#include "Shader.h"
+#include "Light.h"
 
 enum class ShapeType
 {
@@ -67,7 +67,7 @@ class GameObject
 
 		// A non-rotating, non-scalable constructer, best for light sources.
 		GameObject(glm::vec3 pos);
-		// Okay... moving light sources exist to ya know.
+		// Okay... moving light sources exist too ya know.
 		GameObject(glm::vec3 pos, glm::vec3 velocity);
 		GameObject();
 		
@@ -134,12 +134,14 @@ class GameObject
 		
 		
 		virtual void InitModel() {}
-		void DrawModel(Model modelRender,Shader modelShader);
+		void DrawModel(Model modelRender, Shader modelShader);
+
+		void DrawModel(Shader shader);
 		virtual std::shared_ptr<GameObject> clone() const { return NULL; };
 		virtual void InitiateRigidBody(btDynamicsWorld* dynamicsWorld) {}
 		virtual void UpdateRigidBody() {}
 		virtual void InitiateGUI() {}
-		virtual void UpdateObject(Model model, Shader shader, btDynamicsWorld* dynamicsWorld);
+		virtual void UpdateObject(Shader shader, btDynamicsWorld* dynamicsWorld);
 		virtual void ObjMenu(string name);
 		void setRigidBodyEnabled(bool enabled);
 		void updateSize(const btVector3& newSize);

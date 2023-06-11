@@ -1,9 +1,9 @@
 #ifndef COLLISION_H
 #define COLLISION_H
 
-#include "math.h"
-#include "game_obj.h"
-#include "scene.h"
+#include "Math.h"
+#include "GameObject.h"
+#include "Scene.h"
 #include "imgui/imgui.h"
 using namespace glm;
 
@@ -33,6 +33,7 @@ class ColliderShape : public GameObject
             : GameObject(pos, size, rotation, objModel) {}
         ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
             : GameObject(pos, size, rotation) {}
+
         void InitiateRigidBody(btDynamicsWorld* dynamicsWorld)
         {
              createCollisionShape();
@@ -59,6 +60,7 @@ class ColliderShape : public GameObject
             //add the body to the dynamics world
             dynamicsWorld->addRigidBody(rigidBody);
         }
+
         void UpdateRigidBody()
         {
             if (rigidBody) {
@@ -96,12 +98,11 @@ public:
 class BoxCollider : public ColliderShape
 {
 public:
-    Model boxModel;
 
     int id = 0;
     static int next_id;
 
-    void InitModel() override { boxModel = Model("colliders/box.fbx"); }
+    void InitModel() override { model = Model("colliders/boxCollider.obj"); }
     void createCollisionShape() override {
         collisionShape = new btBoxShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)));
     }
@@ -111,18 +112,22 @@ public:
 
     BoxCollider() : ColliderShape() {}
     BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) { 
+        InitModel();
         type = ShapeType::BOX; 
         id = next_id++;
     }
     BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        InitModel();
         type = ShapeType::BOX;
         id = next_id++;
     }
     BoxCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        InitModel();
         type = ShapeType::BOX;
         id = next_id++;
     }
     BoxCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        InitModel();
         type = ShapeType::BOX;
         id = next_id++;
     }
@@ -154,12 +159,10 @@ public:
 class SphereCollider : public ColliderShape
 {
 public:
-    Model sphereModel;
-
     int id = 0;
     static int next_id;
 
-    void InitModel() override { sphereModel = Model("colliders/sphereCollider.obj"); }
+    void InitModel() override { model = Model("colliders/sphereCollider.obj"); }
     void createCollisionShape() override {
         btScalar radius = (Size.x / 6 + Size.y / 6 + Size.z / 6);
         collisionShape = new btSphereShape(radius);
@@ -171,18 +174,22 @@ public:
 
     SphereCollider() : ColliderShape() {}
     SphereCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        InitModel();
         type = ShapeType::SPHERE;
         id = next_id++;
     }
     SphereCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        InitModel();
         type = ShapeType::SPHERE;
         id = next_id++;
     }
     SphereCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        InitModel();
         type = ShapeType::SPHERE;
         id = next_id++;
     }
     SphereCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        InitModel();
         type = ShapeType::SPHERE;
         id = next_id++;
     }
@@ -208,12 +215,10 @@ public:
 class CylinderCollider : public ColliderShape
 {
 public:
-    Model cylinderModel;
-     
     int id = 0;
     static int next_id;
 
-    void InitModel() override { cylinderModel = Model("colliders/CylinderCollider.obj"); }
+    void InitModel() override { model = Model("colliders/CylinderCollider.obj"); }
     void createCollisionShape() override {
         collisionShape = new btCylinderShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)));
     }
@@ -224,18 +229,22 @@ public:
 
     CylinderCollider() : ColliderShape() {}
     CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        InitModel();
         type = ShapeType::CYLINDER;
         id = next_id++;
     }
     CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        InitModel();
         type = ShapeType::CYLINDER;
         id = next_id++;
     }
     CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+        InitModel();
         type = ShapeType::CYLINDER;
         id = next_id++;
     }
     CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+        InitModel();
         type = ShapeType::CYLINDER;
         id = next_id++;
     }
@@ -263,11 +272,9 @@ public:
 class CapsuleCollider : public ColliderShape
 {
 public:
-    Model capsuleModel;
-
     int id = 0;
     static int next_id;
-    void InitModel() override { capsuleModel = Model("colliders/capsuleCollider.obj"); }
+    void InitModel() override { model = Model("colliders/capsuleCollider.obj"); }
     void createCollisionShape() override {
         btScalar radius = (Size.x + Size.z) / 4;
         collisionShape = new btCapsuleShape(radius, Size.y);
@@ -283,6 +290,7 @@ public:
         id = next_id++;
     }
     CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        InitModel();
         type = ShapeType::CAPSULE;
         id = next_id++;
     }
@@ -315,11 +323,9 @@ public:
 class ConeCollider : public ColliderShape
 {
 public:
-    Model coneModel;
-
     int id = 0;
     static int next_id;
-    void InitModel() override { coneModel = Model("colliders/coneCollider.obj"); }
+    void InitModel() override { model = Model("colliders/coneCollider.obj"); }
     void createCollisionShape() override {
         btScalar radius = (Size.x + Size.z) / 4;
         collisionShape = new btConeShape(radius, Size.y);
@@ -335,6 +341,7 @@ public:
         id = next_id++;
     }
     ConeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+        InitModel();
         type = ShapeType::CONE;
         id = next_id++;
     }
@@ -615,11 +622,18 @@ class Floor : public ColliderShape
             collisionShape = new btBoxShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)));
         }
 
+        void InitModel() override { model = Model("colliders/boxCollider.obj"); }
+
         virtual std::shared_ptr<GameObject> clone() const override {
             return std::make_shared<Floor>(*this);
         }
         Floor() : ColliderShape() {}
         Floor(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
+        Floor(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) 
+        {
+            InitModel();
+            type = ShapeType::BOX;
+        }
 };
 
 class Ceiling : public ColliderShape

@@ -2,7 +2,7 @@
 #define GAME_H
 
 
-#include "lvl.h"
+#include "Level.h"
 enum GameState
 {
 	MENU,

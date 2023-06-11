@@ -1,5 +1,5 @@
-#include "light.h"
-#include "g_shader.h"
+#include "Light.h"
+#include "Shader.h"
 #include <imgui.h>
 int Light::next_id = 0;
 int PointLight::next_id = 0;
@@ -57,6 +57,8 @@ void PointLight::ShowMenu(std::string name)
         if (ImGui::DragFloat("Linear", &Linear, 0.005f, 0.0f, 0.1f)) {}
 
         if (ImGui::DragFloat("Quadratic", &Quadratic, 0.005f, 0.0f, 0.1f)) {}
+
+        if (ImGui::Checkbox("Blinn", &Blinn)) {}
         ImGui::EndChild();
     }  ImGui::End();
 }

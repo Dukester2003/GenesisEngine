@@ -1,9 +1,27 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "game_obj.h"
+#include "GameObject.h"
 #include "g_animation.h"
 #include "g_animator.h"
+#include "AnimFlag.h"
+
+
+struct Animations
+{
+	// THE PLAYER SETTINGS
+	// ----------
+	Model playerIdleModel;
+	Animation idleAnimation;
+	Animation runningAnimation;
+	Animation firstJumpAnimation;
+	Animation secondJumpAnimation;
+	Animation superJumpAnimation;
+	Animation crouchTransition;
+	Animation crouchAnimation;
+	Animation backJumpAnimation;
+	Animation longJumpAnimation;
+};
 
 struct JumpActions
 {
@@ -28,6 +46,7 @@ class Player : public GameObject
 {
 	public:
 		Player();
+		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation);
 		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel);
 		Player(btDiscreteDynamicsWorld* dynamicsWorld, const glm::vec3& position);
 		float timeAfterSpacebar;
@@ -44,6 +63,10 @@ class Player : public GameObject
 		int Keys[1024];
 		int KeysProcessed[1024];
 		JumpActions jumpActions;
+		Animator animator;
+		Animations animations;
+		AnimationFlag animFlag;
+		AnimationID animID;
 		CrouchActions crouchActions;
 		bool isGrounded;
 		bool isMoving;
@@ -59,7 +82,10 @@ class Player : public GameObject
 		void MoveBackward(float deltaTime);
 		glm::quat GetForwardDirection();
 		void UpdatePlayer(float deltaTime);
+		void BoneTransforms(Shader shader);
+		void UpdateAnimations();
 		void ProcessPlayerActions(float dt);	
+		void InitAnimations();
 		void FirstJump(float dt);
 		void SecondJump(float dt);
 		void SuperJump(float dt);

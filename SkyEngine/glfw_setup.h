@@ -106,7 +106,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
     {
-        camera.ProcessMouseMovement(xoffset, yoffset);
+        scene.camera.ProcessMouseMovement(xoffset, yoffset);
     }
 }
 
@@ -114,7 +114,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    camera.ProcessMouseScroll(static_cast<float>(yoffset));
+    scene.camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
 

@@ -3,12 +3,12 @@
 
 #include <glad/glad.h> 
 
-#include "math.h"
+#include "Math.h"
 #include <stb_image.h>
 
 
-#include "g_mesh.h"
-#include "g_shader.h"
+#include "Mesh.h"
+#include "Shader.h"
 
 
 #include <string>

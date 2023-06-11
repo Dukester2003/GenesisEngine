@@ -15,7 +15,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "g_shader.h"
+#include "Shader.h"
 
 #include <string>
 #include <vector>

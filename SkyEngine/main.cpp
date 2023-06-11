@@ -1,4 +1,4 @@
-#include "g_GUI.h"
+#include "GUI.h"
 #include "glfw_setup.h"
 #include <random>
 #include <iostream>
@@ -9,26 +9,25 @@
 #include "math.h"
 
 #include "player.h"
-#include "lvl.h"
+#include "Level.h"
 
-#include "g_shader.h"
+#include "Shader.h"
 #include "g_animator.h"
 #include "animFlag.h"
 
-#include "g_collision.h"
-#include "game_obj.h"
+#include "ShapesGeneral.h"
+#include "GameObject.h"
 #include "enemy.h"
-#include "engine.h"
-#include "scene.h"
-#include "g_cubemap.h"
+#include "Engine.h"
+#include "Scene.h"
+#include "Cubemap.h"
 #include "Common_Assets.h"
 #include "framebuffers.h"
-#include "init_collision.h"
-#include "grid.h"
+#include "InitiateCollision.h"
+#include "Grid.h"
 #include <Windows.h>
 
 using namespace irrklang;
-bool gameWindowCreated;
 bool jumpKeyHeld;
 bool isJumping;
 
@@ -44,11 +43,6 @@ std::mt19937 mt(std::random_device{}());
 std::uniform_int_distribution<int> jumpRand(0, 1); // generates random integers between 1 and 2
 int jump_random_integer;
 std::string jump[] = {"audio/Huah!.wav" , "audio/Hoo!.wav"};
-// Animation Checkers
-AnimationFlag animFlag;
-int animID;
-bool currentAnimation = false;
-bool lastAnimation = false;
 
 // AUDIO
 ISoundEngine *SoundEngine = createIrrKlangDevice();
@@ -57,7 +51,6 @@ EngineState engineState;
 
 
 void processInput(GLFWwindow* window);
-void UpdatePlayerAnimation();
 void UpdateCrouchActions(GLFWwindow* window);
 void GUI_SCENE(GLFWwindow* window);
 void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window);
@@ -65,7 +58,6 @@ void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window);
 
 // Math
 glm::vec3 gravity = glm::vec3(0.0f, -0.1f, 0.0f);
-float gravityAccel;
 
 
 // grid slices
@@ -86,26 +78,9 @@ Level lvl_1;
 
 
 
-
-Animator animator;
-
+GUI gui;
 
 
-CollisionCallback collisionCallback;
-
-
-// THE PLAYER SETTINGS
-    // ----------
-Model playerIdleModel;
-Animation idleAnimation;
-Animation runningAnimation;
-Animation firstJumpAnimation;
-Animation secondJumpAnimation;
-Animation superJumpAnimation;
-Animation crouchTransition;
-Animation crouchAnimation;
-Animation backJumpAnimation;
-Animation longJumpAnimation;
 
 CubeMap cubeMap;
 
@@ -117,25 +92,13 @@ int main()
     // glfw window creation
     // --------------------
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Engine", NULL, NULL);
-
     GLFWSetup(window);
     
     
 
     
 
-    // THE PLAYER SETTINGS
-    // ----------
-    playerIdleModel = Model("player/luigiIdle.dae");
-    idleAnimation = Animation("player/luigiIdle.dae", &playerIdleModel);
-    runningAnimation = Animation("player/luigiRunning.dae", &playerIdleModel);
-    firstJumpAnimation = Animation("player/luigiFirstJump.dae", &playerIdleModel);
-    secondJumpAnimation = Animation("player/luigiSecondJump.dae", &playerIdleModel);
-    superJumpAnimation = Animation("player/luigiSuperJump.dae", &playerIdleModel);
-    crouchTransition = Animation("player/luigiCrouchTransition.dae", &playerIdleModel);
-    crouchAnimation = Animation("player/luigiCrouch.dae", &playerIdleModel);
-    backJumpAnimation = Animation("player/luigiBackJump.dae", &playerIdleModel);
-    longJumpAnimation = Animation("player/luigiLongJump.dae", &playerIdleModel);
+    
    
 
     // Level Models
@@ -146,25 +109,25 @@ int main()
     // ------------
 
     CollisionCallback collisionCallback;
-    InitCommonModels();
     InitCommonShaders();
     cubeMap.BuildCubeBoxShaders();
     collisionCallback.BulletInstanceDispatch();
 
-    player = new Player(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f), playerIdleModel);
+    player = new Player(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f));
     ///////////////////////////////////////////////////////////
     ///                   FLOOR COLLIDERS                   ///
     ///////////////////////////////////////////////////////////
-    auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
+    auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
     FloorCollider->InitiateRigidBody(dynamicsWorld);
     FloorCollider->massValue = 0.0f;
 
-    floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);
+    floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
     grid.CreateGrid();
     cubeMap.BuildCubeBox();  
-    imguiSetup(window);
+    gui.ImGuiSetup(window);
     InitFrameBuffers();  
-    InitMaterial();
+    InitMaterial(scene);
+    player->InitAnimations();
     //UPDATE
     while (!glfwWindowShouldClose(window))
     {
@@ -184,9 +147,7 @@ int main()
 
             player->UpdatePlayer(deltaTime);
             DoCollisions();
-            UpdatePlayerAnimation();
-            
-      
+                 
 
             if (!player->isGrounded)
             {
@@ -199,31 +160,17 @@ int main()
         
         
             
-            animator.UpdateAnimation(deltaTime);
+            player->animator.UpdateAnimation(deltaTime);
             collisionCallback.UpdateBtSimulation(deltaTime);
 
             
 
 
             // view/projection transformations
-            projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 200.0f);
-            view = camera.GetViewMatrix();
+            projection = glm::perspective(glm::radians(scene.camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 200.0f);
+            view = scene.camera.GetViewMatrix();
 
-            animationShader.use();
-        
-            auto transforms = animator.GetFinalBoneMatrices();
-            for (int i = 0; i < transforms.size(); ++i)
-                animationShader.setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
-
-
-            ///////////////////////////////
-            ///     DRAW OBJECTS        ///
-            ///////////////////////////////
-
-            /// PLAYER
-            /// ------
-            /// 
-            player->DrawModel(playerIdleModel, animationShader);
+            player->BoneTransforms(animationShader);
       
 
             CreateShaderTransformations();
@@ -237,7 +184,7 @@ int main()
             diffuseShader.setVec3("material.specular", lvl_1.material.specular); // specular lighting doesn't have full effect on this object's material
             
 
-            UpdateCommonObjects();
+            UpdateCommonObjects(scene);
             UpdateLight(scene);
 
             // Render Grid
@@ -253,7 +200,7 @@ int main()
             }
 
             {
-                cubeMap.DrawSkyBox();
+                cubeMap.DrawSkyBox(scene);
             }
             
         }
@@ -269,7 +216,7 @@ int main()
         
 
         GUI_SCENE(window);
-        GUI_INIT();
+        gui.GuiInit();
         GUI_FRAMEBUFFER_RENDER(window);
 
         
@@ -289,6 +236,7 @@ int main()
     glDeleteFramebuffers(1, &fbo);
     grid.Deallocate();
     cubeMap.Deallocate();
+    collisionCallback.btCleanUp();
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
@@ -306,18 +254,18 @@ void processInput(GLFWwindow* window)
 
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
+        scene.camera.ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        scene.camera.ProcessKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
+        scene.camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+        scene.camera.ProcessKeyboard(RIGHT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        camera.MovementSpeed = 10.0;
+        scene.camera.MovementSpeed = 10.0;
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
-        camera.MovementSpeed = 2.5;
+        scene.camera.MovementSpeed = 2.5;
 
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS && !pressedOnce)
@@ -336,7 +284,7 @@ void processInput(GLFWwindow* window)
         player->isMoving = true;
         if (player->isGrounded)
         {
-            animID = PLAYER_RUN_ID;
+            player->animID = PLAYER_RUN_ID;
         }
         
     }
@@ -345,7 +293,7 @@ void processInput(GLFWwindow* window)
         player->isMoving = false;
         if (player->isGrounded)
         {
-            animID = PLAYER_IDLE_ID;
+            player->animID = PLAYER_IDLE_ID;
         }
     }
 
@@ -369,14 +317,14 @@ void processInput(GLFWwindow* window)
     {
         player->crouchTransTime += deltaTime;
         player->isCrouched = true;
-        if (player->isGrounded && player->crouchTransTime <= crouchTransition.GetDuration())
+        if (player->isGrounded && player->crouchTransTime <= player->animations.crouchTransition.GetDuration())
         {
-            animID = PLAYER_CROUCH_TRANSITION_ID;       
+            player->animID = PLAYER_CROUCH_TRANSITION_ID;       
             player->transitionedToCrouch = true;
         }
-        if (player->isGrounded && player->transitionedToCrouch && player->crouchTransTime >= crouchTransition.GetDuration())
+        if (player->isGrounded && player->transitionedToCrouch && player->crouchTransTime >= player->animations.crouchTransition.GetDuration())
         {
-            animID = PLAYER_CROUCH_ID;
+            player->animID = PLAYER_CROUCH_ID;
         }
     }
     else if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE) { player->isCrouched = false; player->transitionedToCrouch = false;  player->crouchTransTime = 0.0f; }
@@ -402,7 +350,7 @@ void processInput(GLFWwindow* window)
 
     if (spacePressed = true && numOfJumps == 0 && !player->crouchActions.backflip && !player->isCrouched)
     {
-            if (!player->isGrounded) animID = PLAYER_SUPER_JUMP_ID;        
+            if (!player->isGrounded) player->animID = PLAYER_SUPER_JUMP_ID;        
             
             player->FirstJump(deltaTime);
             if (!didIterateToNextJump)
@@ -415,7 +363,7 @@ void processInput(GLFWwindow* window)
 
     if (spacePressed = true && numOfJumps == 1 && !player->crouchActions.backflip && !player->isCrouched)
     {
-            if (!player->isGrounded) animID = PLAYER_JUMP_ID;
+            if (!player->isGrounded) player->animID = PLAYER_JUMP_ID;
             player->SecondJump(deltaTime);
             if (!didIterateToNextJump)
             {
@@ -426,7 +374,7 @@ void processInput(GLFWwindow* window)
     }
     if (spacePressed = true && numOfJumps == 2 && !player->crouchActions.backflip && !player->isCrouched)
     {
-            if (!player->isGrounded) animID = PLAYER_SECOND_JUMP_ID;
+            if (!player->isGrounded) player->animID = PLAYER_SECOND_JUMP_ID;
             player->SuperJump(deltaTime);
             if (!didIterateToNextJump)
             {
@@ -511,7 +459,7 @@ void UpdateCrouchActions(GLFWwindow* window)
 
     if (player->crouchActions.backflip)
         {
-            if (!player->isGrounded) animID = PLAYER_BACK_JUMP_ID;
+            if (!player->isGrounded) player->animID = PLAYER_BACK_JUMP_ID;
             std::cout << "Back-Flip";
             player->BackJump(deltaTime);
             if (player->isGrounded) { player->crouchActions.backflip = false; }
@@ -519,83 +467,27 @@ void UpdateCrouchActions(GLFWwindow* window)
     
 }
 
-
-void UpdatePlayerAnimation()
-{
-    if (animID == PLAYER_IDLE_ID && !animFlag.playerIdle) {animFlag.playerIdle = true; animator = (&idleAnimation);} 
-    else if (animID != PLAYER_IDLE_ID && animFlag.playerIdle) animFlag.playerIdle = false;
-
-    if (animID == PLAYER_RUN_ID && !animFlag.playerRun) { animFlag.playerRun = true; animator = (&runningAnimation);} 
-    else if (animID != PLAYER_RUN_ID && animFlag.playerRun) animFlag.playerRun = false;
-
-    if (animID == PLAYER_JUMP_ID && !animFlag.playerJump) { animFlag.playerJump = true; animator = (&firstJumpAnimation); }
-    else if (animID != PLAYER_JUMP_ID && animFlag.playerJump) animFlag.playerJump = false;
-
-    if (animID == PLAYER_SECOND_JUMP_ID && !animFlag.playerSecondJump) { animFlag.playerSecondJump = true; animator = (&secondJumpAnimation);} 
-    else if (animID != PLAYER_SECOND_JUMP_ID && animFlag.playerSecondJump) animFlag.playerSecondJump = false;
-
-    if (animID == PLAYER_SUPER_JUMP_ID && !animFlag.playerSuperJump) { animFlag.playerSuperJump = true; animator = (&superJumpAnimation); } 
-    else if (animID != PLAYER_SUPER_JUMP_ID && animFlag.playerSuperJump) animFlag.playerSuperJump = false;
-
-    if (animID == PLAYER_CROUCH_TRANSITION_ID && !animFlag.playerCrouchTransition) { animFlag.playerCrouchTransition = true; animator = (&crouchTransition); }
-    else if (animID != PLAYER_CROUCH_TRANSITION_ID && animFlag.playerCrouchTransition) animFlag.playerCrouchTransition = false;
-
-    if (animID == PLAYER_CROUCH_ID && !animFlag.playerCrouch) {animFlag.playerCrouch = true; animator = (&crouchAnimation); } 
-    else if (animID != PLAYER_CROUCH_ID && animFlag.playerCrouch) animFlag.playerCrouch = false;
-
-    if (animID == PLAYER_BACK_JUMP_ID && !animFlag.playerBackJump) { animFlag.playerBackJump = true; animator = (&backJumpAnimation); }
-    else if (animID != PLAYER_BACK_JUMP_ID && animFlag.playerBackJump) animFlag.playerBackJump = false;
-}
-
 void DoCollisions()
 {
     bool isAnyColliderColliding = false;
 
-    for (auto& slopeCollider : slopeColliders)
-    {       
-        if (SlopeCollide(*player, slopeCollider))
-        {
-            
-            if (slopeCollider.direction == NORTH) { player->Velocity.y += slopeCollider.tangent1 * player->Speed * cos(player->Rotation.y * glm::pi<float>() / 180); }
-            if (slopeCollider.direction == SOUTH) { player->Velocity.y += slopeCollider.tangent1 * player->Speed * -cos(player->Rotation.y * glm::pi<float>() / 180); }
-            isAnyColliderColliding = true;
-            break;
-        }   
-
-    }
-
-    for (auto& rSlopeCollider : rSlopeColliders)
-    {           
-        if (SlopeCollide(*player, rSlopeCollider))
-        {   
-            
-            if (rSlopeCollider.direction == EAST) { player->Velocity.y += rSlopeCollider.tangent2 * player->Speed * -sin(player->Rotation.y * glm::pi<float>() / 180); }
-            if (rSlopeCollider.direction == WEST) { player->Velocity.y += rSlopeCollider.tangent2 * player->Speed * sin(player->Rotation.y * glm::pi<float>() / 180); }
-            isAnyColliderColliding = true;
-            break;
-        }
-    }
-
-    
-    
-    for (auto& circleFloorCollider : circleFloorColliders)
+   
+    for (auto& floorCollider : floorColliders)
     {
-        for (auto& floorCollider : floorColliders)
+        if (AABB(*player, floorCollider))
         {
-            if (AABB(*player, circleFloorCollider) || AABB(*player, floorCollider))
-            {
-                isAnyColliderColliding = true;
-                break; // If the player is already colliding with one collider, no need to check others
-            }
+            isAnyColliderColliding = true;
+            break; // If the player is already colliding with one collider, no need to check others
         }
     }
+    
     player->isGrounded = isAnyColliderColliding;
     
 }
 
 void GUI_SCENE(GLFWwindow* window)
 {
-    if (ImGui::Begin("Scene", NULL, sceneFlags))
+    if (ImGui::Begin("Scene", NULL, gui.sceneFlags))
     {
 
         // Using a Child allow to fill all the space of the window.
@@ -604,8 +496,8 @@ void GUI_SCENE(GLFWwindow* window)
         {
             if (ImGui::BeginTabItem("Scene"))
             {
-                if (ImGui::IsWindowHovered() || ImGui::IsWindowFocused()) { isSceneHovered = true; ImGui::CaptureMouseFromApp(false); processInput(window); UpdateCrouchActions(window); }
-                else isSceneHovered = false;
+                if (ImGui::IsWindowHovered() || ImGui::IsWindowFocused()) { gui.isSceneHovered = true; ImGui::CaptureMouseFromApp(false); processInput(window); UpdateCrouchActions(window); }
+                else gui.isSceneHovered = false;
                 // Get the size of the child (i.e. the whole draw size of the windows).
                 ImVec2 wsize = ImGui::GetWindowSize();
                 // Because I use the texture from OpenGL, I need to invert the V from the UV.

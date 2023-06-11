@@ -1,4 +1,4 @@
-#include "g_collision.h"
+#include "ShapesGeneral.h"
 
 /// Some Code Might be a bit repetitive or unfinished
 /// Of course collision detection is one of the most

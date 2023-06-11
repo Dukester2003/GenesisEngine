@@ -13,7 +13,7 @@
 #include <vector>
 #include <btBulletDynamicsCommon.h>
 #include <iostream>
-#include "scene.h"
+#include "Scene.h"
 
 inline btDynamicsWorld* dynamicsWorld; 
 inline btBroadphaseInterface* broadphase;

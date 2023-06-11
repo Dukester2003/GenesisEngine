@@ -2,8 +2,8 @@
 #ifndef CUBEMAP_H
 #define CUBEMAP_H
 
-#include "g_mesh.h"
-#include "scene.h"
+#include "Mesh.h"
+#include "Scene.h"
 #include "common_assets.h"
 #include <stb_image.h>
 
@@ -121,12 +121,12 @@ public:
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 		return textureID;
 	}
-	void DrawSkyBox()
+	void DrawSkyBox(Scene& scene)
 	{
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 		skyboxShader.use();
-		view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+		view = glm::mat4(glm::mat3(scene.camera.GetViewMatrix())); // remove translation from the view matrix
 		skyboxShader.setMat4("view", view);
 		skyboxShader.setMat4("projection", projection);
 		// skybox cube

@@ -1,71 +1,31 @@
 #ifndef COMMON_ASSETS
 #define COMMON_ASSETS
 
-#include "init_collision.h"
-#include "g_collision.h"
+#include "InitiateCollision.h"
+#include "ShapesGeneral.h"
 #include "levels/terrain/Grass Block/blocks.h"
-#include "scene.h"
+#include "Scene.h"
 
 
-glm::mat4 projection;
-glm::mat4 view;
+inline glm::mat4 projection;
+inline glm::mat4 view;
 
 // Colliders
-std::vector<ColliderShape> colliders;
-std::vector<Ceiling> ceilingColliders;
-std::vector<SlopeCollider> slopeColliders;
-std::vector<SlopeCollider> rSlopeColliders;
-CylinderCollider circleFloorColliders[3];
-Floor floorColliders[8];
-
-// Terrain
-std::vector<std::shared_ptr<GrassBlock>> grassBlocks;
+inline Floor floorColliders[8];
 
 
-Shader gridShader;
-Shader modelShader;
-Shader diffuseShader;
-Shader animationShader;
-Shader eulerShader;
-Shader collisionShader;
-
-// Collider Models
-Model boxModel;
-Model sphereModel;
-Model capsuleModel;
-Model coneModel;
-Model monkeModel;
-Model floorColliderModel;
-Model circleFloorColliderModel;
-Model cylinderModel;
-Model slopeColliderModel;
-Model rSlopeColliderModel;
 
 
-// Level Models
-Model grassBlockModel;
-Model stoneBlockModel;
-void InitCommonModels()
-{
-    // Collider Models
-    for (auto& item : items) { item->InitModel(); }
-    boxModel = Model("colliders/boxCollider.obj");
-    sphereModel = Model("colliders/sphereCollider.obj");
-    floorColliderModel = Model("colliders/floor.obj");
-    circleFloorColliderModel = Model("colliders/CircleFloor.obj");
-    cylinderModel = Model("colliders/CylinderCollider.obj");
-    slopeColliderModel = Model("colliders/SlopeCollider.obj");
-    rSlopeColliderModel = Model("colliders/RightSlopeCollider.obj");
-    capsuleModel = Model("colliders/capsuleCollider.obj");
-    coneModel = Model("colliders/coneCollider.obj");
-    monkeModel = Model("colliders/monke.obj");
+inline Shader gridShader;
+inline Shader modelShader;
+inline Shader diffuseShader;
+inline Shader animationShader;
+inline Shader eulerShader;
+inline Shader collisionShader;
 
-    // Level Models
-    grassBlockModel = Model("levels/terrain/Grass Block/grass_block.obj");
-    stoneBlockModel = Model("levels/terrain/Stone Block/stone_block.obj");
-}
 
-void InitCommonShaders()
+
+inline void InitCommonShaders()
 {
     // build and compile our shaders program
     // ------------------------------------
@@ -77,7 +37,7 @@ void InitCommonShaders()
     collisionShader = Shader("shaders/collisionShader.vs", "shaders/collisionShader.fs");
 }
 
-void CreateShaderTransformations()
+inline void CreateShaderTransformations()
 {
     // create transformations
     animationShader.setMat4("projection", projection);
@@ -96,20 +56,15 @@ void CreateShaderTransformations()
     modelShader.setMat4("view", view);
 }
 
-void UpdateCommonObjects()
+inline void UpdateCommonObjects(Scene& scene)
 {
-    /// COLLIDERS
-            /// ---------
-    for (auto& item : items) { item->UpdateObject(item->model, diffuseShader, dynamicsWorld); }
-    for (auto& slopeCollider : slopeColliders) { slopeCollider.DrawModel(slopeColliderModel, modelShader); }
-    for (auto& rSlopeCollider : rSlopeColliders) { rSlopeCollider.DrawModel(rSlopeColliderModel, modelShader); }
-    for (auto& circleFloorCollider : circleFloorColliders) { circleFloorCollider.UpdateObject(cylinderModel, modelShader, dynamicsWorld); }
-    for (auto& floorCollider : floorColliders) { floorCollider.UpdateObject(boxModel,modelShader, dynamicsWorld); }
+    for (auto& item : scene.items) { item->UpdateObject(diffuseShader, dynamicsWorld); }
+    for (auto& floorCollider : floorColliders) { floorCollider.UpdateObject(modelShader, dynamicsWorld); }
 }
 
-void InitMaterial()
+inline void InitMaterial(Scene& scene)
 {
-    for (auto& item : items) {
+    for (auto& item : scene.items) {
         diffuseShader.use();
         diffuseShader.setFloat("material.shininess", item->material.shininess);
         diffuseShader.setVec3("material.ambient", item->material.ambient);
@@ -117,16 +72,16 @@ void InitMaterial()
         diffuseShader.setVec3("material.specular", item->material.specular);
     }
 }
-void UpdateLight(Scene& scene)
+inline void UpdateLight(Scene& scene)
 {
     diffuseShader.use();
     scene.UpdateDirLights(diffuseShader);
     scene.UpdatePointLights(diffuseShader);
     scene.UpdateSpotLights(diffuseShader);
 
-    diffuseShader.setVec3("viewPos", camera.Position);
+    diffuseShader.setVec3("viewPos", scene.camera.Position);
 
-    for(auto& item: items) {
+    for(auto& item: scene.items) {
         diffuseShader.use();      
         diffuseShader.setFloat("material.shininess", item->material.shininess);
 

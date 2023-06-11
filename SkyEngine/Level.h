@@ -1,8 +1,8 @@
 #ifndef LVL_H
 #define LVL_H
 
-#include "g_model.h"
-#include "game_obj.h"
+#include "Model.h"
+#include "GameObject.h"
 class Level
 {
 	public:

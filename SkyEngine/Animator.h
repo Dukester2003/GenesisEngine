@@ -10,7 +10,7 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include "g_animation.h"
-#include "g_bone.h"
+#include "Bone.h"
 
 class Animator
 {

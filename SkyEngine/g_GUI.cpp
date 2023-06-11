@@ -1,38 +1,10 @@
-#pragma once
-#ifndef G_GUI_H
-#define G_GUI_H
+#include "GUI.h"
 
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+bool GUI::showSaveWindow = false;
+bool GUI::showLoadWindow = false;
+char GUI::filename[64] = { '\0' };
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#include "Common_Assets.h"
-#include "init_collision.h"
-
-#include <dirent.h>
-#include <sys/stat.h>
-#include <filesystem> // Include this for std::filesystem::path
-
-
-ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove + ImGuiWindowFlags_NoCollapse; // by ex
-ImGuiWindowFlags sceneFlags = ImGuiWindowFlags_NoMove + ImGuiWindowFlags_NoCollapse + ImGuiWindowFlags_NoScrollWithMouse;
-btVector3 _btPosition = btVector3(0.0f, 0.0f, 0.0f);
-bool pushedBack;
-bool isPlaying = false;
-bool show_file_explorer;
-static bool showSaveWindow = false;
-static bool showLoadWindow = false;
-std::string current_path = "."; // Set an initial path, e.g., the current working directory
-void FileExplorer(const std::string& title, std::string& current_path);
-void ShowSaveWindow();
-void ShowLoadWindow();
-bool isSceneHovered = false; 
-static char filename[64] = "scene.json";
-Scene scene;
-void imguiSetup(GLFWwindow* window)
+void GUI::ImGuiSetup(GLFWwindow * window)
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -49,9 +21,9 @@ void imguiSetup(GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 450");
 }
-void GUI_INIT();
 
-bool IsMouseHoveringOverWindow(const char* window_name)
+
+bool GUI::IsMouseHoveringOverWindow(const char* window_name)
 {
     // Get the window by name
     ImGui::SetNextWindowFocus();
@@ -69,7 +41,7 @@ bool IsMouseHoveringOverWindow(const char* window_name)
     return is_hovered;
 }
 
-bool ListFiles(const std::string& path, std::vector<std::string>& files, std::vector<std::string>& directories) {
+bool GUI::ListFiles(const std::string& path, std::vector<std::string>& files, std::vector<std::string>& directories) {
     DIR* dir;
     struct dirent* ent;
     struct stat sb;
@@ -93,7 +65,7 @@ bool ListFiles(const std::string& path, std::vector<std::string>& files, std::ve
     return false;
 }
 
-void FileExplorer(const std::string& title, std::string& current_path) {
+void GUI::FileExplorer(const std::string& title, std::string& current_path) {
     ImGui::Begin(title.c_str());
 
     // Change directory by clicking on the folder name
@@ -116,7 +88,7 @@ void FileExplorer(const std::string& title, std::string& current_path) {
             std::filesystem::path parent_path = std::filesystem::path(current_path).parent_path();
             current_path = parent_path.string();
         }
-        
+
     }
     ImGui::SameLine();
     if (ImGui::Button("Close")) { show_file_explorer = false; }
@@ -136,18 +108,18 @@ void FileExplorer(const std::string& title, std::string& current_path) {
     ImGui::End();
 }
 
-void AddItem(std::shared_ptr<GameObject> item, btDynamicsWorld* dynamicsWorld) {
+void GUI::AddItem(std::shared_ptr<GameObject> item, btDynamicsWorld* dynamicsWorld) {
     item->massValue = 5.0f;
     item->InitiateRigidBody(dynamicsWorld);
 }
 
-inline void GUI_INIT()
-{   
+void GUI::GuiInit()
+{
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
-            
+
             if (ImGui::MenuItem("Open..", "Ctrl+O"))
             {
                 // Set a flag to show the file explorer
@@ -156,7 +128,7 @@ inline void GUI_INIT()
 
             if (ImGui::MenuItem("Save", "Ctrl+S"))
             {
-                showSaveWindow = true;   
+                showSaveWindow = true;
             }
 
             if (ImGui::MenuItem("Load", "Ctrl+O"))
@@ -187,6 +159,7 @@ inline void GUI_INIT()
             {
 
             }
+            if (ImGui::MenuItem("Enable Gizmos", NULL, &scene.enableGizmos)) {}
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Add"))
@@ -195,58 +168,58 @@ inline void GUI_INIT()
             {
                 if (ImGui::MenuItem("Box"))
                 {
-                    auto boxCollider = std::make_shared<BoxCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), boxModel);               
+                    auto boxCollider = std::make_shared<BoxCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(boxCollider, dynamicsWorld);
-                    items.push_back(boxCollider);
+                    scene.items.push_back(boxCollider);
                 }
 
                 if (ImGui::MenuItem("Sphere"))
                 {
-                    auto sphereCollider = std::make_shared<SphereCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), sphereModel);
+                    auto sphereCollider = std::make_shared<SphereCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(sphereCollider, dynamicsWorld);
-                    items.push_back(sphereCollider);
+                    scene.items.push_back(sphereCollider);
                 }
 
                 if (ImGui::MenuItem("Cylinder"))
                 {
-                    auto cylinderCollider = std::make_shared<CylinderCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), cylinderModel);
+                    auto cylinderCollider = std::make_shared<CylinderCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(cylinderCollider, dynamicsWorld);
-                    items.push_back(cylinderCollider);
+                    scene.items.push_back(cylinderCollider);
                 }
 
                 if (ImGui::MenuItem("Capsule"))
                 {
-                    auto capsuleCollider = std::make_shared<CapsuleCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), capsuleModel);
+                    auto capsuleCollider = std::make_shared<CapsuleCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(capsuleCollider, dynamicsWorld);
-                    items.push_back(capsuleCollider);
+                    scene.items.push_back(capsuleCollider);
                 }
 
                 if (ImGui::MenuItem("Cone"))
                 {
-                    auto coneCollider = std::make_shared<ConeCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f) , coneModel);
+                    auto coneCollider = std::make_shared<ConeCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(coneCollider, dynamicsWorld);
-                    items.push_back(coneCollider);
+                    scene.items.push_back(coneCollider);
                 }
 
                 if (ImGui::MenuItem("Compound Shape"))
                 {
                     auto compoundShape = std::make_shared<CompoundShape>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(compoundShape, dynamicsWorld);
-                    items.push_back(compoundShape);
+                    scene.items.push_back(compoundShape);
                 }
                 if (ImGui::MenuItem("Monke"))
                 {
 
                 }
                 ImGui::EndMenu();
-            }         
+            }
             if (ImGui::BeginMenu("Light Source"))
             {
                 if (ImGui::MenuItem("Point Light"))
                 {
                     scene.pointLights.push_back(PointLight(glm::vec3(spawnPosition)));
                     scene.pointLightPresent = true;
-                }        
+                }
 
                 if (ImGui::MenuItem("Directional Light"))
                 {
@@ -288,7 +261,7 @@ inline void GUI_INIT()
     }
     if (ImGui::CollapsingHeader("Entities"))
     {
-       
+
     }
     if (ImGui::CollapsingHeader("Level Elements"))
     {
@@ -296,9 +269,9 @@ inline void GUI_INIT()
         {
             if (ImGui::Button("Grass Block"))
             {
-                auto grassBlock = std::make_shared<GrassBlock>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f), grassBlockModel);
+                auto grassBlock = std::make_shared<GrassBlock>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                 AddItem(grassBlock, dynamicsWorld);
-                items.push_back(grassBlock);
+                scene.items.push_back(grassBlock);
             }
             ImGui::TreePop();
         }
@@ -330,7 +303,7 @@ inline void GUI_INIT()
         if (ImGui::Button("Paste"))
         {
             if (copiedObject) {
-                items.push_back(copiedObject->clone());
+                scene.items.push_back(copiedObject->clone());
             }
         }
 
@@ -347,8 +320,8 @@ inline void GUI_INIT()
             int coneCounter = 0;
 
             static int selectedItem = 0;
-            itemIndex = 0;
-            for (auto& item : items)
+            scene.itemIndex = 0;
+            for (auto& item : scene.items)
             {
                 switch (item->type) {
                 case ShapeType::PLANE:
@@ -390,9 +363,9 @@ inline void GUI_INIT()
                 case BlockType::GRASS:
                     item->Name = "GrassBlock " + std::to_string(static_cast<GrassBlock*>(item.get())->id);
                 }
-                item->IsSelected = (selectedItem == itemIndex);
+                item->IsSelected = (selectedItem == scene.itemIndex);
                 if (ImGui::Selectable(item->Name.c_str(), item->IsSelected)) {
-                    selectedItem = itemIndex;
+                    selectedItem = scene.itemIndex;
                 }
                 if (item->IsSelected) {
                     // Call the item menu function for the selected object
@@ -401,14 +374,14 @@ inline void GUI_INIT()
 
 
 
-                itemIndex++;
+                scene.itemIndex++;
                 // ... Use the 'name' string to display the object in ImGui ...
 
 
             }
-            for (auto it = items.begin(); it != items.end(); /* no increment here */) {
+            for (auto it = scene.items.begin(); it != scene.items.end(); /* no increment here */) {
                 if ((*it)->Destroyed) {
-                    it = items.erase(it);  // erase returns the new iterator position
+                    it = scene.items.erase(it);  // erase returns the new iterator position
                 }
                 else {
                     ++it;
@@ -416,24 +389,24 @@ inline void GUI_INIT()
             }
             if (ImGui::Button("Copy"))
             {
-                if (selectedItem >= 0 && selectedItem < items.size()) {
-                    copiedObject = items[selectedItem]->clone();
+                if (selectedItem >= 0 && selectedItem < scene.items.size()) {
+                    copiedObject = scene.items[selectedItem]->clone();
                 }
             }
             ImGui::EndListBox();
             // After the ImGui::EndListBox() line
 
-        }       
+        }
         ImGui::End();
-    } 
-    
+    }
+
 
     ///////////////////////////////////
     ///           LIGHTS            ///
     ///////////////////////////////////
-    if (ImGui::Begin("Light Sources In Scene"), NULL ,flags)
+    if (ImGui::Begin("Light Sources In Scene"), NULL, flags)
     {
-        if (ImGui::BeginListBox("Light Scene In Scene", ImVec2(250,1500)))
+        if (ImGui::BeginListBox("Light Scene In Scene", ImVec2(250, 1500)))
         {
             size_t lightIndex = 0;
             static int selectedItem = 0;
@@ -458,13 +431,13 @@ inline void GUI_INIT()
             for (int i = 0; i < scene.pointLights.size(); i++)
             {
                 auto& pointLight = scene.pointLights[i];
-                
+
                 pointLight.Name = "PointLight ";
                 std::string name = pointLight.Name + std::to_string(i);
                 pointLight.IsSelected = (selectedItem == lightIndex);
                 if (ImGui::Selectable(name.c_str(), pointLight.IsSelected)) {
                     selectedItem = lightIndex;
-                    
+
                 }
                 if (pointLight.IsSelected) {
                     // Call the item menu function for the selected object
@@ -490,19 +463,19 @@ inline void GUI_INIT()
                 lightIndex++;
             }
 
-            
-            
+
+
             ImGui::EndListBox();
         }
         ImGui::End();
     }
 
-   
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ShowSaveWindow() {
+void GUI::ShowSaveWindow() {
     if (ImGui::Begin("Name File"))  // The window will close when showSaveWindow is set to false
     {
         if (ImGui::InputText("Filename", filename, IM_ARRAYSIZE(filename), ImGuiInputTextFlags_EnterReturnsTrue))
@@ -511,7 +484,7 @@ void ShowSaveWindow() {
             // Check if filename is not empty before saving the scene.
             if (strlen(filename) > 0)
             {
-                scene.SaveScene(filename, items);
+                scene.SaveScene(filename, scene.items);
                 showSaveWindow = false; // Close the dialog when the scene is saved.
             }
             else
@@ -527,7 +500,7 @@ void ShowSaveWindow() {
     } ImGui::End();
 }
 
-void ShowLoadWindow()
+void GUI::ShowLoadWindow()
 {
     if (ImGui::Begin("Load File"))
     {
@@ -537,7 +510,7 @@ void ShowLoadWindow()
             // Check if filename is not empty before saving the scene.
             if (strlen(filename) > 0)
             {
-                scene.SaveScene(filename, items);
+                scene.SaveScene(filename, scene.items);
                 showLoadWindow = false; // Close the dialog when the scene is saved.
             }
             else
@@ -552,4 +525,3 @@ void ShowLoadWindow()
         }
     } ImGui::End();
 }
-#endif

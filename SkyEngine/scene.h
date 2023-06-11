@@ -1,10 +1,10 @@
 #ifndef SCENE
 #define SCENE
 
-#include "light.h"
-#include "game_obj.h"
+#include "Light.h"
+#include "GameObject.h"
 #include "player.h"
-#include "g_camera.h"
+#include "Camera.h"
 #include <vector>
 #include <list>
 #include <fstream>
@@ -14,13 +14,12 @@
 using json = nlohmann::json;
 inline glm::vec3 spawnPosition = glm::vec3(0.0f, 5.0f, 0.0f);
 inline btAlignedObjectArray<btCollisionShape*> collisionShapes;
-inline std::vector<std::shared_ptr<GameObject>> items;
+
 inline std::shared_ptr<GameObject> copiedObject;
-inline size_t itemIndex;
+
 inline Player* player;
-inline Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
-inline bool enableVisibleColliders;
-inline bool canPaste;
+
+
 
 
 struct Copy
@@ -39,7 +38,19 @@ inline Copy* _copy = new Copy;
 
 class Scene
 {   
+public:
+	glm::mat4 projection;
+	glm::mat4 view;
 
+    size_t itemIndex;
+
+	Shader gridShader;
+
+	Shader modelShader;
+	Shader diffuseShader;
+	Shader animationShader;
+	Shader eulerShader;
+	Shader collisionShader;
 public:
 	Scene();
 	~Scene();
@@ -56,7 +67,15 @@ public:
 	std::vector<PointLight> pointLights;
 	std::vector<DirectionalLight> dirLights;
 	std::vector<SpotLight> spotLights;
+	std::vector<std::shared_ptr<GameObject>> items;
 
+	Player* player;
+	Camera camera = glm::vec3(0.0f, 3.0f, 0.0f);
+
+public:
+	void InitShaders();
+	void CreateShaderTransformations();
+	void UpdateObjects(btDynamicsWorld* dynamicsWorld);
 	void DefaultPointLights(Shader& shader);
 	void ActivatePointLights(Shader& shader);
 	void UpdatePointLights(Shader& shader);
@@ -72,6 +91,9 @@ public:
 	bool dirLightPresent;
 	bool pointLightPresent;
 	bool spotLightPresent;
+
+	bool enableGizmos = false;
+	bool enableVisibleColliders = false;
 }; 
 
 

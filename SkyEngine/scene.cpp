@@ -1,5 +1,6 @@
 #include "scene.h"
-#include "g_collision.h"
+#include "ShapesGeneral.h"
+
 
 
 
@@ -11,6 +12,43 @@ Scene::Scene()
 Scene::~Scene()
 {
     // destructor implementation
+}
+
+void Scene::InitShaders()
+{
+    // build and compile our shaders program
+    // ------------------------------------
+    gridShader = Shader("shaders/grid.vs", "shaders/grid.fs");
+    modelShader = Shader("shaders/model.vs", "shaders/model.fs");
+    diffuseShader = Shader("shaders/diffuse.vs", "shaders/diffuse.fs");
+    animationShader = Shader("shaders/anim.vs", "shaders/anim.fs");
+    eulerShader = Shader("shaders/euler.vs", "shaders/euler.fs");
+    collisionShader = Shader("shaders/collisionShader.vs", "shaders/collisionShader.fs");
+}
+
+
+void Scene::CreateShaderTransformations()
+{
+    // create transformations
+    animationShader.setMat4("projection", projection);
+    animationShader.setMat4("view", view);
+    gridShader.use();
+    gridShader.setMat4("projection", projection);
+    gridShader.setMat4("view", view);
+    collisionShader.use();
+    collisionShader.setMat4("projection", projection);
+    collisionShader.setMat4("view", view);
+    diffuseShader.use();
+    diffuseShader.setMat4("projection", projection);
+    diffuseShader.setMat4("view", view);
+    modelShader.use();
+    modelShader.setMat4("projection", projection);
+    modelShader.setMat4("view", view);
+}
+
+void Scene::UpdateObjects(btDynamicsWorld* dynamicsWorld)
+{
+    for (auto& item : items) { item->UpdateObject(diffuseShader, dynamicsWorld); }
 }
 
 void Scene::SaveScene(const std::string& filename, const std::vector<std::shared_ptr<GameObject>>& items) {
@@ -99,7 +137,10 @@ std::vector<std::string> Scene::getFilesInDirectory(const std::string& directory
     return files;
 }
 
-
+///
+/// For the lights in this scene,
+/// 
+/// 
 
 // Directions
 void Scene::DefaultDirLights(Shader& shader)
@@ -142,8 +183,7 @@ void Scene::DefaultPointLights(Shader& shader)
     for (int i = 0; i < pointLights.size(); ++i)
     {
         std::string lightName = "lights[" + std::to_string(i) + "]";
-
-        
+      
         shader.setVec3(lightName  +  ".position",   0.0f,0.0f,0.0f);
         shader.setVec3(lightName  +  ".ambient",    0.0f,0.0f,0.0f);
         shader.setVec3(lightName  +  ".diffuse",    0.0f,0.0f,0.0f);
@@ -151,6 +191,7 @@ void Scene::DefaultPointLights(Shader& shader)
         shader.setFloat(lightName +  ".constant",   0.0f);
         shader.setFloat(lightName +  ".linear",     0.0f);
         shader.setFloat(lightName +  ".quadratic",  0.0f);
+        shader.setBool(lightName  +  ".blinn",      false);
     }
 }
 
@@ -159,7 +200,8 @@ void Scene::ActivatePointLights(Shader& shader)
     for (int i = 0; i < pointLights.size(); ++i)
     {
         std::string lightName = "lights[" + std::to_string(i) + "]";
-
+        if (!pointLights[i].modelDrawn) { pointLights[i].InitGizmo(); pointLights[i].modelDrawn = true; }
+        if (enableGizmos) { pointLights[i].DrawGizmo(shader); }
         shader.setVec3(lightName  +  ".position",  pointLights[i].Position);
         shader.setVec3(lightName  +  ".ambient",   pointLights[i].Ambient);
         shader.setVec3(lightName  +  ".diffuse",   pointLights[i].Diffuse);
@@ -167,6 +209,7 @@ void Scene::ActivatePointLights(Shader& shader)
         shader.setFloat(lightName + ".constant",   pointLights[i].Constant);
         shader.setFloat(lightName + ".linear",     pointLights[i].Linear);
         shader.setFloat(lightName + ".quadratic",  pointLights[i].Quadratic);
+        shader.setBool(lightName  + ".blinn",      pointLights[i].Blinn);
     }
 }
 

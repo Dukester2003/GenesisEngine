@@ -8,10 +8,10 @@
 #include <map>
 #include <glm/glm.hpp>
 #include <assimp/scene.h>
-#include "g_bone.h"
+#include "Bone.h"
 #include <functional>
 #include "g_animdata.h"
-#include "g_model.h"
+#include "Model.h"
 
 struct AssimpNodeData
 {

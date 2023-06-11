@@ -1,5 +1,5 @@
 
-#include "game_obj.h"
+#include "GameObject.h"
 #include "imgui/imgui.h"
 #include "scene.h"
 
@@ -11,7 +11,6 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::q
 : Position(pos), Size(size), Velocity(velocity), hasVelocity(true) ,Rotation(rotation), 
   isEuler(false), Destroyed(false), model(objModel), modelDynamic(false)
 {
-
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
@@ -27,6 +26,7 @@ GameObject::GameObject(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::q
     _dynamicsWorld = NULL;
     rigidBody = NULL;
     collisionShape = NULL;
+    massValue = 0.0f;
     frictionValue = 0.0f;
     localInertia = btVector3(0.0f, 0.0f, 0.0f);
 }
@@ -128,10 +128,15 @@ void GameObject::DrawModel(Model modelRender, Shader modelShader)
 	modelRender.Draw(modelShader, this->Position, this->Size, this->Rotation);
 }
 
-void GameObject::UpdateObject(Model model, Shader shader, btDynamicsWorld* dynamicsWorld)
+void GameObject::DrawModel(Shader modelShader)
+{
+    model.Draw(modelShader, this->Position, this->Size, this->Rotation);
+}
+
+void GameObject::UpdateObject(Shader shader, btDynamicsWorld* dynamicsWorld)
 {
     _dynamicsWorld = dynamicsWorld;
-    DrawModel(model, shader);
+    DrawModel(shader);
     UpdateRigidBody();
 }
 void GameObject::ObjMenu(string name)

@@ -3,7 +3,7 @@
 
 #include "math.h"
 #include <string.h>
-#include "g_model.h"
+#include "Model.h"
 enum class LightType
 {
     AMBIENT,
@@ -23,6 +23,7 @@ public:
     glm::vec3 Influence;
     LightType type;
     std::string Name;
+    bool Blinn;
     bool IsSelected;
     bool gizmoToggle;
     glm::vec3 gizmoSize = glm::vec3(1.0f);
@@ -56,14 +57,7 @@ public:
     virtual void DefaultData(Shader shader) {}
     virtual void Update(Shader shader) = 0;
 
-    void InitGizmo()
-    {
-        gizmo = Model("eng/lightGizmo.obj");
-    }
-    void DrawGizmo(Shader shader)
-    {
-
-    }
+    
 };
 
 class PointLight : public Light
@@ -82,6 +76,17 @@ public:
     }
 
     PointLight() {}
+
+    bool modelDrawn = false;
+    void InitGizmo()
+    {
+        gizmo = Model("eng/lightGizmo.obj");
+    }
+    void DrawGizmo(Shader shader)
+    {
+        gizmo.Draw(shader, Position, glm::vec3(1.0f), glm::vec3(0.0f));
+    }
+
     // Getters
     glm::vec3 getPosition() { return Position; }
     float getConstant() { return Constant; }
