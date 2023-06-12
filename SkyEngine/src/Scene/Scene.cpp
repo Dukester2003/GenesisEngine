@@ -1,5 +1,5 @@
-#include "scene.h"
-#include "ShapesGeneral.h"
+#include "Scene.h"
+#include "../BaseShape.h"
 
 
 

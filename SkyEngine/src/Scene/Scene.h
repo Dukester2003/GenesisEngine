@@ -1,9 +1,10 @@
 #ifndef SCENE
 #define SCENE
 
-#include "Light.h"
-#include "GameObject.h"
-#include "player.h"
+#include "../Light.h"
+#include "../GameObject.h"
+#include "../player.h"
+#include "Grid.h"
 #include "Camera.h"
 #include <vector>
 #include <list>
@@ -42,6 +43,9 @@ public:
 	glm::mat4 projection;
 	glm::mat4 view;
 
+	// This refers to kinematic rigidbodies like the player and enemies.
+	glm::vec3 gravity = glm::vec3(0.0f, -0.1f, 0.0f);
+
     size_t itemIndex;
 
 	Shader gridShader;
@@ -71,6 +75,7 @@ public:
 
 	Player* player;
 	Camera camera = glm::vec3(0.0f, 3.0f, 0.0f);
+	Grid grid;
 
 public:
 	void InitShaders();

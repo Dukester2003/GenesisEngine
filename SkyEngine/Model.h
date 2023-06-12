@@ -18,7 +18,7 @@
 #include <map>
 #include <vector>
 #include <learnopengl/assimp_glm_helpers.h>
-#include "g_animdata.h"
+#include "AnimationData.h"
 
 /// Original Model Loading Code By Joey De Vries modified to fit this program
 

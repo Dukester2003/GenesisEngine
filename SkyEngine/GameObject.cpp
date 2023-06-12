@@ -1,7 +1,7 @@
 
 #include "GameObject.h"
 #include "imgui/imgui.h"
-#include "scene.h"
+#include "src/Scene/scene.h"
 
 // For the game objects with vs without the 'Model' argument at the end of the constructor, use the constructer with Model argument if the object model is static, 
 // use the constructer without the Model argument if the object model is dynamic.

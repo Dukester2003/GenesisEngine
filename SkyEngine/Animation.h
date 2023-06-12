@@ -10,7 +10,7 @@
 #include <assimp/scene.h>
 #include "Bone.h"
 #include <functional>
-#include "g_animdata.h"
+#include "AnimationData.h"
 #include "Model.h"
 
 struct AssimpNodeData

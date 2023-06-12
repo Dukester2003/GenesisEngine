@@ -1,30 +1,30 @@
-#include "GUI.h"
-#include "glfw_setup.h"
+#include "../Scene/Scene.h"
+#include "../Scene/glfw_setup.h"
 #include <random>
 #include <iostream>
 #include <stb_image.h>
 #include <irrklang/irrKlang.h>
 
 
-#include "math.h"
+#include "../math.h"
 
-#include "player.h"
-#include "Level.h"
+#include "../player.h"
+#include "../Level.h"
 
-#include "Shader.h"
-#include "g_animator.h"
-#include "animFlag.h"
+#include "../Shader.h"
+#include "../Animator.h"
+#include "../animFlag.h"
 
-#include "ShapesGeneral.h"
-#include "GameObject.h"
-#include "enemy.h"
-#include "Engine.h"
-#include "Scene.h"
-#include "Cubemap.h"
-#include "Common_Assets.h"
-#include "framebuffers.h"
-#include "InitiateCollision.h"
-#include "Grid.h"
+#include "../BaseShape.h"
+#include "../GameObject.h"
+#include "../enemy.h"
+#include "../Main/Engine.h"
+#include "../Scene/Scene.h"
+#include "../Scene/Cubemap.h"
+#include "../Common_Assets.h"
+#include "../framebuffers.h"
+#include "../InitiateCollision.h"
+#include "../Scene/Grid.h"
 #include <Windows.h>
 
 using namespace irrklang;
@@ -44,96 +44,54 @@ std::uniform_int_distribution<int> jumpRand(0, 1); // generates random integers 
 int jump_random_integer;
 std::string jump[] = {"audio/Huah!.wav" , "audio/Hoo!.wav"};
 
+
+
+
+
+void Initialize();
+void Update();
+void processInput(GLFWwindow* window);
+void UpdateCrouchActions(GLFWwindow* window);
+void GUI_SCENE(GLFWwindow* window, GUI gui);
+void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window);
+//bool on_mouse_click_collision(GLFWwindow* window, float xpos, float ypos, GameObject gameObject);
+
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
+
+Model lvl_1_model;
+Level lvl_1;
+GUI gui;
+CubeMap cubeMap;
+CollisionCallback collisionCallback;
+GLFW_Setup* glfwSetup;
+
 // AUDIO
 ISoundEngine *SoundEngine = createIrrKlangDevice();
 EngineState engineState;
 
-
-
-void processInput(GLFWwindow* window);
-void UpdateCrouchActions(GLFWwindow* window);
-void GUI_SCENE(GLFWwindow* window);
-void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window);
-//bool on_mouse_click_collision(GLFWwindow* window, float xpos, float ypos, GameObject gameObject);
-
-// Math
-glm::vec3 gravity = glm::vec3(0.0f, -0.1f, 0.0f);
-
-
-// grid slices
-Grid grid;
-
-
-
-
-// timing
-float deltaTime = 0.0f;	// time between current frame and last frame
-float lastFrame = 0.0f;
-
-
-
-
-// The Levels
-Level lvl_1;
-
-
-
-GUI gui;
-
-
-
-CubeMap cubeMap;
-
-int main()
+void Initialize()
 {
-    InitiateGLFW();
+  glfwSetup = new GLFW_Setup();
+  gui.ImGuiSetup(glfwSetup->window);
+  InitCommonShaders();
+  cubeMap.BuildCubeBoxShaders();
+  collisionCallback.BulletInstanceDispatch();
+  scene.grid.CreateGrid();
+  cubeMap.BuildCubeBox();  
+  InitFrameBuffers();  
+  InitMaterial(scene);
+}
 
-
-    // glfw window creation
-    // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Engine", NULL, NULL);
-    GLFWSetup(window);
-    
-    
-
-    
-
-    
-   
-
-    // Level Models
-    // ------------
-    Model lvl_1_model("levels/warehouse/compound.glb");
-
-    // Level Element Models/Animation
-    // ------------
-
-    CollisionCallback collisionCallback;
-    InitCommonShaders();
-    cubeMap.BuildCubeBoxShaders();
-    collisionCallback.BulletInstanceDispatch();
-
-    player = new Player(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-    ///////////////////////////////////////////////////////////
-    ///                   FLOOR COLLIDERS                   ///
-    ///////////////////////////////////////////////////////////
-    auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-    FloorCollider->InitiateRigidBody(dynamicsWorld);
-    FloorCollider->massValue = 0.0f;
-
-    floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-    grid.CreateGrid();
-    cubeMap.BuildCubeBox();  
-    gui.ImGuiSetup(window);
-    InitFrameBuffers();  
-    InitMaterial(scene);
-    player->InitAnimations();
+void Update()
+{
     //UPDATE
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(glfwSetup->window))
     {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
         // Bind the framebuffer
         BindFrameBuffer();
         
@@ -151,23 +109,15 @@ int main()
 
             if (!player->isGrounded)
             {
-                player->Position.y += gravity.y;
+                player->Position.y += scene.gravity.y;
             }
-        
-        
-            // per-frame time logic	
-            // --------------------	
-        
-        
             
             player->animator.UpdateAnimation(deltaTime);
             collisionCallback.UpdateBtSimulation(deltaTime);
 
-            
-
-
+       
             // view/projection transformations
-            projection = glm::perspective(glm::radians(scene.camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 200.0f);
+            projection = glm::perspective(glm::radians(scene.camera.Zoom), (float)glfwSetup->SCR_WIDTH / (float)glfwSetup->SCR_HEIGHT, 0.1f, 200.0f);
             view = scene.camera.GetViewMatrix();
 
             player->BoneTransforms(animationShader);
@@ -190,12 +140,12 @@ int main()
             // Render Grid
             {
                 // Grid Shader
-                grid.RenderGrid();
+                scene.grid.RenderGrid(gridShader, view);
 
                 // render grid
-                if (grid.gridActive && engineState == ENGINE_SCENE)
+                if (scene.grid.gridActive && engineState == ENGINE_SCENE)
                 {
-                    glDrawElements(GL_LINES, grid.gridLength, GL_UNSIGNED_INT, NULL);
+                    glDrawElements(GL_LINES, scene.grid.gridLength, GL_UNSIGNED_INT, NULL);
                 }
             }
 
@@ -205,43 +155,67 @@ int main()
             
         }
         
-       
+        
         UnbindFrameBuffer();
+
+        // ImGUI Update
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
+        // Show the following windows
         ImGui::ShowDemoWindow();
-        
-        
-
-        GUI_SCENE(window);
+        GUI_SCENE(glfwSetup->window, gui);
         gui.GuiInit();
-        GUI_FRAMEBUFFER_RENDER(window);
+        GUI_FRAMEBUFFER_RENDER(glfwSetup->window);
 
         
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(glfwSetup->window);
         glfwPollEvents();
     }
+}
+
+int main()
+{
+    Initialize();
+    
+    lvl_1_model = Model("levels/warehouse/compound.glb"); 
+
+    player = new Player(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+    player->InitAnimations();
+
+    auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+    FloorCollider->InitiateRigidBody(dynamicsWorld);
+    FloorCollider->massValue = 0.0f;
+    floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+    
+    Update();
+
+    
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
     glDeleteRenderbuffers(1, &rbo);
     glDeleteFramebuffers(1, &fbo);
-    grid.Deallocate();
+    scene.grid.Deallocate();
     cubeMap.Deallocate();
     collisionCallback.btCleanUp();
+
+
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
     return 0;
 }
+
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
@@ -270,8 +244,8 @@ void processInput(GLFWwindow* window)
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS && !pressedOnce)
     {
-        if (grid.gridActive) grid.gridActive = false;
-        else if (!grid.gridActive) grid.gridActive = true;
+        if (scene.grid.gridActive) scene.grid.gridActive = false;
+        else if (!scene.grid.gridActive) scene.grid.gridActive = true;
         pressedOnce = true;
     }
     else if (glfwGetKey(window, GLFW_KEY_G) == GLFW_RELEASE) { pressedOnce = false; }
@@ -485,7 +459,7 @@ void DoCollisions()
     
 }
 
-void GUI_SCENE(GLFWwindow* window)
+void GUI_SCENE(GLFWwindow* window, GUI gui)
 {
     if (ImGui::Begin("Scene", NULL, gui.sceneFlags))
     {

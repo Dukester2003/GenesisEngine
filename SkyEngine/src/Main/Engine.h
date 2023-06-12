@@ -2,9 +2,9 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "scene.h"
-#include "GUI.h"
-#include "game.h"
+#include "../Scene/Scene.h"
+#include "../Scene/GUI.h"
+#include "../game.h"
 
 enum EngineState
 {

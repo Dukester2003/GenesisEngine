@@ -6,8 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include<vector>
-#include "Shader.h"
-#include "common_assets.h"
+#include "../Shader.h"
 
 class Grid
 {
@@ -76,14 +75,14 @@ public:
 
         glEnable(GL_DEPTH_TEST);
     }
-    void RenderGrid()
+    void RenderGrid(Shader shader, glm::mat4 view)
     {
         // Grid Shader
-        gridShader.use();
+        shader.use();
         glm::mat4 gridMat = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
         // retrieve the matrix uniform locations
-        unsigned int gridLoc = glGetUniformLocation(gridShader.ID, "grid");
-        unsigned int viewLoc = glGetUniformLocation(gridShader.ID, "view");
+        unsigned int gridLoc = glGetUniformLocation(shader.ID, "grid");
+        unsigned int viewLoc = glGetUniformLocation(shader.ID, "view");
         gridMat = glm::translate(gridMat, gridOriginOffset);
         // pass them to the shaders (3 different ways)
         glUniformMatrix4fv(gridLoc, 1, GL_FALSE, glm::value_ptr(gridMat));

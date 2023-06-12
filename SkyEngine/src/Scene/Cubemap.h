@@ -2,9 +2,9 @@
 #ifndef CUBEMAP_H
 #define CUBEMAP_H
 
-#include "Mesh.h"
+#include "../Mesh.h"
 #include "Scene.h"
-#include "common_assets.h"
+#include "../common_assets.h"
 #include <stb_image.h>
 
 Shader skyboxShader;

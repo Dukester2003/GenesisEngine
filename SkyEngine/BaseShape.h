@@ -3,7 +3,7 @@
 
 #include "Math.h"
 #include "GameObject.h"
-#include "Scene.h"
+#include "src/Scene/Scene.h"
 #include "imgui/imgui.h"
 using namespace glm;
 
@@ -19,19 +19,19 @@ enum Direction
 
 
 // Objects with physics in them, probably should've came up with a better way do this.
-class ColliderShape : public GameObject
+class BaseShape : public GameObject
 {
     public:
         Model ColliderModel;
-        ColliderShape::ColliderShape()
+        BaseShape::BaseShape()
             : GameObject() {}
-        ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel)
+        BaseShape::BaseShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel)
             : GameObject(pos, size, velocity, rotation, objModel) {}
-        ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation)
+        BaseShape::BaseShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation)
             : GameObject(pos, size, velocity, rotation) {}
-        ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model objModel)
+        BaseShape::BaseShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model objModel)
             : GameObject(pos, size, rotation, objModel) {}
-        ColliderShape::ColliderShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
+        BaseShape::BaseShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation)
             : GameObject(pos, size, rotation) {}
 
         void InitiateRigidBody(btDynamicsWorld* dynamicsWorld)
@@ -85,7 +85,7 @@ class ColliderShape : public GameObject
 };
 
 // Planes will always be static, meaning they are non-moving, use only for demo purposes
-class Plane : public ColliderShape
+class Plane : public BaseShape
 {
 public:
     int id = 0;
@@ -95,7 +95,7 @@ public:
     }
 };
 
-class BoxCollider : public ColliderShape
+class BoxCollider : public BaseShape
 {
 public:
 
@@ -110,23 +110,23 @@ public:
     
 
 
-    BoxCollider() : ColliderShape() {}
-    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) { 
+    BoxCollider() : BaseShape() {}
+    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) { 
         InitModel();
         type = ShapeType::BOX; 
         id = next_id++;
     }
-    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         InitModel();
         type = ShapeType::BOX;
         id = next_id++;
     }
-    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         InitModel();
         type = ShapeType::BOX;
         id = next_id++;
     }
-    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    BoxCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         InitModel();
         type = ShapeType::BOX;
         id = next_id++;
@@ -156,7 +156,7 @@ public:
     }
 };
 
-class SphereCollider : public ColliderShape
+class SphereCollider : public BaseShape
 {
 public:
     int id = 0;
@@ -172,23 +172,23 @@ public:
         return std::make_shared<SphereCollider>(*this);
     }
 
-    SphereCollider() : ColliderShape() {}
-    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+    SphereCollider() : BaseShape() {}
+    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
         InitModel();
         type = ShapeType::SPHERE;
         id = next_id++;
     }
-    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         InitModel();
         type = ShapeType::SPHERE;
         id = next_id++;
     }
-    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         InitModel();
         type = ShapeType::SPHERE;
         id = next_id++;
     }
-    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    SphereCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         InitModel();
         type = ShapeType::SPHERE;
         id = next_id++;
@@ -212,7 +212,7 @@ public:
     }
 };
 
-class CylinderCollider : public ColliderShape
+class CylinderCollider : public BaseShape
 {
 public:
     int id = 0;
@@ -227,23 +227,23 @@ public:
         return std::make_shared<CylinderCollider>(*this);
     }
 
-    CylinderCollider() : ColliderShape() {}
-    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+    CylinderCollider() : BaseShape() {}
+    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
         InitModel();
         type = ShapeType::CYLINDER;
         id = next_id++;
     }
-    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         InitModel();
         type = ShapeType::CYLINDER;
         id = next_id++;
     }
-    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         InitModel();
         type = ShapeType::CYLINDER;
         id = next_id++;
     }
-    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    CylinderCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         InitModel();
         type = ShapeType::CYLINDER;
         id = next_id++;
@@ -269,7 +269,7 @@ public:
 
 
 
-class CapsuleCollider : public ColliderShape
+class CapsuleCollider : public BaseShape
 {
 public:
     int id = 0;
@@ -284,21 +284,21 @@ public:
         return std::make_shared<CapsuleCollider>(*this);
     }
 
-    CapsuleCollider() : ColliderShape() {}
-    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+    CapsuleCollider() : BaseShape() {}
+    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
         type = ShapeType::CAPSULE;
         id = next_id++;
     }
-    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         InitModel();
         type = ShapeType::CAPSULE;
         id = next_id++;
     }
-    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         type = ShapeType::CAPSULE;
         id = next_id++;
     }
-    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    CapsuleCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         type = ShapeType::CAPSULE;
         id = next_id++;
     }
@@ -320,7 +320,7 @@ public:
     }
 };
 
-class ConeCollider : public ColliderShape
+class ConeCollider : public BaseShape
 {
 public:
     int id = 0;
@@ -335,21 +335,21 @@ public:
         return std::make_shared<ConeCollider>(*this);
     }
 
-    ConeCollider() : ColliderShape() {}
-    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+    ConeCollider() : BaseShape() {}
+    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
         type = ShapeType::CONE;
         id = next_id++;
     }
-    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         InitModel();
         type = ShapeType::CONE;
         id = next_id++;
     }
-    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         type = ShapeType::CONE;
         id = next_id++;
     }
-    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    ConeCollider(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         type = ShapeType::CONE;
         id = next_id++;
     }
@@ -372,7 +372,7 @@ public:
 };
 
 // Since the compound shape is going to have multiple objects, multiple models, the models are not going to be static
-class CompoundShape : public ColliderShape
+class CompoundShape : public BaseShape
 {
 public:
     Model monkeModel;
@@ -383,7 +383,7 @@ public:
     void createCollisionShape() override {
         btCompoundShape* compound = new btCompoundShape();
 
-        for (ColliderShape* childShape : childShapes) {
+        for (BaseShape* childShape : childShapes) {
             childShape->createCollisionShape();
             btTransform childTransform; // set this as necessary
             compound->addChildShape(childTransform, childShape->getBtCollisionShape());
@@ -394,12 +394,12 @@ public:
     }
 
     // Add a child shape to the compound shape
-    void AddChildShape(ColliderShape* shape) {
+    void AddChildShape(BaseShape* shape) {
         childShapes.push_back(shape);
     }
 
     // Remove a child shape from the compound shape
-    void RemoveChildShape(ColliderShape* shape) {
+    void RemoveChildShape(BaseShape* shape) {
         //... implement this
     }
 
@@ -410,40 +410,40 @@ public:
     void ObjMenu(string name) override;
         
     
-    CompoundShape() : ColliderShape() {}
-    CompoundShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    CompoundShape() : BaseShape() {}
+    CompoundShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         type = ShapeType::COMPOUND;
         id = next_id++;
     }
-    CompoundShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    CompoundShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         type = ShapeType::COMPOUND;
         id = next_id++;
     }
 
 private:
-    std::vector<ColliderShape*> childShapes;
+    std::vector<BaseShape*> childShapes;
 };
 
-class ConvexHull : public ColliderShape
+class ConvexHull : public BaseShape
 {
 public:
 
     int id = 0;
     static int next_id;
-    ConvexHull() : ColliderShape() {}
-    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+    ConvexHull() : BaseShape() {}
+    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
         type = ShapeType::CONVEXHULL;
         id = next_id++;
     }
-    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         type = ShapeType::CONVEXHULL;
         id = next_id++;
     }
-    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         type = ShapeType::CONVEXHULL;
         id = next_id++;
     }
-    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    ConvexHull(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         type = ShapeType::CONVEXHULL;
         id = next_id++;
     }
@@ -466,26 +466,26 @@ public:
     
 };
 
-class TriangleMesh : public ColliderShape
+class TriangleMesh : public BaseShape
 {
 public:
 
     int id = 0;
     static int next_id;
-    TriangleMesh() : ColliderShape() {}
-    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+    TriangleMesh() : BaseShape() {}
+    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
         type = ShapeType::TRIANGLEMESH;
         id = next_id++;
     }
-    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         type = ShapeType::TRIANGLEMESH;
         id = next_id++;
     }
-    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         type = ShapeType::TRIANGLEMESH;
         id = next_id++;
     }
-    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         type = ShapeType::TRIANGLEMESH;
         id = next_id++;
     }
@@ -508,25 +508,25 @@ public:
 
 };
 
-class HeightField : public ColliderShape
+class HeightField : public BaseShape
 {
 public:
     int id = 0;
     static int next_id;
-    HeightField() : ColliderShape() {}
-    HeightField(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+    HeightField() : BaseShape() {}
+    HeightField(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
         type = ShapeType::HEIGHTFIELD;
         id = next_id++;
     }
-    HeightField(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    HeightField(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         type = ShapeType::HEIGHTFIELD;
         id = next_id++;
     }
-    HeightField(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    HeightField(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         type = ShapeType::HEIGHTFIELD;
         id = next_id++;
     }
-    HeightField(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    HeightField(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         type = ShapeType::HEIGHTFIELD;
         id = next_id++;
     }
@@ -548,25 +548,25 @@ public:
     }
 };
 
-class SoftBody : public ColliderShape
+class SoftBody : public BaseShape
 {
 public:
     int id = 0;
     static int next_id;
-    SoftBody() : ColliderShape() {}
-    SoftBody(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+    SoftBody() : BaseShape() {}
+    SoftBody(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
         type = ShapeType::SOFTBODY;
         id = next_id++;
     }
-    SoftBody(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) {
+    SoftBody(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
         type = ShapeType::SOFTBODY;
         id = next_id++;
     }
-    SoftBody(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : ColliderShape(pos, size, rotation) {
+    SoftBody(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
         type = ShapeType::SOFTBODY;
         id = next_id++;
     }
-    SoftBody(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, rotation, colliderModel) {
+    SoftBody(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
         type = ShapeType::SOFTBODY;
         id = next_id++;
     }
@@ -588,34 +588,34 @@ public:
     }
 };
 
-class MultiSphere : public ColliderShape
+class MultiSphere : public BaseShape
 {
 public:
 
 };
 
-class ConvexPointCloud : public ColliderShape
+class ConvexPointCloud : public BaseShape
 {
 public:
 
 };
 
-class CircleFloor : public ColliderShape
+class CircleFloor : public BaseShape
 {
 public:
     float Radius;
-    CircleFloor() : ColliderShape() {}
-    CircleFloor(glm::vec3 pos, float radius, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, glm::vec3(Radius * 2, Radius * 2, Radius * 2), velocity, rotation, colliderModel), Radius(radius) {}
+    CircleFloor() : BaseShape() {}
+    CircleFloor(glm::vec3 pos, float radius, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, glm::vec3(Radius * 2, Radius * 2, Radius * 2), velocity, rotation, colliderModel), Radius(radius) {}
 };
 
-class Wall : public ColliderShape
+class Wall : public BaseShape
 {
     public:
-        Wall() : ColliderShape() {}
-        Wall(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
+        Wall() : BaseShape() {}
+        Wall(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {}
 };
 
-class Floor : public ColliderShape
+class Floor : public BaseShape
 {
     public:
         void createCollisionShape() override {
@@ -627,25 +627,25 @@ class Floor : public ColliderShape
         virtual std::shared_ptr<GameObject> clone() const override {
             return std::make_shared<Floor>(*this);
         }
-        Floor() : ColliderShape() {}
-        Floor(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
-        Floor(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : ColliderShape(pos, size, velocity, rotation) 
+        Floor() : BaseShape() {}
+        Floor(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {}
+        Floor(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) 
         {
             InitModel();
             type = ShapeType::BOX;
         }
 };
 
-class Ceiling : public ColliderShape
+class Ceiling : public BaseShape
 {
     public:
-        Ceiling() : ColliderShape() {}
-        Ceiling(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {}
+        Ceiling() : BaseShape() {}
+        Ceiling(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {}
 };
 
 
 
-class SlopeCollider : public ColliderShape
+class SlopeCollider : public BaseShape
 {
     public:
         float angle1 = atan2(Size.y, Size.z);
@@ -661,8 +661,8 @@ class SlopeCollider : public ColliderShape
             return std::make_shared<SlopeCollider>(*this);
         }
 
-        SlopeCollider() : ColliderShape() {}
-        SlopeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel, Direction slopeDirection) : ColliderShape(pos, size, velocity, rotation, colliderModel) , direction(slopeDirection) {}
+        SlopeCollider() : BaseShape() {}
+        SlopeCollider(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel, Direction slopeDirection) : BaseShape(pos, size, velocity, rotation, colliderModel) , direction(slopeDirection) {}
 };
 
 bool AABB(GameObject& a, GameObject& b);
@@ -678,8 +678,8 @@ vec3 normal(const vec3& a, const Vertex& b);
 float vertDot(const vec3& a, const Vertex& b);
 void processMeshCollider(aiMesh* mesh, const aiScene* scene);
 bool SAT(GameObject& a, GameObject& b);
-bool SATAABB(GameObject& a, ColliderShape& b);
+bool SATAABB(GameObject& a, BaseShape& b);
 bool SATAABB(GameObject& a, GameObject& b);
-bool SATAABB(ColliderShape& a, GameObject& b);
+bool SATAABB(BaseShape& a, GameObject& b);
 void DoCollisions();
 #endif // !COLLISION_H

@@ -2,8 +2,8 @@
 #define PLAYER_H
 
 #include "GameObject.h"
-#include "g_animation.h"
-#include "g_animator.h"
+#include "Animation.h"
+#include "Animator.h"
 #include "AnimFlag.h"
 
 
