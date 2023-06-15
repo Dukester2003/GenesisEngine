@@ -13,231 +13,330 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\imgui">
-      <UniqueIdentifier>{4675734f-e55f-4f9f-a958-1d42cef3f963}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\actors">
-      <UniqueIdentifier>{44415d22-fa44-43b1-bff1-9ffc9df4d202}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\actors\enemies">
-      <UniqueIdentifier>{7eaf2047-6b32-475d-a54a-1aadb4bf97a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\common">
-      <UniqueIdentifier>{172d8043-20ab-4898-ac91-3ee49fcc3f71}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{83baebc0-0807-4869-bf74-02092ccb5edb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene">
-      <UniqueIdentifier>{650ea3f5-5809-46d7-8fd8-6da585cdb64c}</UniqueIdentifier>
+    <Filter Include="Source Files\Main">
+      <UniqueIdentifier>{d360dbcd-a67e-44a3-9469-85bf879e5efd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\physics">
-      <UniqueIdentifier>{57275145-7156-476c-8631-0e068e963d3d}</UniqueIdentifier>
+    <Filter Include="Header Files\Shapes_Header">
+      <UniqueIdentifier>{e4583396-4fbe-42bf-b089-517a6dbf7dc5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene">
+    <Filter Include="Source Files\Shapes_Source">
+      <UniqueIdentifier>{125d0159-eb17-4af9-95e1-f81785af7b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scene_Source">
       <UniqueIdentifier>{e1525056-5ebb-403e-bd13-3f30adf088de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\common">
+    <Filter Include="Source Files\Common_Source">
       <UniqueIdentifier>{7bd856f0-82c2-4596-b124-fe8f89c35379}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\warehouse">
+    <Filter Include="Header Files\Common_Header">
+      <UniqueIdentifier>{172d8043-20ab-4898-ac91-3ee49fcc3f71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Actors_Header">
+      <UniqueIdentifier>{44415d22-fa44-43b1-bff1-9ffc9df4d202}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Actors_Header\enemies">
+      <UniqueIdentifier>{7eaf2047-6b32-475d-a54a-1aadb4bf97a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Actors_Source">
+      <UniqueIdentifier>{b6d000fe-dd5d-49c6-9e3a-c62b2fa50b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scene_Header">
+      <UniqueIdentifier>{650ea3f5-5809-46d7-8fd8-6da585cdb64c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ImGui_Source">
+      <UniqueIdentifier>{4675734f-e55f-4f9f-a958-1d42cef3f963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Warehouse_Header">
+      <UniqueIdentifier>{5811ff57-7fa4-4b36-8a40-f47feeb7a47c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Warehouse_Source">
       <UniqueIdentifier>{8729c0f4-070d-46a1-8456-b8a8759b24bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\warehouse">
-      <UniqueIdentifier>{5811ff57-7fa4-4b36-8a40-f47feeb7a47c}</UniqueIdentifier>
+    <Filter Include="Header Files\Physics_Header">
+      <UniqueIdentifier>{57275145-7156-476c-8631-0e068e963d3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scene_Header\Animations">
+      <UniqueIdentifier>{3c1aba0f-4ffe-4fa9-b6f2-750405de477a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Window">
+      <UniqueIdentifier>{3814cb3b-6981-4bc6-9ded-305f3cf37dca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bob-omb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="goomba.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lvl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stb_image.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="whomp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boss.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
-      <Filter>Source Files\imgui</Filter>
+      <Filter>Source Files\ImGui_Source</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>Source Files\imgui</Filter>
+      <Filter>Source Files\ImGui_Source</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_draw.cpp">
-      <Filter>Source Files\imgui</Filter>
+      <Filter>Source Files\ImGui_Source</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_impl_glfw.cpp">
-      <Filter>Source Files\imgui</Filter>
+      <Filter>Source Files\ImGui_Source</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files\imgui</Filter>
+      <Filter>Source Files\ImGui_Source</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
-      <Filter>Source Files\imgui</Filter>
+      <Filter>Source Files\ImGui_Source</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
-      <Filter>Source Files\imgui</Filter>
+      <Filter>Source Files\ImGui_Source</Filter>
     </ClCompile>
     <ClCompile Include="levels\terrain\Grass Block\blocks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>Source Files\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="game_obj.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="g_collision.cpp">
-      <Filter>Source Files\common</Filter>
-    </ClCompile>
-    <ClCompile Include="light.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Common_Source</Filter>
     </ClCompile>
     <ClCompile Include="levels\warehouse\Klaxon.cpp">
-      <Filter>Source Files\warehouse</Filter>
+      <Filter>Source Files\Warehouse_Source</Filter>
     </ClCompile>
     <ClCompile Include="levels\warehouse\Gate.cpp">
-      <Filter>Source Files\warehouse</Filter>
+      <Filter>Source Files\Warehouse_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="bob-omb.cpp">
+      <Filter>Source Files\Actors_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="goomba.cpp">
+      <Filter>Source Files\Actors_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>Source Files\Actors_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="boss.c">
+      <Filter>Source Files\Actors_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="whomp.cpp">
+      <Filter>Source Files\Actors_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Scene_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Source Files\Scene_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Actors_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseShape.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\HeightField.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\MultiSphere.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\Plane.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\SoftBody.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\Sphere.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\TriangleMesh.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\Box.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\Capsule.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\CompoundShape.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\Cone.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\ConvexHull.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\ConvexPointCloud.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CollisionShapes\Cylinder.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Main\main.cpp">
+      <Filter>Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Main\Engine.cpp">
+      <Filter>Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Scene.cpp">
+      <Filter>Source Files\Scene_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\GUI.cpp">
+      <Filter>Source Files\Scene_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="euler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="g_bone.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="g_camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="g_cubemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="glfw_setup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="grid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="obj_renderer.h">
+    <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="animFlag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bob-omb.h">
-      <Filter>Header Files\actors\enemies</Filter>
+      <Filter>Header Files\Actors_Header\enemies</Filter>
     </ClInclude>
     <ClInclude Include="boss.h">
-      <Filter>Header Files\actors\enemies</Filter>
+      <Filter>Header Files\Actors_Header\enemies</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>Header Files\actors\enemies</Filter>
+      <Filter>Header Files\Actors_Header\enemies</Filter>
     </ClInclude>
     <ClInclude Include="whomp.h">
-      <Filter>Header Files\actors\enemies</Filter>
+      <Filter>Header Files\Actors_Header\enemies</Filter>
     </ClInclude>
     <ClInclude Include="goomba.h">
-      <Filter>Header Files\actors\enemies</Filter>
+      <Filter>Header Files\Actors_Header\enemies</Filter>
     </ClInclude>
-    <ClInclude Include="g_mesh.h">
-      <Filter>Header Files\common</Filter>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
-    <ClInclude Include="g_model.h">
-      <Filter>Header Files\common</Filter>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
-    <ClInclude Include="g_shader.h">
-      <Filter>Header Files\common</Filter>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
-    <ClInclude Include="framebuffers.h">
-      <Filter>Header Files\common</Filter>
+    <ClInclude Include="Framebuffers.h">
+      <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
-    <ClInclude Include="scene.h">
-      <Filter>Header Files\scene</Filter>
+    <ClInclude Include="FrustumCulling.h">
+      <Filter>Header Files\Scene_Header</Filter>
     </ClInclude>
-    <ClInclude Include="frustum_culling.h">
-      <Filter>Header Files\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="g_animation.h">
-      <Filter>Header Files\actors</Filter>
-    </ClInclude>
-    <ClInclude Include="g_animator.h">
-      <Filter>Header Files\actors</Filter>
-    </ClInclude>
-    <ClInclude Include="g_animdata.h">
-      <Filter>Header Files\actors</Filter>
-    </ClInclude>
-    <ClInclude Include="g_GUI.h">
-      <Filter>Header Files\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Header Files\actors</Filter>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Actors_Header</Filter>
     </ClInclude>
     <ClInclude Include="levels\terrain\Grass Block\blocks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common_assets.h">
-      <Filter>Header Files\common</Filter>
+      <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
-    <ClInclude Include="g_collision.h">
-      <Filter>Header Files\physics</Filter>
+    <ClInclude Include="InitiateCollision.h">
+      <Filter>Header Files\Physics_Header</Filter>
     </ClInclude>
-    <ClInclude Include="init_collision.h">
-      <Filter>Header Files\physics</Filter>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
-    <ClInclude Include="game_obj.h">
-      <Filter>Header Files\common</Filter>
+    <ClInclude Include="Types.h">
+      <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
-    <ClInclude Include="types.h">
-      <Filter>Header Files\common</Filter>
-    </ClInclude>
-    <ClInclude Include="light.h">
-      <Filter>Header Files\scene</Filter>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Scene_Header</Filter>
     </ClInclude>
     <ClInclude Include="levels\warehouse\Klaxon.h">
-      <Filter>Header Files\warehouse</Filter>
+      <Filter>Header Files\Warehouse_Header</Filter>
     </ClInclude>
     <ClInclude Include="levels\warehouse\Gate.h">
-      <Filter>Header Files\warehouse</Filter>
+      <Filter>Header Files\Warehouse_Header</Filter>
     </ClInclude>
-    <ClInclude Include="lvl.h">
-      <Filter>Header Files\scene</Filter>
+    <ClInclude Include="Level.h">
+      <Filter>Header Files\Scene_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseShape.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\Box.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\Capsule.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\CompoundShape.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\Cone.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\ConvexHull.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\ConvexPointCloud.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\Cylinder.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\HeightField.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\MultiSphere.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\Plane.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\SoftBody.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\Sphere.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionShapes\TriangleMesh.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\GUI.h">
+      <Filter>Header Files\Scene_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Scene.h">
+      <Filter>Header Files\Scene_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Grid.h">
+      <Filter>Header Files\Scene_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Camera.h">
+      <Filter>Header Files\Scene_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Cubemap.h">
+      <Filter>Header Files\Scene_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Animation\Animation.h">
+      <Filter>Header Files\Scene_Header\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Animation\AnimationData.h">
+      <Filter>Header Files\Scene_Header\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Animation\Animator.h">
+      <Filter>Header Files\Scene_Header\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Animation\AnimFlag.h">
+      <Filter>Header Files\Scene_Header\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Animation\Bone.h">
+      <Filter>Header Files\Scene_Header\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\GLFW_Setup.h">
+      <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\InputManager.h">
+      <Filter>Header Files\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

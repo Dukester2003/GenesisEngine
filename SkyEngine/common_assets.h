@@ -4,11 +4,8 @@
 #include "InitiateCollision.h"
 #include "BaseShape.h"
 #include "levels/terrain/Grass Block/blocks.h"
-#include "Scene.h"
+#include "src/Scene/Scene.h"
 
-
-inline glm::mat4 projection;
-inline glm::mat4 view;
 
 // Colliders
 inline Floor floorColliders[8];
@@ -37,23 +34,23 @@ inline void InitCommonShaders()
     collisionShader = Shader("shaders/collisionShader.vs", "shaders/collisionShader.fs");
 }
 
-inline void CreateShaderTransformations()
+inline void CreateShaderTransformations(Scene scene)
 {
     // create transformations
-    animationShader.setMat4("projection", projection);
-    animationShader.setMat4("view", view);
+    animationShader.setMat4("projection", scene.projection);
+    animationShader.setMat4("view", scene.view);
     gridShader.use();
-    gridShader.setMat4("projection", projection);
-    gridShader.setMat4("view", view);
+    gridShader.setMat4("projection", scene.projection);
+    gridShader.setMat4("view", scene.view);
     collisionShader.use();
-    collisionShader.setMat4("projection", projection);
-    collisionShader.setMat4("view", view);
+    collisionShader.setMat4("projection", scene.projection);
+    collisionShader.setMat4("view", scene.view);
     diffuseShader.use();
-    diffuseShader.setMat4("projection", projection);
-    diffuseShader.setMat4("view", view);
+    diffuseShader.setMat4("projection", scene.projection);
+    diffuseShader.setMat4("view", scene.view);
     modelShader.use();
-    modelShader.setMat4("projection", projection);
-    modelShader.setMat4("view", view);
+    modelShader.setMat4("projection", scene.projection);
+    modelShader.setMat4("view", scene.view);
 }
 
 inline void UpdateCommonObjects(Scene& scene)

@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 
 
+using namespace irrklang;
 
 Player::Player()
 	: GameObject() {}
@@ -77,11 +78,14 @@ void Player::BoneTransforms(Shader shader)
 	DrawModel(animations.playerIdleModel, shader);
 }
 
-void Player::UpdatePlayer(float deltaTime)
+void Player::UpdatePlayer(Shader shader, InputManager* input, ISoundEngine* SoundEngine, float dt)
 {
 	backFlipJumpVelocity = glm::vec3(-.2f * sin(Rotation.y * 3.14159 / 180), 0.8, -.2f * cos(Rotation.y * 3.14159 / 180));
 	Velocity = glm::vec3(Speed * sin(Rotation.y * glm::pi<float>() / 180), 0.0, Speed * cos(Rotation.y * glm::pi<float>() / 180));
 	UpdateAnimations();
+	animator.UpdateAnimation(dt);
+    HandleInput(input, SoundEngine, dt);
+	BoneTransforms(shader);
 }
 
 void Player::UpdateAnimations()
@@ -113,6 +117,105 @@ void Player::UpdateAnimations()
 		}
 	}
 }
+
+int Player::numOfJumps;
+std::mt19937 Player::mt;
+std::uniform_int_distribution<int> Player::jumpRand; // generates random integers between 1 and 2	
+std::string Player::jump[3] = { "audio/Yah.mp3" , "audio/Woo.mp3", "audio/Yahh.mp3" };
+std::string Player::superJump[3] = { "audio/Yahoo!.wav","audio/Yipee!.wav","audio/WaHa!.wav" };
+
+void Player::HandleInput(InputManager* input, ISoundEngine* SoundEngine ,float dt)
+{
+	HandleMovement(input, dt);
+	HandleRotation(input);
+	HandleCrouch(input, dt);
+	HandleJump(input, dt, SoundEngine);
+}
+
+void Player::HandleMovement(InputManager* input, float dt) {
+    if (input->IsKeyPressed(GLFW_KEY_UP) && !isCrouched)
+    {
+        MoveForward(dt);
+        isMoving = true;
+        if (isGrounded)
+        {
+            animID = PLAYER_RUN_ID;
+        }
+    }
+    else if (input->IsKeyReleased(GLFW_KEY_UP))
+    {
+        isMoving = false;
+        if (isGrounded)
+        {
+            animID = PLAYER_IDLE_ID;
+        }
+    }
+}
+
+void Player::HandleRotation(InputManager* input) {
+    if (input->IsKeyPressed(GLFW_KEY_RIGHT) && !isCrouched && isGrounded)
+    {
+        glm::quat currentRotation = Rotation;
+        glm::quat deltaRotation = glm::angleAxis(glm::radians(-2.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        Rotation = currentRotation * deltaRotation;
+    }
+
+    if (input->IsKeyPressed(GLFW_KEY_LEFT) && !isCrouched && isGrounded)
+    {
+        glm::quat currentRotation = Rotation;
+        glm::quat deltaRotation = glm::angleAxis(glm::radians(2.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+        Rotation = currentRotation * deltaRotation;
+    }
+}
+
+void Player::HandleCrouch(InputManager* input, float dt) {
+
+	// Crouch
+	if (input->IsKeyPressed(GLFW_KEY_LEFT_CONTROL))
+	{
+		crouchTransTime += dt;
+		isCrouched = true;
+		if (isGrounded && crouchTransTime <= animations.crouchTransition.GetDuration())
+		{
+			animID = PLAYER_CROUCH_TRANSITION_ID;
+			transitionedToCrouch = true;
+		}
+		if (isGrounded && transitionedToCrouch && crouchTransTime >= animations.crouchTransition.GetDuration())
+		{
+			animID = PLAYER_CROUCH_ID;
+		}
+	}
+	else if (input->IsKeyReleased(GLFW_KEY_LEFT_CONTROL)) { isCrouched = false; transitionedToCrouch = false;  crouchTransTime = 0.0f; }
+
+
+    if (isCrouched && input->IsKeyPressed(GLFW_KEY_SPACE))
+    {
+        crouchActions.backflip = true;
+        // Make Sure Jump Sound doesn't play twice, so this time after spacebar being more than 0.05 is here
+        if (isGrounded && timeAfterSpacebar > 0.05)
+        {
+            jumpSoundPlayed = false;
+            didIterateToNextJump = false;
+            timeAfterSpacebar = 0.0f;
+            return;
+        }
+    }
+
+
+
+    if (crouchActions.backflip)
+    {
+        if (!isGrounded) animID = PLAYER_BACK_JUMP_ID;
+        std::cout << "Back-Flip";
+        BackJump(dt);
+        if (isGrounded) { crouchActions.backflip = false; }
+    }
+}
+
+void Player::HandleJump(InputManager* input, float dt, ISoundEngine* SoundEngine) {
+    
+}
+
 void Player::FirstJump(float dt)
 {
 	Velocity.y = FirstJumpVelocity;

@@ -1,16 +1,18 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <irrklang/irrKlang.h>
+#include <random>
 #include "GameObject.h"
-#include "Animation.h"
-#include "Animator.h"
-#include "AnimFlag.h"
+#include "src/Scene/InputManager.h"
+#include "src/Scene/Animation/Animation.h"
+#include "src/Scene/Animation/Animator.h"
+#include "src/Scene/Animation/AnimFlag.h"
 
+using namespace irrklang;
 
 struct Animations
 {
-	// THE PLAYER SETTINGS
-	// ----------
 	Model playerIdleModel;
 	Animation idleAnimation;
 	Animation runningAnimation;
@@ -73,19 +75,37 @@ class Player : public GameObject
 		bool isCrouched;
 		bool transitionedToCrouch;
 		float crouchTransTime;
-
-
+	public:
+		bool jumpKeyHeld;
+		bool isJumping;
+		
+		bool pressedOnce;
+		bool spacePressed;
+		bool didIterateToNextJump;
+		bool didLastJump;
+		bool jumpSoundPlayed;
+		static int numOfJumps;
+		static std::mt19937 mt;
+		static std::uniform_int_distribution<int> jumpRand; // generates random integers between 1 and 2	
+		static std::string jump[3];
+		static std::string superJump[3];
+		int jump_random_integer;
 	public:	
 		void createCollisionShape() override { /* Do nothing */ };
 		std::shared_ptr<GameObject> clone() const override { return NULL; };
 		void MoveForward(float deltaTime);
 		void MoveBackward(float deltaTime);
 		glm::quat GetForwardDirection();
-		void UpdatePlayer(float deltaTime);
+		void UpdatePlayer(Shader shader, InputManager* input, ISoundEngine* SoundEngine, float dt);
 		void BoneTransforms(Shader shader);
-		void UpdateAnimations();
-		void ProcessPlayerActions(float dt);	
 		void InitAnimations();
+		void UpdateAnimations();
+		void HandleInput(InputManager* input, ISoundEngine* SoundEngine, float dt);	
+		void HandleMovement(InputManager* input, float dt);
+		void HandleRotation(InputManager* input);
+		void HandleCrouch(InputManager* input, float dt);
+		void HandleJump(InputManager* input, float dt, ISoundEngine* SoundEngine);
+		void PlayJumpSound(ISoundEngine* SoundEngine, const std::string& soundDescription, const std::string& soundFile);
 		void FirstJump(float dt);
 		void SecondJump(float dt);
 		void SuperJump(float dt);
