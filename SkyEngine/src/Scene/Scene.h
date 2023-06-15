@@ -80,7 +80,8 @@ public:
 public:
 	void InitShaders();
 	void CreateShaderTransformations();
-	void UpdateObjects(btDynamicsWorld* dynamicsWorld);
+	void SetPerspectiveTransformations(const float screenWidth, const float screenHeight);
+
 	void DefaultPointLights(Shader& shader);
 	void ActivatePointLights(Shader& shader);
 	void UpdatePointLights(Shader& shader);

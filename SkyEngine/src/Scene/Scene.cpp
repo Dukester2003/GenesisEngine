@@ -46,9 +46,10 @@ void Scene::CreateShaderTransformations()
     modelShader.setMat4("view", view);
 }
 
-void Scene::UpdateObjects(btDynamicsWorld* dynamicsWorld)
+void Scene::SetPerspectiveTransformations(const float screenWidth, const float screenHeight)
 {
-    for (auto& item : items) { item->UpdateObject(diffuseShader, dynamicsWorld); }
+    projection = glm::perspective(glm::radians(camera.Zoom), (float)screenWidth / (float)screenHeight, 0.1f, 200.0f);
+    view = camera.GetViewMatrix();
 }
 
 void Scene::SaveScene(const std::string& filename, const std::vector<std::shared_ptr<GameObject>>& items) {
