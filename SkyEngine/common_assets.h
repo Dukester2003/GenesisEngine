@@ -2,7 +2,7 @@
 #define COMMON_ASSETS
 
 #include "InitiateCollision.h"
-#include "BaseShape.h"
+#include  "src/CollisionShapes/BaseShape.h"
 #include "levels/terrain/Grass Block/blocks.h"
 #include "src/Scene/Scene.h"
 

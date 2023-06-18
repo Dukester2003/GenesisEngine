@@ -2,7 +2,8 @@
 #define LVL_H
 
 #include "Model.h"
-#include "GameObject.h"
+#include "src/Core/Object/GameObject.h"
+#include "src/CollisionShapes/TriangleMesh.h"
 class Level
 {
 	public:

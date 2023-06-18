@@ -139,14 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bob-omb.cpp" />
-    <ClCompile Include="boss.c" />
-    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="goomba.cpp" />
-    <ClCompile Include="BaseShape.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -160,6 +154,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="src\CollisionShapes\BaseShape.cpp" />
     <ClCompile Include="Src\CollisionShapes\Box.cpp" />
     <ClCompile Include="Src\CollisionShapes\Capsule.cpp" />
     <ClCompile Include="Src\CollisionShapes\CompoundShape.cpp" />
@@ -173,25 +168,20 @@
     <ClCompile Include="Src\CollisionShapes\SoftBody.cpp" />
     <ClCompile Include="Src\CollisionShapes\Sphere.cpp" />
     <ClCompile Include="Src\CollisionShapes\TriangleMesh.cpp" />
+    <ClCompile Include="src\Core\Object\GameObject.cpp" />
     <ClCompile Include="src\Main\Engine.cpp" />
     <ClCompile Include="src\Main\main.cpp" />
     <ClCompile Include="src\Scene\GUI.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="whomp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bob-omb.h" />
-    <ClInclude Include="boss.h" />
     <ClInclude Include="common_assets.h" />
-    <ClInclude Include="enemy.h" />
     <ClInclude Include="euler.h" />
     <ClInclude Include="Framebuffers.h" />
     <ClInclude Include="FrustumCulling.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="goomba.h" />
-    <ClInclude Include="BaseShape.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
@@ -204,6 +194,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="InitiateCollision.h" />
+    <ClInclude Include="src\CollisionShapes\BaseShape.h" />
     <ClInclude Include="Src\CollisionShapes\Box.h" />
     <ClInclude Include="Src\CollisionShapes\Capsule.h" />
     <ClInclude Include="Src\CollisionShapes\CompoundShape.h" />
@@ -214,6 +205,7 @@
     <ClInclude Include="Src\CollisionShapes\HeightField.h" />
     <ClInclude Include="Src\CollisionShapes\MultiSphere.h" />
     <ClInclude Include="Src\CollisionShapes\Plane.h" />
+    <ClInclude Include="src\CollisionShapes\ShapesInclude.h" />
     <ClInclude Include="Src\CollisionShapes\SoftBody.h" />
     <ClInclude Include="Src\CollisionShapes\Sphere.h" />
     <ClInclude Include="Src\CollisionShapes\TriangleMesh.h" />
@@ -230,7 +222,6 @@
     <ClInclude Include="src\Scene\InputManager.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="Types.h" />
-    <ClInclude Include="whomp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="skybox.fs" />

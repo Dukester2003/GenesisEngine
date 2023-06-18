@@ -3,7 +3,7 @@
 
 #include <irrklang/irrKlang.h>
 #include <random>
-#include "GameObject.h"
+#include "src/Core/Object/GameObject.h"
 #include "src/Scene/InputManager.h"
 #include "src/Scene/Animation/Animation.h"
 #include "src/Scene/Animation/Animator.h"
