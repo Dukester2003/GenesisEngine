@@ -2,7 +2,7 @@
 out vec4 FragColor;
 
 in vec2 TexCoords;
-
+in vec4 Color;
 uniform sampler2D texture_diffuse1;
 
 
@@ -17,5 +17,5 @@ float LinearizeDepth(float depth)
 void main()
 {    
     float depth = LinearizeDepth(gl_FragCoord.z) / far; // divide by far to get depth in range [0,1] for visualization purposes
-    FragColor = texture(texture_diffuse1, TexCoords) + vec4(vec3(depth), 1.0);
+    FragColor = texture(texture_diffuse1, TexCoords) + vec4(vec3(depth), 1.0) + Color;
 }

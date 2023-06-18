@@ -1,8 +1,8 @@
 #ifndef BLOCKS_H
 #define BLOCKS_H
 
-#include "../../../g_collision.h"
-class GrassBlock : public ColliderShape
+#include "../../../src/CollisionShapes/BaseShape.h"
+class GrassBlock : public BaseShape
 {
     public:
         int id = 0;
@@ -15,8 +15,14 @@ class GrassBlock : public ColliderShape
             return std::make_shared<GrassBlock>(*this);
         }
 
-        GrassBlock() : ColliderShape() {}
-        GrassBlock(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : ColliderShape(pos, size, velocity, rotation, colliderModel) {
+        void InitModel() override { model = Model("levels/terrain/Grass Block/grass_block.obj"); }
+        GrassBlock() : BaseShape() {}
+        GrassBlock(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
+            blockType = BlockType::GRASS;
+            id = next_id++;
+        }
+        GrassBlock(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
+            InitModel();
             blockType = BlockType::GRASS;
             id = next_id++;
         }
