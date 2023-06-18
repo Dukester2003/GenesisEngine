@@ -2,7 +2,8 @@
 #define SCENE
 
 #include "../Light.h"
-#include "../GameObject.h"
+#include "../Core/Object/GameObject.h"
+#include "../CollisionShapes/ShapesInclude.h"
 #include "../player.h"
 #include "Grid.h"
 #include "Camera.h"

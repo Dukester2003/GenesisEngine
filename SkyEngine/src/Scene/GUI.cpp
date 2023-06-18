@@ -110,7 +110,7 @@ void GUI::FileExplorer(const std::string& title, std::string& current_path) {
 
 void GUI::AddItem(std::shared_ptr<GameObject> item, btDynamicsWorld* dynamicsWorld) {
     item->massValue = 5.0f;
-    item->InitiateRigidBody(dynamicsWorld);
+    item->InitiateRigidBody(dynamicsWorld, collisionShapes);
 }
 
 void GUI::GuiInit()

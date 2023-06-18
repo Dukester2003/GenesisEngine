@@ -11,13 +11,11 @@
 #include "../player.h"
 #include "../Level.h"
 
-#include "../Shader.h"
 #include "../Scene/Animation/Animation.h"
 #include "../Scene/Animation/AnimationData.h"
 
-#include "../BaseShape.h"
-#include "../GameObject.h"
-#include "../enemy.h"
+#include "../CollisionShapes/BaseShape.h"
+#include "../Core/Object/GameObject.h"
 #include "../Main/Engine.h"
 #include "../Scene/Scene.h"
 #include "../Scene/Cubemap.h"
@@ -28,24 +26,11 @@
 #include <Windows.h>
 
 using namespace irrklang;
-bool jumpKeyHeld;
-bool isJumping;
-
-
-// Jump Code and Animation Code
-int numOfJumps;
 bool pressedOnce;
-bool spacePressed;
-bool didIterateToNextJump;
-bool didLastJump;
-bool jumpSoundPlayed;
-
-
-
 
 void Initialize();
-void UpdateViewPort();
 void Update();
+void UpdateViewPort();
 void processInput(GLFWwindow* window);
 void GUI_SCENE(GLFWwindow* window, GUI gui);
 void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window);
@@ -53,8 +38,8 @@ void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window);
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-Model lvl_1_model;
-Level lvl_1;
+Model warehouseModel;
+Level complex;
 GUI                       gui;
 CubeMap                   cubeMap;
 CollisionCallback         collisionCallback;
@@ -93,10 +78,7 @@ void Update()
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) 
         {
             UpdateViewPort();
-            input->Update();
-            player->UpdatePlayer(animationShader, input, SoundEngine, deltaTime);
-            DoCollisions();             
-            if (!player->isGrounded) { player->Position.y += scene.gravity.y; }
+            input->Update();             
             collisionCallback.UpdateBtSimulation(deltaTime);
        
             // view/projection transformations
@@ -105,7 +87,7 @@ void Update()
 
             CreateShaderTransformations(scene);
 
-            lvl_1.DrawLevel(lvl_1_model, diffuseShader);
+            complex.DrawLevel(warehouseModel, diffuseShader);
 
             UpdateCommonObjects(scene);
             UpdateLight(scene);
@@ -142,13 +124,10 @@ int main()
 {
     Initialize();
     
-    lvl_1_model = Model("levels/warehouse/compound.glb"); 
-
-    player = new Player(glm::vec3(0.0f, 4.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-    player->InitAnimations();
+    warehouseModel = Model("levels/warehouse/compound.glb"); 
 
     auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-    FloorCollider->InitiateRigidBody(dynamicsWorld);
+    FloorCollider->InitiateRigidBody(dynamicsWorld, collisionShapes);
     FloorCollider->massValue = 0.0f;
     floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
     
@@ -174,8 +153,6 @@ int main()
     glfwTerminate();
     return 0;
 }
-
-
 
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
@@ -208,24 +185,6 @@ void processInput(GLFWwindow* window)
         pressedOnce = true;
     }
     else if (glfwGetKey(window, GLFW_KEY_G) == GLFW_RELEASE) { pressedOnce = false; }
-}
-
-void DoCollisions()
-{
-    bool isAnyColliderColliding = false;
-
-   
-    for (auto& floorCollider : floorColliders)
-    {
-        if (AABB(*player, floorCollider))
-        {
-            isAnyColliderColliding = true;
-            break; // If the player is already colliding with one collider, no need to check others
-        }
-    }
-    
-    player->isGrounded = isAnyColliderColliding;
-    
 }
 
 void UpdateViewPort()
