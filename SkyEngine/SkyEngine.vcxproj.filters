@@ -96,32 +96,14 @@
     <ClCompile Include="levels\terrain\Grass Block\blocks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Common_Source</Filter>
-    </ClCompile>
     <ClCompile Include="levels\warehouse\Klaxon.cpp">
       <Filter>Source Files\Warehouse_Source</Filter>
     </ClCompile>
     <ClCompile Include="levels\warehouse\Gate.cpp">
       <Filter>Source Files\Warehouse_Source</Filter>
     </ClCompile>
-    <ClCompile Include="bob-omb.cpp">
-      <Filter>Source Files\Actors_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="goomba.cpp">
-      <Filter>Source Files\Actors_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>Source Files\Actors_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="boss.c">
-      <Filter>Source Files\Actors_Source</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="whomp.cpp">
-      <Filter>Source Files\Actors_Source</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Source Files\Scene_Source</Filter>
@@ -131,9 +113,6 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Actors_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseShape.cpp">
-      <Filter>Source Files\Shapes_Source</Filter>
     </ClCompile>
     <ClCompile Include="Src\CollisionShapes\HeightField.cpp">
       <Filter>Source Files\Shapes_Source</Filter>
@@ -186,6 +165,12 @@
     <ClCompile Include="src\Scene\GUI.cpp">
       <Filter>Source Files\Scene_Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Object\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CollisionShapes\BaseShape.cpp">
+      <Filter>Source Files\Shapes_Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="euler.h">
@@ -199,21 +184,6 @@
     </ClInclude>
     <ClInclude Include="resource_manager.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bob-omb.h">
-      <Filter>Header Files\Actors_Header\enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="boss.h">
-      <Filter>Header Files\Actors_Header\enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>Header Files\Actors_Header\enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="whomp.h">
-      <Filter>Header Files\Actors_Header\enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="goomba.h">
-      <Filter>Header Files\Actors_Header\enemies</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\Common_Header</Filter>
@@ -259,9 +229,6 @@
     </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Header Files\Scene_Header</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseShape.h">
-      <Filter>Header Files\Shapes_Header</Filter>
     </ClInclude>
     <ClInclude Include="Src\CollisionShapes\Box.h">
       <Filter>Header Files\Shapes_Header</Filter>
@@ -337,6 +304,12 @@
     </ClInclude>
     <ClInclude Include="src\Scene\InputManager.h">
       <Filter>Header Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CollisionShapes\ShapesInclude.h">
+      <Filter>Header Files\Shapes_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CollisionShapes\BaseShape.h">
+      <Filter>Header Files\Shapes_Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
