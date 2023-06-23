@@ -8,6 +8,7 @@
 #include "GUI.h"
 class GLFW_Setup {
 public:
+    Scene* scene;
     GLFWwindow* window;
     const unsigned int SCR_WIDTH = 1200;
     const unsigned int SCR_HEIGHT = 900;
@@ -110,12 +111,12 @@ public:
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
         {
-            scene.camera.ProcessMouseMovement(xoffset, yoffset);
+            scene->camera.ProcessMouseMovement(xoffset, yoffset);
         }
     }
 
     void actual_scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-        scene.camera.ProcessMouseScroll(static_cast<float>(yoffset));
+        scene->camera.ProcessMouseScroll(static_cast<float>(yoffset));
     }
 private:
     

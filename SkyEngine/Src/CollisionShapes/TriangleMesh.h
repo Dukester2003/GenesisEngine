@@ -4,46 +4,21 @@
 #include "BaseShape.h"
 
 // Triangle Meshes are best only if they are static, making them dynamic could be too computationally expensive
-class TriangleMesh : public BaseShape
+class TriangleMesh : public BaseShape, public btTriangleIndexVertexArray
 {
 public:
-
     int id = 0;
     static int next_id;
-    TriangleMesh() : BaseShape() {}
-    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, velocity, rotation, colliderModel) {
-        type = ShapeType::TRIANGLEMESH;
-        id = next_id++;
-    }
-    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
-        type = ShapeType::TRIANGLEMESH;
-        id = next_id++;
-    }
-    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
-        type = ShapeType::TRIANGLEMESH;
-        id = next_id++;
-    }
-    TriangleMesh(glm::vec3 pos, glm::vec3 size, glm::quat rotation, Model colliderModel) : BaseShape(pos, size, rotation, colliderModel) {
-        type = ShapeType::TRIANGLEMESH;
-        id = next_id++;
-    }
-    ~TriangleMesh() override {
-        if (rigidBody) {
-            if (rigidBody->getMotionState()) {
-                delete rigidBody->getMotionState();
-            }
 
-            // Assuming you have access to the dynamicsWorld instance here
-            _dynamicsWorld->removeRigidBody(rigidBody);
-            delete rigidBody;
-        }
+    std::vector<int> Indices;
+    std::vector<btVector3> Vertices;
 
-        // Delete the shape if it's not shared with other bodies
-        if (collisionShape) {
-            delete collisionShape;
-        }
-    }
+    TriangleMesh();
+    TriangleMesh(const std::vector<int>& indices, const std::vector<btVector3>& vertices);
+    ~TriangleMesh() override;
 
+    void createCollisionShape() override;
+    void InitiateRigidBody(btDynamicsWorld* dynamicsWorld, btAlignedObjectArray<btCollisionShape*> collisionShapes) override;
 };
 
 #endif // !TRIANGLE_MESH_H

@@ -1,7 +1,6 @@
 
 #include "GameObject.h"
 #include "../../../imgui/imgui.h"
-#include "../../Scene/Scene.h"
 
 // For the game objects with vs without the 'Model' argument at the end of the constructor, use the constructer with Model argument if the object model is static, 
 // use the constructer without the Model argument if the object model is dynamic.
@@ -310,17 +309,6 @@ void GameObject::setFrictionValue(float newFriction)
 
     // Add the new rigid body back to the dynamics world
     _dynamicsWorld->addRigidBody(rigidBody);
-
-}
-
-void GameObject::copy() {
-    _copy->copyPosition = getPosition();
-    _copy->copyRotation = getRotation();
-    _copy->copyVelocity = getVelocity();
-    _copy->copySize = getScale();
-    _copy->copyMass = getMass();
-    _copy->copyFriction = getFrictionValue();
-    _copy->copyInertia = getLocalIntertia();
 
 }
 

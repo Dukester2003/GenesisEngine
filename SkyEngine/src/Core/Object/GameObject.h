@@ -127,10 +127,6 @@ class GameObject
 		void setFrictionValue(const float newFrictionValue);
 		virtual void setShader() {}
 
-
-		void copy();
-		void paste();
-
 		
 		
 		virtual void InitModel() {}

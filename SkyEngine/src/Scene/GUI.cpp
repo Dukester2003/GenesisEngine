@@ -113,7 +113,7 @@ void GUI::AddItem(std::shared_ptr<GameObject> item, btDynamicsWorld* dynamicsWor
     item->InitiateRigidBody(dynamicsWorld, collisionShapes);
 }
 
-void GUI::GuiInit()
+void GUI::ShowEngineGUI(Scene& scene)
 {
     if (ImGui::BeginMainMenuBar())
     {
@@ -140,8 +140,8 @@ void GUI::GuiInit()
             ImGui::EndMenu();
         }
 
-        if (showSaveWindow) { ShowSaveWindow(); }
-        if (showLoadWindow) { ShowLoadWindow(); }
+        if (showSaveWindow) { ShowSaveWindow(scene); }
+        if (showLoadWindow) { ShowLoadWindow(scene); }
         if (ImGui::BeginMenu("Edit"))
         {
             if (ImGui::MenuItem("Undo", "Ctrl+Z")) { /* Do Things */ }
@@ -168,35 +168,35 @@ void GUI::GuiInit()
             {
                 if (ImGui::MenuItem("Box"))
                 {
-                    auto boxCollider = std::make_shared<BoxCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+                    auto boxCollider = std::make_shared<Box>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(boxCollider, dynamicsWorld);
                     scene.items.push_back(boxCollider);
                 }
 
                 if (ImGui::MenuItem("Sphere"))
                 {
-                    auto sphereCollider = std::make_shared<SphereCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+                    auto sphereCollider = std::make_shared<Sphere>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(sphereCollider, dynamicsWorld);
                     scene.items.push_back(sphereCollider);
                 }
 
                 if (ImGui::MenuItem("Cylinder"))
                 {
-                    auto cylinderCollider = std::make_shared<CylinderCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+                    auto cylinderCollider = std::make_shared<Cylinder>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(cylinderCollider, dynamicsWorld);
                     scene.items.push_back(cylinderCollider);
                 }
 
                 if (ImGui::MenuItem("Capsule"))
                 {
-                    auto capsuleCollider = std::make_shared<CapsuleCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+                    auto capsuleCollider = std::make_shared<Capsule>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(capsuleCollider, dynamicsWorld);
                     scene.items.push_back(capsuleCollider);
                 }
 
                 if (ImGui::MenuItem("Cone"))
                 {
-                    auto coneCollider = std::make_shared<ConeCollider>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+                    auto coneCollider = std::make_shared<Cone>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));
                     AddItem(coneCollider, dynamicsWorld);
                     scene.items.push_back(coneCollider);
                 }
@@ -219,12 +219,6 @@ void GUI::GuiInit()
                 {
                     scene.pointLights.push_back(PointLight(glm::vec3(spawnPosition)));
                     scene.pointLightPresent = true;
-                }
-
-                if (ImGui::MenuItem("Directional Light"))
-                {
-                    scene.dirLights.push_back(DirectionalLight(glm::vec3(0.0f)));
-                    scene.dirLightPresent = true;
                 }
 
                 if (ImGui::MenuItem("Spot Light"))
@@ -328,19 +322,19 @@ void GUI::GuiInit()
                     item->Name = "Plane " + std::to_string(static_cast<Plane*>(item.get())->id);
                     break;
                 case ShapeType::BOX:
-                    item->Name = "Box " + std::to_string(static_cast<BoxCollider*>(item.get())->id);
+                    item->Name = "Box " + std::to_string(static_cast<Box*>(item.get())->id);
                     break;
                 case ShapeType::SPHERE:
-                    item->Name = "Sphere " + std::to_string(static_cast<SphereCollider*>(item.get())->id);
+                    item->Name = "Sphere " + std::to_string(static_cast<Sphere*>(item.get())->id);
                     break;
                 case ShapeType::CYLINDER:
-                    item->Name = "Cylinder " + std::to_string(static_cast<CylinderCollider*>(item.get())->id);
+                    item->Name = "Cylinder " + std::to_string(static_cast<Cylinder*>(item.get())->id);
                     break;
                 case ShapeType::CAPSULE:
-                    item->Name = "Capsule " + std::to_string(static_cast<CapsuleCollider*>(item.get())->id);
+                    item->Name = "Capsule " + std::to_string(static_cast<Capsule*>(item.get())->id);
                     break;
                 case ShapeType::CONE:
-                    item->Name = "Cone " + std::to_string(static_cast<ConeCollider*>(item.get())->id);
+                    item->Name = "Cone " + std::to_string(static_cast<Cone*>(item.get())->id);
                     break;
                 case ShapeType::COMPOUND:
                     item->Name = "Compound Shape " + std::to_string(static_cast<CompoundShape*>(item.get())->id);
@@ -411,21 +405,20 @@ void GUI::GuiInit()
             size_t lightIndex = 0;
             static int selectedItem = 0;
 
-
-            for (int i = 0; i < scene.dirLights.size(); i++)
             {
-                auto& dirLight = scene.dirLights[i];
+                auto& dirLight = scene.dirLight;
 
-                dirLight.Name = "DirLight ";
-                std::string name = dirLight.Name + std::to_string(i);
-                dirLight.IsSelected = (selectedItem == lightIndex);
-                if (ImGui::Selectable(name.c_str(), dirLight.IsSelected)) {
+                dirLight->Name = "DirectionalLight";
+                dirLight->IsSelected = (selectedItem == lightIndex);
+
+                if (ImGui::Selectable(dirLight->Name.c_str(), dirLight->IsSelected)) {
                     selectedItem = lightIndex;
                 }
-                if (dirLight.IsSelected) {
-                    // Call the item menu function for the selected object
-                    dirLight.ShowMenu(dirLight.Name);
+
+                if (dirLight->IsSelected) {
+                    dirLight->ShowMenu(dirLight->Name);
                 }
+
                 lightIndex++;
             }
             for (int i = 0; i < scene.pointLights.size(); i++)
@@ -475,7 +468,7 @@ void GUI::GuiInit()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void GUI::ShowSaveWindow() {
+void GUI::ShowSaveWindow(Scene& scene) {
     if (ImGui::Begin("Name File"))  // The window will close when showSaveWindow is set to false
     {
         if (ImGui::InputText("Filename", filename, IM_ARRAYSIZE(filename), ImGuiInputTextFlags_EnterReturnsTrue))
@@ -500,7 +493,7 @@ void GUI::ShowSaveWindow() {
     } ImGui::End();
 }
 
-void GUI::ShowLoadWindow()
+void GUI::ShowLoadWindow(Scene& scene)
 {
     if (ImGui::Begin("Load File"))
     {

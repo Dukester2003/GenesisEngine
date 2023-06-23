@@ -16,9 +16,6 @@
 #include <sys/stat.h>
 #include <filesystem> // Include this for std::filesystem::path
 
-
-inline Scene scene;
-
 class GUI
 {
 public:
@@ -36,12 +33,12 @@ public:
     GUI() {}
     void ImGuiSetup(GLFWwindow* window);
     void AddItem(std::shared_ptr<GameObject> item, btDynamicsWorld* dynamicsWorld);
-    void GuiInit();
+    void ShowEngineGUI(Scene& scene);
     bool IsMouseHoveringOverWindow(const char* window_name);
     bool ListFiles(const std::string& path, std::vector<std::string>& files, std::vector<std::string>& directories);
     void FileExplorer(const std::string& title, std::string& current_path);
-    void ShowSaveWindow();
-    void ShowLoadWindow();
+    void ShowSaveWindow(Scene& scene);
+    void ShowLoadWindow(Scene& scene);
 
 };
 

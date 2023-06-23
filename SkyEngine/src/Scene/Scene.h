@@ -19,11 +19,6 @@ inline btAlignedObjectArray<btCollisionShape*> collisionShapes;
 
 inline std::shared_ptr<GameObject> copiedObject;
 
-inline Player* player;
-
-
-
-
 struct Copy
 {
 	glm::vec3 copyPosition; 
@@ -70,7 +65,7 @@ public:
 	std::vector<std::string> getFilesInDirectory(const std::string& directory); 
 
 	std::vector<PointLight> pointLights;
-	std::vector<DirectionalLight> dirLights;
+	std::unique_ptr<DirectionalLight> dirLight;
 	std::vector<SpotLight> spotLights;
 	std::vector<std::shared_ptr<GameObject>> items;
 
@@ -82,17 +77,10 @@ public:
 	void InitShaders();
 	void CreateShaderTransformations();
 	void SetPerspectiveTransformations(const float screenWidth, const float screenHeight);
+	void UpdateObjects(Shader& shader, btDynamicsWorld* dynamicsWorld);
 
-	void DefaultPointLights(Shader& shader);
-	void ActivatePointLights(Shader& shader);
-	void UpdatePointLights(Shader& shader);
-
-	void DefaultDirLights(Shader& shader);
-	void ActivateDirLights(Shader& shader);
 	void UpdateDirLights(Shader& shader);
-
-	void DefaultSpotLights(Shader& shader);
-	void ActivateSpotLights(Shader& shader);
+	void UpdatePointLights(Shader& shader);
 	void UpdateSpotLights(Shader& shader);
 
 	bool dirLightPresent;

@@ -2,7 +2,6 @@
 #include "../Scene/glfw_setup.h"
 #include <random>
 #include <iostream>
-#include <stb_image.h>
 #include <irrklang/irrKlang.h>
 
 
@@ -38,8 +37,8 @@ void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window);
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
-Model warehouseModel;
-Level complex;
+Scene*                    scene;
+Level*                    complex;
 GUI                       gui;
 CubeMap                   cubeMap;
 CollisionCallback         collisionCallback;
@@ -53,15 +52,19 @@ EngineState engineState;
 void Initialize()
 {
   glfwSetup = new GLFW_Setup();
+  scene = new Scene();
+  glfwSetup->scene = scene;
   gui.ImGuiSetup(glfwSetup->window);
   input = new InputManager(glfwSetup->window);
   InitCommonShaders();
   cubeMap.BuildCubeBoxShaders();
+  cubeMap.BuildCubeBox();
+  scene->grid.CreateGrid();
   collisionCallback.BulletInstanceDispatch();
-  scene.grid.CreateGrid();
-  cubeMap.BuildCubeBox();  
   InitFrameBuffers();  
-  InitMaterial(scene);
+  InitMaterial(*scene);
+  complex = new Level();
+  complex->InitCollision(dynamicsWorld, collisionShapes);
 }
 
 void Update()
@@ -72,7 +75,7 @@ void Update()
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
+        
         // Bind the framebuffer
         BindFrameBuffer();        
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) 
@@ -82,23 +85,22 @@ void Update()
             collisionCallback.UpdateBtSimulation(deltaTime);
        
             // view/projection transformations
-            scene.SetPerspectiveTransformations(glfwSetup->SCR_WIDTH, glfwSetup->SCR_HEIGHT);
+            scene->SetPerspectiveTransformations(glfwSetup->SCR_WIDTH, glfwSetup->SCR_HEIGHT);
             
+            CreateShaderTransformations(*scene);
 
-            CreateShaderTransformations(scene);
+            complex->DrawLevel(diffuseShader);
+            complex->UpdateCollision(dynamicsWorld);
 
-            complex.DrawLevel(warehouseModel, diffuseShader);
+            scene->UpdateObjects(diffuseShader, dynamicsWorld);
+            UpdateLight(*scene);
 
-            UpdateCommonObjects(scene);
-            UpdateLight(scene);
-
-            // Render GriD
-            scene.grid.RenderGrid(gridShader, scene.view);
-            if (scene.grid.gridActive && engineState == ENGINE_SCENE) { glDrawElements(GL_LINES, scene.grid.gridLength, GL_UNSIGNED_INT, NULL); }
-            cubeMap.DrawSkyBox(scene);
+            // Render Grid
+            scene->grid.RenderGrid(gridShader, scene->view);
+            if (scene->grid.gridActive && engineState == ENGINE_SCENE) { glDrawElements(GL_LINES, scene->grid.gridLength, GL_UNSIGNED_INT, NULL); }
+            cubeMap.DrawSkyBox(*scene);
         }
-        
-        
+
         UnbindFrameBuffer();
 
         // ImGUI Update
@@ -109,7 +111,7 @@ void Update()
         // Show the following windows
         ImGui::ShowDemoWindow();
         GUI_SCENE(glfwSetup->window, gui);
-        gui.GuiInit();
+        gui.ShowEngineGUI(*scene);
         GUI_FRAMEBUFFER_RENDER(glfwSetup->window);
 
        
@@ -122,14 +124,12 @@ void Update()
 
 int main()
 {
-    Initialize();
     
-    warehouseModel = Model("levels/warehouse/compound.glb"); 
+    Initialize();
 
-    auto FloorCollider = std::make_shared<BoxCollider>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
+    auto FloorCollider = std::make_shared<Box>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
     FloorCollider->InitiateRigidBody(dynamicsWorld, collisionShapes);
     FloorCollider->massValue = 0.0f;
-    floorColliders[0] = Floor(glm::vec3(0.0f, -0.5f,0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
     
     Update();
 
@@ -143,7 +143,7 @@ int main()
     // ------------------------------------------------------------------------
     glDeleteRenderbuffers(1, &rbo);
     glDeleteFramebuffers(1, &fbo);
-    scene.grid.Deallocate();
+    scene->grid.Deallocate();
     cubeMap.Deallocate();
     collisionCallback.btCleanUp();
 
@@ -164,24 +164,24 @@ void processInput(GLFWwindow* window)
 
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        scene.camera.ProcessKeyboard(FORWARD, deltaTime);
+        scene->camera.ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        scene.camera.ProcessKeyboard(BACKWARD, deltaTime);
+        scene->camera.ProcessKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        scene.camera.ProcessKeyboard(LEFT, deltaTime);
+        scene->camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        scene.camera.ProcessKeyboard(RIGHT, deltaTime);
+        scene->camera.ProcessKeyboard(RIGHT, deltaTime);
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        scene.camera.MovementSpeed = 10.0;
+        scene->camera.MovementSpeed = 10.0;
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
-        scene.camera.MovementSpeed = 2.5;
+        scene->camera.MovementSpeed = 2.5;
 
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS && !pressedOnce)
     {
-        if (scene.grid.gridActive) scene.grid.gridActive = false;
-        else if (!scene.grid.gridActive) scene.grid.gridActive = true;
+        if       (scene->grid.gridActive)  scene->grid.gridActive = false;
+        else if (!scene->grid.gridActive)  scene->grid.gridActive = true;
         pressedOnce = true;
     }
     else if (glfwGetKey(window, GLFW_KEY_G) == GLFW_RELEASE) { pressedOnce = false; }

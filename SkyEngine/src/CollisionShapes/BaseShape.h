@@ -27,61 +27,6 @@ class BaseShape : public GameObject
         void UpdateRigidBody();
 };
 
-
-
-// Since the compound shape is going to have multiple objects, multiple models, the models are not going to be static
-class CompoundShape : public BaseShape
-{
-public:
-    Model monkeModel;
-
-    int id = 0;
-    static int next_id;
-    void InitModel() override { monkeModel = Model("colliders/monke.obj"); }
-    void createCollisionShape() override {
-        btCompoundShape* compound = new btCompoundShape();
-
-        for (BaseShape* childShape : childShapes) {
-            childShape->createCollisionShape();
-            btTransform childTransform; // set this as necessary
-            compound->addChildShape(childTransform, childShape->getBtCollisionShape());
-        }
-
-        // Store 'compound' somewhere safe where it can be deleted later
-        setBtCollisionShape(compound);
-    }
-
-    // Add a child shape to the compound shape
-    void AddChildShape(BaseShape* shape) {
-        childShapes.push_back(shape);
-    }
-
-    // Remove a child shape from the compound shape
-    void RemoveChildShape(BaseShape* shape) {
-        //... implement this
-    }
-
-    virtual std::shared_ptr<GameObject> clone() const override {
-        return std::make_shared<CompoundShape>(*this);
-    }
-
-    void ObjMenu(string name) override;
-        
-    
-    CompoundShape() : BaseShape() {}
-    CompoundShape(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation) : BaseShape(pos, size, velocity, rotation) {
-        type = ShapeType::COMPOUND;
-        id = next_id++;
-    }
-    CompoundShape(glm::vec3 pos, glm::vec3 size, glm::quat rotation) : BaseShape(pos, size, rotation) {
-        type = ShapeType::COMPOUND;
-        id = next_id++;
-    }
-
-private:
-    std::vector<BaseShape*> childShapes;
-};
-
 class ConvexHull : public BaseShape
 {
 public:
@@ -217,7 +162,6 @@ class ConvexPointCloud : public BaseShape
 public:
 
 };
-
 
 class Floor : public BaseShape
 {

@@ -6,7 +6,7 @@
 
 Scene::Scene()
 {
-    // constructor implementation
+    dirLight = make_unique<DirectionalLight>();
 }
 
 Scene::~Scene()
@@ -50,6 +50,11 @@ void Scene::SetPerspectiveTransformations(const float screenWidth, const float s
 {
     projection = glm::perspective(glm::radians(camera.Zoom), (float)screenWidth / (float)screenHeight, 0.1f, 200.0f);
     view = camera.GetViewMatrix();
+}
+
+void Scene::UpdateObjects(Shader& shader, btDynamicsWorld* dynamicsWorld)
+{
+    for (auto& item : items) { item->UpdateObject(shader, dynamicsWorld); }
 }
 
 void Scene::SaveScene(const std::string& filename, const std::vector<std::shared_ptr<GameObject>>& items) {
@@ -113,19 +118,19 @@ void Scene::LoadScene(const std::string& filename, std::vector<std::shared_ptr<G
         glm::vec3 velocity = glm::vec3(itemJson["velocity"][0], itemJson["velocity"][1], itemJson["velocity"][2]);
         std::string type = itemJson["type"];
         if (type == "Box") {
-            items.push_back(std::make_shared<BoxCollider>(position, scale, rotation));
+            items.push_back(std::make_shared<Box>(position, scale, rotation));
         }
         if (type == "Sphere") {
-            items.push_back(std::make_shared<SphereCollider>(position, scale, rotation));
+            items.push_back(std::make_shared<Sphere>(position, scale, rotation));
         }
         if (type == "Cylinder") {
-            items.push_back(std::make_shared<CylinderCollider>(position, scale, rotation));
+            items.push_back(std::make_shared<Cylinder>(position, scale, rotation));
         }
         if (type == "Capsule") {
-            items.push_back(std::make_shared<CapsuleCollider>(position, scale, rotation));
+            items.push_back(std::make_shared<Capsule>(position, scale, rotation));
         }
         if (type == "Cone") {
-            items.push_back(std::make_shared<ConeCollider>(position, scale, rotation));
+            items.push_back(std::make_shared<Cone>(position, scale, rotation));
         }
         // add other types as necessary
     }
@@ -141,110 +146,37 @@ std::vector<std::string> Scene::getFilesInDirectory(const std::string& directory
 ///
 /// For the lights in this scene,
 /// 
-/// 
-
-// Directions
-void Scene::DefaultDirLights(Shader& shader)
-{
-    for (int i = 0; i < dirLights.size(); ++i)
-    {
-        std::string lightName = "dirLights[" + std::to_string(i) + "]";
-
-        shader.setVec3(lightName + ".direction",  0.0f, 0.0f, 0.0f);
-        shader.setVec3(lightName + ".ambient",    0.0f, 0.0f, 0.0f);
-        shader.setVec3(lightName + ".diffuse",    0.0f, 0.0f, 0.0f);
-        shader.setVec3(lightName + ".specular",   0.0f, 0.0f, 0.0f);
-    }
-}
-
-void Scene::ActivateDirLights(Shader& shader)
-{
-    for (int i = 0; i < dirLights.size(); ++i)
-    {
-        std::string lightName = "dirLights[" + std::to_string(i) + "]";
-
-        shader.setVec3(lightName + ".direction", dirLights[i].Direction);
-        shader.setVec3(lightName + ".ambient",   dirLights[i].Ambient);
-        shader.setVec3(lightName + ".diffuse",   dirLights[i].Diffuse);
-        shader.setVec3(lightName + ".specular",  dirLights[i].Specular);
-    }
-}
 
 void Scene::UpdateDirLights(Shader& shader)
 {
-    if (dirLightPresent) {
-        ActivateDirLights(shader);
-    }
-    else DefaultDirLights(shader);
-}
-
-// Point Lights
-void Scene::DefaultPointLights(Shader& shader)
-{
-    for (int i = 0; i < pointLights.size(); ++i)
-    {
-        std::string lightName = "lights[" + std::to_string(i) + "]";
-      
-        shader.setVec3(lightName  +  ".position",   0.0f,0.0f,0.0f);
-        shader.setVec3(lightName  +  ".ambient",    0.0f,0.0f,0.0f);
-        shader.setVec3(lightName  +  ".diffuse",    0.0f,0.0f,0.0f);
-        shader.setVec3(lightName  +  ".specular",   0.0f,0.0f,0.0f);
-        shader.setFloat(lightName +  ".constant",   0.0f);
-        shader.setFloat(lightName +  ".linear",     0.0f);
-        shader.setFloat(lightName +  ".quadratic",  0.0f);
-        shader.setBool(lightName  +  ".blinn",      false);
-    }
-}
-
-void Scene::ActivatePointLights(Shader& shader)
-{
-    for (int i = 0; i < pointLights.size(); ++i)
-    {
-        std::string lightName = "lights[" + std::to_string(i) + "]";
-        if (!pointLights[i].modelDrawn) { pointLights[i].InitGizmo(); pointLights[i].modelDrawn = true; }
-        if (enableGizmos) { pointLights[i].DrawGizmo(shader); }
-        shader.setVec3(lightName  +  ".position",  pointLights[i].Position);
-        shader.setVec3(lightName  +  ".ambient",   pointLights[i].Ambient);
-        shader.setVec3(lightName  +  ".diffuse",   pointLights[i].Diffuse);
-        shader.setVec3(lightName  +  ".specular",  pointLights[i].Specular);
-        shader.setFloat(lightName + ".constant",   pointLights[i].Constant);
-        shader.setFloat(lightName + ".linear",     pointLights[i].Linear);
-        shader.setFloat(lightName + ".quadratic",  pointLights[i].Quadratic);
-        shader.setBool(lightName  + ".blinn",      pointLights[i].Blinn);
-    }
+    shader.setVec3("dirLight.direction",  dirLight->Direction);
+    shader.setVec3("dirLight.ambient",    dirLight->Ambient);
+    shader.setVec3("dirLight.diffuse",    dirLight->Diffuse);
+    shader.setVec3("dirLight.specular",   dirLight->Specular);
 }
 
 void Scene::UpdatePointLights(Shader& shader)
 {
-    if (pointLightPresent) {
-        ActivatePointLights(shader);
+    for (int i = 0; i < pointLights.size(); ++i)
+    {
+        std::string lightName = "pointLights[" + std::to_string(i) + "]";
+        if (!pointLights[i].modelDrawn) { pointLights[i].InitGizmo(); pointLights[i].modelDrawn = true; }
+        if (enableGizmos) { pointLights[i].DrawGizmo(shader); }
+        shader.setVec3(lightName + ".position", pointLights[i].Position);
+        shader.setVec3(lightName + ".ambient", pointLights[i].Ambient);
+        shader.setVec3(lightName + ".diffuse", pointLights[i].Diffuse);
+        shader.setVec3(lightName + ".specular", pointLights[i].Specular);
+        shader.setFloat(lightName + ".constant", pointLights[i].Constant);
+        shader.setFloat(lightName + ".linear", pointLights[i].Linear);
+        shader.setFloat(lightName + ".quadratic", pointLights[i].Quadratic);
+        shader.setBool(lightName + ".blinn", pointLights[i].Blinn);
     }
-    else DefaultPointLights(shader);
 }
 
 
 // SpotLights
-void Scene::DefaultSpotLights(Shader& shader)
+void Scene::UpdateSpotLights(Shader& shader)
 {
-    for (int i = 0; i < spotLights.size(); ++i)
-    {
-        std::string lightName = "spotLights[" + std::to_string(i) + "]";
-
-        shader.setVec3(lightName + ".position",     0.0f, 0.0f, 0.0f);
-        shader.setVec3(lightName + ".ambient",      0.0f, 0.0f, 0.0f);
-        shader.setVec3(lightName + ".diffuse",      0.0f, 0.0f, 0.0f);
-        shader.setVec3(lightName + ".specular",     0.0f, 0.0f, 0.0f);
-        shader.setFloat(lightName + ".constant",    0.0f);
-        shader.setFloat(lightName + ".linear",      0.0f);
-        shader.setFloat(lightName + ".quadratic",   0.0f);
-        shader.setFloat(lightName + ".cutOff",      glm::cos(glm::radians(0.0f)));
-        shader.setFloat(lightName + ".outerCutOff", glm::cos(glm::radians(0.0f)));
-    }
-}
-
-void Scene::ActivateSpotLights(Shader& shader)
-{
-    std::cout << "spotLight";
     for (int i = 0; i < spotLights.size(); ++i)
     {
         std::string lightName = "spotLights[" + std::to_string(i) + "]";
@@ -259,12 +191,4 @@ void Scene::ActivateSpotLights(Shader& shader)
         shader.setFloat(lightName + ".cutOff", glm::cos(glm::radians(spotLights[i].CutOff)));
         shader.setFloat(lightName + ".outerCutOff", glm::cos(glm::radians(spotLights[i].OuterCutOff)));
     }
-}
-
-void Scene::UpdateSpotLights(Shader& shader)
-{
-    if (spotLightPresent) {
-        ActivateSpotLights(shader);
-    }
-    else DefaultSpotLights(shader);
 }
