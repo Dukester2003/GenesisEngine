@@ -8,7 +8,7 @@
 #include "../math.h"
 
 #include "../player.h"
-#include "../Level.h"
+#include "../Scene/Level.h"
 
 #include "../Scene/Animation/Animation.h"
 #include "../Scene/Animation/AnimationData.h"
@@ -20,8 +20,9 @@
 #include "../Scene/Cubemap.h"
 #include "../Common_Assets.h"
 #include "../framebuffers.h"
-#include "../InitiateCollision.h"
+#include "../../src/CollisionShapes/InitiateCollision.h"
 #include "../Scene/Grid.h"
+#include "../Game/Water.h"
 #include <Windows.h>
 
 using namespace irrklang;
@@ -33,6 +34,8 @@ void UpdateViewPort();
 void processInput(GLFWwindow* window);
 void GUI_SCENE(GLFWwindow* window, GUI gui);
 void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window);
+void ImGuiShutDown();
+void DeAllocate();
 
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
@@ -44,7 +47,6 @@ CubeMap                   cubeMap;
 CollisionCallback         collisionCallback;
 GLFW_Setup*               glfwSetup;
 InputManager*             input;
-
 // AUDIO
 ISoundEngine *SoundEngine = createIrrKlangDevice();
 EngineState engineState;
@@ -54,15 +56,20 @@ void Initialize()
   glfwSetup = new GLFW_Setup();
   scene = new Scene();
   glfwSetup->scene = scene;
+
   gui.ImGuiSetup(glfwSetup->window);
   input = new InputManager(glfwSetup->window);
+
   InitCommonShaders();
-  cubeMap.BuildCubeBoxShaders();
-  cubeMap.BuildCubeBox();
-  scene->grid.CreateGrid();
-  collisionCallback.BulletInstanceDispatch();
   InitFrameBuffers();  
   InitMaterial(*scene);
+
+  cubeMap.BuildCubeBoxShaders();
+  cubeMap.BuildCubeBox();
+
+  scene->grid.CreateGrid();
+  collisionCallback.BulletInstanceDispatch();
+  
   complex = new Level();
   complex->InitCollision(dynamicsWorld, collisionShapes);
 }
@@ -92,8 +99,7 @@ void Update()
             complex->DrawLevel(diffuseShader);
             complex->UpdateCollision(dynamicsWorld);
 
-            scene->UpdateObjects(diffuseShader, dynamicsWorld);
-            UpdateLight(*scene);
+            scene->Update(diffuseShader, dynamicsWorld);
 
             // Render Grid
             scene->grid.RenderGrid(gridShader, scene->view);
@@ -130,22 +136,12 @@ int main()
     auto FloorCollider = std::make_shared<Box>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(120.0f, .1f, 120.0f), glm::vec3(0.0f), glm::vec3(0.0f));
     FloorCollider->InitiateRigidBody(dynamicsWorld, collisionShapes);
     FloorCollider->massValue = 0.0f;
-    
     Update();
 
-    
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-
+    ImGuiShutDown();
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
-    glDeleteRenderbuffers(1, &rbo);
-    glDeleteFramebuffers(1, &fbo);
-    scene->grid.Deallocate();
-    cubeMap.Deallocate();
-    collisionCallback.btCleanUp();
+    DeAllocate();
 
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
@@ -232,4 +228,20 @@ void GUI_FRAMEBUFFER_RENDER(GLFWwindow* window)
     glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void ImGuiShutDown()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
+
+void DeAllocate()
+{
+    glDeleteRenderbuffers(1, &rbo);
+    glDeleteFramebuffers(1, &fbo);
+    scene->grid.Deallocate();
+    cubeMap.Deallocate();
+    collisionCallback.btCleanUp();
 }

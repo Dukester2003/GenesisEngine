@@ -102,15 +102,6 @@
     <ClCompile Include="levels\warehouse\Gate.cpp">
       <Filter>Source Files\Warehouse_Source</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Source Files\Scene_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
-      <Filter>Source Files\Scene_Source</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Actors_Source</Filter>
     </ClCompile>
@@ -171,12 +162,21 @@
     <ClCompile Include="src\CollisionShapes\BaseShape.cpp">
       <Filter>Source Files\Shapes_Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\Light.cpp">
+      <Filter>Source Files\Scene_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Water.cpp">
+      <Filter>Source Files\Warehouse_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Game.cpp">
+      <Filter>Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Level.cpp">
+      <Filter>Source Files\Scene_Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="euler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Math.h">
@@ -184,15 +184,6 @@
     </ClInclude>
     <ClInclude Include="resource_manager.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Common_Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files\Common_Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
     <ClInclude Include="Framebuffers.h">
       <Filter>Header Files\Common_Header</Filter>
@@ -209,26 +200,14 @@
     <ClInclude Include="common_assets.h">
       <Filter>Header Files\Common_Header</Filter>
     </ClInclude>
-    <ClInclude Include="InitiateCollision.h">
-      <Filter>Header Files\Physics_Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Common_Header</Filter>
-    </ClInclude>
     <ClInclude Include="Types.h">
       <Filter>Header Files\Common_Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files\Scene_Header</Filter>
     </ClInclude>
     <ClInclude Include="levels\warehouse\Klaxon.h">
       <Filter>Header Files\Warehouse_Header</Filter>
     </ClInclude>
     <ClInclude Include="levels\warehouse\Gate.h">
       <Filter>Header Files\Warehouse_Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Header Files\Scene_Header</Filter>
     </ClInclude>
     <ClInclude Include="Src\CollisionShapes\Box.h">
       <Filter>Header Files\Shapes_Header</Filter>
@@ -311,12 +290,48 @@
     <ClInclude Include="src\CollisionShapes\BaseShape.h">
       <Filter>Header Files\Shapes_Header</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Object\GameObject.h">
+      <Filter>Header Files\Common_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CollisionShapes\InitiateCollision.h">
+      <Filter>Header Files\Physics_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Light.h">
+      <Filter>Header Files\Scene_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Water.h">
+      <Filter>Header Files\Warehouse_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>Header Files\Common_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Level.h">
+      <Filter>Header Files\Scene_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Common\Mesh.h">
+      <Filter>Header Files\Common_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Common\Model.h">
+      <Filter>Header Files\Common_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Common\Shader.h">
+      <Filter>Header Files\Common_Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="skybox.vs">
       <Filter>Shaders</Filter>
     </None>
     <None Include="skybox.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="water.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="water.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

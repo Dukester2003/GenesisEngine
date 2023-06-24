@@ -11,7 +11,7 @@
 #include "Bone.h"
 #include <functional>
 #include "AnimationData.h"
-#include "Model.h"
+#include "../../Core/Common/Model.h"
 
 struct AssimpNodeData
 {

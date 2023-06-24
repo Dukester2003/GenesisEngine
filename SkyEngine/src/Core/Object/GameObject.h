@@ -2,9 +2,9 @@
 #define GAMEOBJECT_H
 
 
-#include "../../../Model.h"
-#include "../../../Shader.h"
-#include "../../../Light.h"
+#include "../Common/Model.h"
+#include "../Common/Shader.h"
+#include "../../Scene/Light.h"
 
 enum class ShapeType
 {
@@ -67,12 +67,14 @@ class GameObject
 
 		// A non-rotating, non-scalable constructer, best for light sources.
 		GameObject(glm::vec3 pos);
-		// Okay... moving light sources exist too ya know.
-		GameObject(glm::vec3 pos, glm::vec3 velocity);
+		GameObject(glm::vec3 pos, glm::vec3 size);
+
 		GameObject();
 		
 		virtual ~GameObject() {};
 		// ...
+
+		std::vector < std::shared_ptr<GameObject>> childObject;
 		std::shared_ptr<Light> lightSource;  // Light emitted by this object, if any
 		ShapeType type;
 		BlockType blockType;

@@ -17,6 +17,7 @@ public:
     {
         // glfw: initialize and configure
         // ------------------------------
+        std::cout << "Initiating GLFW \n";
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

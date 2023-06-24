@@ -10,7 +10,7 @@
 #include <GLFW/glfw3.h>
 
 #include "../Common_Assets.h"
-#include "../InitiateCollision.h"
+#include "../CollisionShapes/InitiateCollision.h"
 
 #include <dirent.h>
 #include <sys/stat.h>

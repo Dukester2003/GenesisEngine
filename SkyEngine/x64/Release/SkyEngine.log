@@ -1,53 +1,17 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (SLeng.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  bob-omb.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
-  enemy.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
-  GameObject.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(35,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(36,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(60,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(102,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\GameObject.cpp(190,70): warning C4305: 'argument': truncation from 'double' to 'float'
-  goomba.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
-  BaseShape.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(35,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(36,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(60,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(102,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\BaseShape.cpp(117,71): warning C4305: 'argument': truncation from 'double' to 'float'
   blocks.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(35,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(36,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(60,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(102,21): warning C4018: '<': signed/unsigned mismatch
   Light.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
-  lvl.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
+  Level.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
-  player.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(22,22): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(19,24): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  Player.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -56,23 +20,54 @@ C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(36,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(60,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(102,21): warning C4018: '<': signed/unsigned mismatch
-  Box.cpp
-  Capsule.cpp
-  CompoundShape.cpp
-  Cone.cpp
-  ConvexHull.cpp
-  ConvexPointCloud.cpp
-  Cylinder.cpp
-  HeightField.cpp
-  MultiSphere.cpp
-  Plane.cpp
-  SoftBody.cpp
-  Compiling...
-  Sphere.cpp
-  TriangleMesh.cpp
-  Engine.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
+  BaseShape.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\BaseShape.cpp(111,71): warning C4305: 'argument': truncation from 'double' to 'float'
+  Box.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Capsule.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Cone.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+  ConvexHull.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Cylinder.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Plane.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Sphere.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+  TriangleMesh.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Src\CollisionShapes\TriangleMesh.h(22,22): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Src\CollisionShapes\TriangleMesh.h(19,24): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  GameObject.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(22,22): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(19,24): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(35,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(36,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(60,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(102,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Core\Object\GameObject.cpp(190,70): warning C4305: 'argument': truncation from 'double' to 'float'
+  Engine.cpp
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(22,22): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(19,24): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -82,8 +77,10 @@ C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(102,21): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Main\engine.h(26,1): warning C4624: 'Engine': destructor was implicitly defined as deleted
   main.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(22,22): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(19,24): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -92,9 +89,13 @@ C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(60,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(102,21): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Main\Engine.h(26,1): warning C4624: 'Engine': destructor was implicitly defined as deleted
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Main\main.cpp(85,80): warning C4244: 'argument': conversion from 'const unsigned int' to 'const float', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Main\main.cpp(85,58): warning C4244: 'argument': conversion from 'const unsigned int' to 'const float', possible loss of data
   GUI.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(22,22): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(19,24): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -107,8 +108,10 @@ C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\GUI.cpp(423,36): warni
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\GUI.cpp(439,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\GUI.cpp(457,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   Scene.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(212,43): warning C4018: '<': signed/unsigned mismatch
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(22,22): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\CollisionShapes\TriangleMesh.h(19,24): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(47,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(58,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(69,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -116,17 +119,10 @@ C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(36,31): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(60,44): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Animation.h(102,21): warning C4018: '<': signed/unsigned mismatch
-  whomp.cpp
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Model.h(217,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\Light.h(73,78): warning C4305: 'initializing': truncation from 'double' to 'float'
 LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(108): warning C4715: 'Bone::GetRotationIndex': not all control paths return a value
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(98): warning C4715: 'Bone::GetPositionIndex': not all control paths return a value
-C:\Users\qduke\source\repos\SkyEngine\SkyEngine\src\Scene\Animation\Bone.h(118): warning C4715: 'Bone::GetScaleIndex': not all control paths return a value
-  1916 of 5948 functions (32.2%) were compiled, the rest were copied from previous compilation.
-    215 functions were new in current compilation
-    461 functions had inline decision re-evaluated but remain unchanged
+  Compiler switch has changed, fall back to full compilation.
+  All 5526 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
 glfw3.lib(input.obj) : warning LNK4099: PDB '' was not found with 'glfw3.lib(input.obj)' or at ''; linking object as if no debug info
 glfw3.lib(window.obj) : warning LNK4099: PDB '' was not found with 'glfw3.lib(window.obj)' or at ''; linking object as if no debug info

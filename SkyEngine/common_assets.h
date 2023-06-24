@@ -1,14 +1,13 @@
 #ifndef COMMON_ASSETS
 #define COMMON_ASSETS
 
-#include "InitiateCollision.h"
+#include "src/CollisionShapes/InitiateCollision.h"
 #include  "src/CollisionShapes/BaseShape.h"
 #include "levels/terrain/Grass Block/blocks.h"
 #include "src/Scene/Scene.h"
 
 
 // Colliders
-inline Floor floorColliders[8];
 
 
 
@@ -19,6 +18,7 @@ inline Shader diffuseShader;
 inline Shader animationShader;
 inline Shader eulerShader;
 inline Shader collisionShader;
+inline Shader waterShader;
 
 
 
@@ -26,15 +26,19 @@ inline void InitCommonShaders()
 {
     // build and compile our shaders program
     // ------------------------------------
+
+    std::cout << "Initiating Shaders \n";
+
     gridShader = Shader("shaders/grid.vs", "shaders/grid.fs");
     modelShader = Shader("shaders/model.vs", "shaders/model.fs");
     diffuseShader = Shader("shaders/diffuse.vs", "shaders/diffuse.fs");
     animationShader = Shader("shaders/anim.vs", "shaders/anim.fs");
     eulerShader = Shader("shaders/euler.vs", "shaders/euler.fs");
     collisionShader = Shader("shaders/collisionShader.vs", "shaders/collisionShader.fs");
+    waterShader = Shader("shaders/water.vs", "shaders/water.fs");
 }
 
-inline void CreateShaderTransformations(Scene scene)
+inline void CreateShaderTransformations(Scene& scene)
 {
     // create transformations
     animationShader.setMat4("projection", scene.projection);
@@ -51,12 +55,9 @@ inline void CreateShaderTransformations(Scene scene)
     modelShader.use();
     modelShader.setMat4("projection", scene.projection);
     modelShader.setMat4("view", scene.view);
-}
-
-inline void UpdateCommonObjects(Scene& scene)
-{
-    for (auto& item : scene.items) { item->UpdateObject(diffuseShader, dynamicsWorld); }
-    for (auto& floorCollider : floorColliders) { floorCollider.UpdateObject(modelShader, dynamicsWorld); }
+    waterShader.use();
+    waterShader.setMat4("projection", scene.projection);
+    waterShader.setMat4("view", scene.view);
 }
 
 inline void InitMaterial(Scene& scene)
@@ -67,21 +68,6 @@ inline void InitMaterial(Scene& scene)
         diffuseShader.setVec3("material.ambient", item->material.ambient);
         diffuseShader.setVec3("material.diffuse", item->material.diffuse);
         diffuseShader.setVec3("material.specular", item->material.specular);
-    }
-}
-inline void UpdateLight(Scene& scene)
-{
-    diffuseShader.use();
-    scene.UpdateDirLights(diffuseShader);
-    scene.UpdatePointLights(diffuseShader);
-    scene.UpdateSpotLights(diffuseShader);
-
-    diffuseShader.setVec3("viewPos", scene.camera.Position);
-
-    for(auto& item: scene.items) {
-        diffuseShader.use();      
-        diffuseShader.setFloat("material.shininess", item->material.shininess);
-
     }
 }
 #endif // !COMMON_ASSETS

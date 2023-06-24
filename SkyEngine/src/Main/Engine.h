@@ -4,7 +4,7 @@
 
 #include "../Scene/Scene.h"
 #include "../Scene/GUI.h"
-#include "../game.h"
+#include "../Game/Game.h"
 
 enum EngineState
 {

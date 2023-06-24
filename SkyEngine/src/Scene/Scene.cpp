@@ -6,6 +6,7 @@
 
 Scene::Scene()
 {
+    std::cout << "Loading Scene \n";
     dirLight = make_unique<DirectionalLight>();
 }
 
@@ -57,6 +58,27 @@ void Scene::UpdateObjects(Shader& shader, btDynamicsWorld* dynamicsWorld)
     for (auto& item : items) { item->UpdateObject(shader, dynamicsWorld); }
 }
 
+void Scene::UpdateLight(Shader& shader)
+{
+    shader.use();
+    UpdateDirLights(shader);
+    UpdatePointLights(shader);
+    UpdateSpotLights(shader);
+
+    shader.setVec3("viewPos", camera.Position);
+
+    for (auto& item : items) {
+        shader.use();
+        shader.setFloat("material.shininess", item->material.shininess);
+
+    }
+}
+
+void Scene::Update(Shader& shader, btDynamicsWorld* dynamicsWorld)
+{
+    UpdateObjects(shader, dynamicsWorld);
+    UpdateLight(shader);
+}
 void Scene::SaveScene(const std::string& filename, const std::vector<std::shared_ptr<GameObject>>& items) {
     json j;
 

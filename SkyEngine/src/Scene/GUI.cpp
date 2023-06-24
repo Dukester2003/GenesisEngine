@@ -6,6 +6,7 @@ char GUI::filename[64] = { '\0' };
 
 void GUI::ImGuiSetup(GLFWwindow * window)
 {
+    std::cout << "Setting Up ImGUI \n";
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -166,6 +167,12 @@ void GUI::ShowEngineGUI(Scene& scene)
         {
             if (ImGui::BeginMenu("Shape"))
             {
+                if (ImGui::MenuItem("Plane"))
+                {
+                    auto plane = std::make_shared<Plane>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f));
+                    AddItem(plane, dynamicsWorld);
+                    scene.items.push_back(plane);
+                }
                 if (ImGui::MenuItem("Box"))
                 {
                     auto boxCollider = std::make_shared<Box>(glm::vec3(spawnPosition), glm::vec3(2.0f), glm::vec3(0.0f), glm::vec3(0.0f));

@@ -2,7 +2,7 @@
 #ifndef CUBEMAP_H
 #define CUBEMAP_H
 
-#include "../Mesh.h"
+#include "../Core/Common/Mesh.h"
 #include "Scene.h"
 #include "../common_assets.h"
 #include <stb_image.h>

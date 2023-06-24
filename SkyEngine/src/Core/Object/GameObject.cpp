@@ -107,8 +107,8 @@ GameObject::GameObject(glm::vec3 pos)
 {
 }
 
-GameObject::GameObject(glm::vec3 pos, glm::vec3 velocity)
-    : Position(pos), Size(1.0f), Velocity(velocity), hasVelocity(false), Rotation(glm::identity<glm::quat>()),
+GameObject::GameObject(glm::vec3 pos, glm::vec3 size)
+    : Position(pos), Size(size), Velocity(0.0f), hasVelocity(false), Rotation(glm::identity<glm::quat>()),
     isEuler(false), Destroyed(false), model(), modelDynamic(false)
 {
 }
@@ -147,18 +147,17 @@ void GameObject::ObjMenu(string name)
 
     if (ImGui::BeginChild("Child Window", ImVec2(600, 200), false))
     {
+        btTransform   currentTransform;
+        glm::vec3     currentPosition;
+        btScalar      newMass         = massValue;
+        glm::quat     currentRotation = bulletToGlm(currentTransform.getRotation());
+
         if (rigidBody) { rigidBodyEnabled = rigidBody->getActivationState() != DISABLE_SIMULATION; }
         if (ImGui::Checkbox("Rigidbody Enabled?", &rigidBodyEnabled))
         {
             setRigidBodyEnabled(rigidBodyEnabled);
         }
-        btScalar newMass = massValue;
-
-
-        btTransform currentTransform;
-
-        glm::vec3 currentPosition;
-
+        
         if (rigidBody != nullptr) {
             currentTransform = rigidBody->getWorldTransform();
             currentPosition = bulletToGlm(currentTransform.getOrigin());
@@ -184,7 +183,7 @@ void GameObject::ObjMenu(string name)
 
         ScaleUniform("Object Size", (float*)&Size, 1.0f, 0.0f, 100.0f);
 
-        glm::quat currentRotation = bulletToGlm(currentTransform.getRotation());
+        
 
         if(ImGui::DragFloat4("Object Rot", (float*)&currentRotation, .05, -1.0f, 1.0f)) { 
             // Update the object's rotation

@@ -1,7 +1,7 @@
 #ifndef SCENE
 #define SCENE
 
-#include "../Light.h"
+#include "Light.h"
 #include "../Core/Object/GameObject.h"
 #include "../CollisionShapes/ShapesInclude.h"
 #include "../player.h"
@@ -75,6 +75,7 @@ public:
 
 public:
 	void InitShaders();
+
 	void CreateShaderTransformations();
 	void SetPerspectiveTransformations(const float screenWidth, const float screenHeight);
 	void UpdateObjects(Shader& shader, btDynamicsWorld* dynamicsWorld);
@@ -82,6 +83,10 @@ public:
 	void UpdateDirLights(Shader& shader);
 	void UpdatePointLights(Shader& shader);
 	void UpdateSpotLights(Shader& shader);
+
+	void UpdateLight(Shader& shader);
+
+	void Update(Shader& shader, btDynamicsWorld* dynamicsWorld);
 
 	bool dirLightPresent;
 	bool pointLightPresent;

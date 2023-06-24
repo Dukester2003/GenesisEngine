@@ -8,9 +8,12 @@ class Plane : public BaseShape
 public:
     int id = 0;
     static int next_id;
+    Plane();
+    Plane(glm::vec3 pos, glm::vec3 size, glm::quat rotation);
     void createCollisionShape() override {
-        collisionShape = new btStaticPlaneShape(btVector3(btScalar(Size.x / 2), btScalar(Size.y / 2), btScalar(Size.z / 2)), 10.0f);
+        collisionShape = new btStaticPlaneShape(btVector3(btScalar(Size.x), btScalar(Size.y), btScalar(Size.z)), 0.0f);
     }
+    virtual void InitModel() override;
 };
 
 #endif // !PLANE_SHAPE_H

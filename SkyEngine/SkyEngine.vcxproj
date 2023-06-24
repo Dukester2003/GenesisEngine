@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -151,8 +150,6 @@
     <ClCompile Include="levels\terrain\Grass Block\blocks.cpp" />
     <ClCompile Include="levels\warehouse\Gate.cpp" />
     <ClCompile Include="levels\warehouse\Klaxon.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="src\CollisionShapes\BaseShape.cpp" />
     <ClCompile Include="Src\CollisionShapes\Box.cpp" />
@@ -169,9 +166,13 @@
     <ClCompile Include="Src\CollisionShapes\Sphere.cpp" />
     <ClCompile Include="Src\CollisionShapes\TriangleMesh.cpp" />
     <ClCompile Include="src\Core\Object\GameObject.cpp" />
+    <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\Game\Water.cpp" />
     <ClCompile Include="src\Main\Engine.cpp" />
     <ClCompile Include="src\Main\main.cpp" />
     <ClCompile Include="src\Scene\GUI.cpp" />
+    <ClCompile Include="src\Scene\Level.cpp" />
+    <ClCompile Include="src\Scene\Light.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
@@ -180,20 +181,13 @@
     <ClInclude Include="euler.h" />
     <ClInclude Include="Framebuffers.h" />
     <ClInclude Include="FrustumCulling.h" />
-    <ClInclude Include="game.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="levels\terrain\Grass Block\blocks.h" />
     <ClInclude Include="levels\warehouse\Gate.h" />
     <ClInclude Include="levels\warehouse\Klaxon.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Level.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource_manager.h" />
-    <ClInclude Include="InitiateCollision.h" />
+    <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="src\CollisionShapes\BaseShape.h" />
     <ClInclude Include="Src\CollisionShapes\Box.h" />
     <ClInclude Include="Src\CollisionShapes\Capsule.h" />
@@ -203,12 +197,19 @@
     <ClInclude Include="Src\CollisionShapes\ConvexPointCloud.h" />
     <ClInclude Include="Src\CollisionShapes\Cylinder.h" />
     <ClInclude Include="Src\CollisionShapes\HeightField.h" />
+    <ClInclude Include="src\CollisionShapes\InitiateCollision.h" />
     <ClInclude Include="Src\CollisionShapes\MultiSphere.h" />
     <ClInclude Include="Src\CollisionShapes\Plane.h" />
     <ClInclude Include="src\CollisionShapes\ShapesInclude.h" />
     <ClInclude Include="Src\CollisionShapes\SoftBody.h" />
     <ClInclude Include="Src\CollisionShapes\Sphere.h" />
     <ClInclude Include="Src\CollisionShapes\TriangleMesh.h" />
+    <ClInclude Include="src\Core\Common\Mesh.h" />
+    <ClInclude Include="src\Core\Common\Model.h" />
+    <ClInclude Include="src\Core\Common\Shader.h" />
+    <ClInclude Include="src\Core\Object\GameObject.h" />
+    <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\Game\Water.h" />
     <ClInclude Include="src\Scene\Animation\Animation.h" />
     <ClInclude Include="src\Scene\Animation\AnimationData.h" />
     <ClInclude Include="src\Scene\Animation\Animator.h" />
@@ -220,12 +221,16 @@
     <ClInclude Include="src\Scene\Grid.h" />
     <ClInclude Include="src\Scene\GUI.h" />
     <ClInclude Include="src\Scene\InputManager.h" />
+    <ClInclude Include="src\Scene\Level.h" />
+    <ClInclude Include="src\Scene\Light.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="skybox.fs" />
     <None Include="skybox.vs" />
+    <None Include="water.fs" />
+    <None Include="water.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

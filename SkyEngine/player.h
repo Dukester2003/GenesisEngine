@@ -13,36 +13,8 @@ using namespace irrklang;
 
 struct Animations
 {
-	Model playerIdleModel;
-	Animation idleAnimation;
-	Animation runningAnimation;
-	Animation firstJumpAnimation;
-	Animation secondJumpAnimation;
-	Animation superJumpAnimation;
-	Animation crouchTransition;
-	Animation crouchAnimation;
-	Animation backJumpAnimation;
-	Animation longJumpAnimation;
+	// Animation Code Here
 };
-
-struct JumpActions
-{
-	bool jump;
-	bool secondJump;
-	bool superJump;
-	bool jumpKick;
-	bool dive;
-};
-
-struct CrouchActions
-{
-	bool backflip;
-	bool longJump;
-	bool lowKick;
-	bool crawl;
-};
-
-
 
 class Player : public GameObject
 {
@@ -51,70 +23,6 @@ class Player : public GameObject
 		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation);
 		Player(glm::vec3 pos, glm::vec3 size, glm::vec3 velocity, glm::quat rotation, Model objModel);
 		Player(btDiscreteDynamicsWorld* dynamicsWorld, const glm::vec3& position);
-		float timeAfterSpacebar;
-		float timeAfterfirstJump;
-		float timeAfterSecondJump;
-		bool didFirstJump;
-		bool didSecondJump;
-		float Speed = 0.2f;
-		float FirstJumpVelocity = 1.0f;
-		float SecondJumpVelocity = .4f;
-		float SuperJumpVelocity =  .5f;
-		glm::vec3 backFlipJumpVelocity;
-		float jumpSlowDown = .003f;
-		int Keys[1024];
-		int KeysProcessed[1024];
-		JumpActions jumpActions;
-		Animator animator;
-		Animations animations;
-		AnimationFlag animFlag;
-		AnimationID animID;
-		CrouchActions crouchActions;
-		bool isGrounded;
-		bool isMoving;
-		bool isCrouched;
-		bool transitionedToCrouch;
-		float crouchTransTime;
-	public:
-		bool jumpKeyHeld;
-		bool isJumping;
-		
-		bool pressedOnce;
-		bool spacePressed;
-		bool didIterateToNextJump;
-		bool didLastJump;
-		bool jumpSoundPlayed;
-		static int numOfJumps;
-		static std::mt19937 mt;
-		static std::uniform_int_distribution<int> jumpRand; // generates random integers between 1 and 2	
-		static std::string jump[3];
-		static std::string superJump[3];
-		int jump_random_integer;
-	public:	
-		void createCollisionShape() override { /* Do nothing */ };
-		std::shared_ptr<GameObject> clone() const override { return NULL; };
-		void MoveForward(float deltaTime);
-		void MoveBackward(float deltaTime);
-		glm::quat GetForwardDirection();
-		void UpdatePlayer(Shader shader, InputManager* input, ISoundEngine* SoundEngine, float dt);
-		void BoneTransforms(Shader shader);
-		void InitAnimations();
-		void UpdateAnimations();
-		void HandleInput(InputManager* input, ISoundEngine* SoundEngine, float dt);	
-		void HandleMovement(InputManager* input, float dt);
-		void HandleRotation(InputManager* input);
-		void HandleCrouch(InputManager* input, float dt);
-		void HandleJump(InputManager* input, float dt, ISoundEngine* SoundEngine);
-		void PlayJumpSound(ISoundEngine* SoundEngine, const std::string& soundDescription, const std::string& soundFile);
-		void FirstJump(float dt);
-		void SecondJump(float dt);
-		void SuperJump(float dt);
-		void Crouch();
-		void SideJump();
-		void BackJump(float dt);
-		void LongJump();
-		void GroundSlam();
-		void Punch();
 	private:
 		glm::vec3 currentPosition;
 };
