@@ -1,7 +1,7 @@
 # GenesisEngine
-A game engine made in OpenGL using bullet3
+A game engine made in OpenGL using bullet3 to learn computer graphics
 
-Still inexperienced at using github, so this repo may not be organized properly
+Still inexperienced at using github, so this repo isn't organized properly
 
 My learning sources
 
