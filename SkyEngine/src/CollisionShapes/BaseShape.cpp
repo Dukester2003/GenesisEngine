@@ -56,7 +56,9 @@ void BaseShape::UpdateRigidBody()
         // Update rotation
         btQuaternion btRot = btTrans.getRotation();
         glm::quat glmRot(btRot.w(), btRot.x(), btRot.y(), btRot.z());
-        Rotation = glm::eulerAngles(glmRot);
+        Rotation = glmRot;
+
+        std::cout << "X Rotation = " << Rotation.x << endl << "Y Rotation = " << Rotation.y << endl << "Z Rotation = " << Rotation.z << endl;
     }
 }
 

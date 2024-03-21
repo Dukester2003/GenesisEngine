@@ -15,7 +15,6 @@ class Level
 		TriangleMesh* triangleMesh;
 		void InitModel();
 		void DrawLevel(Shader shader);
-		void IterateMeshes();
 		void InitCollision(btDynamicsWorld* dynamicsWorld ,btAlignedObjectArray<btCollisionShape*> collisionShapes);
 		void UpdateCollision(btDynamicsWorld* dynamicsWorld);
 };

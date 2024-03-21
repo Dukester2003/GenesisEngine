@@ -11,6 +11,8 @@
 
 #include "../Common_Assets.h"
 #include "../CollisionShapes/InitiateCollision.h"
+#include "../../Framebuffers.h"
+#include "../Scene/InputManager.h"
 
 #include <dirent.h>
 #include <sys/stat.h>
@@ -39,7 +41,8 @@ public:
     void FileExplorer(const std::string& title, std::string& current_path);
     void ShowSaveWindow(Scene& scene);
     void ShowLoadWindow(Scene& scene);
-
+    void GuiScene(GLFWwindow* window, Framebuffer* framebuffer);
+    void FramebufferRender(GLFWwindow* window);
 };
 
 #endif

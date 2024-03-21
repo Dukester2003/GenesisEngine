@@ -3,8 +3,33 @@
 
 #include <GLFW/glfw3.h>
 #include <array>
+
+enum class KeyAction
+{
+    CAMERA_MOVE_FORWARD,    // W
+    CAMERA_MOVE_BACKWARD,   // A
+    CAMERA_MOVE_LEFT,       // S
+    CAMERA_MOVE_RIGHT,      // D
+    EXIT_APP,               // ESC
+    INCREASE_SPEED,         // LEFT SHIFT 
+    DECREASE_SPEED,         // LEFT SHIFT RELEASE
+    // ... any other actions
+};
 class InputManager
 {
+public:
+    // Map GLFW keys to actions
+    std::map<int, KeyAction> keyToAction = {
+        {GLFW_KEY_W, KeyAction::CAMERA_MOVE_FORWARD},
+        {GLFW_KEY_S, KeyAction::CAMERA_MOVE_BACKWARD},
+        {GLFW_KEY_A, KeyAction::CAMERA_MOVE_LEFT},
+        {GLFW_KEY_D, KeyAction::CAMERA_MOVE_RIGHT},
+        {GLFW_KEY_ESCAPE, KeyAction::EXIT_APP},
+        {GLFW_KEY_LEFT_SHIFT, KeyAction::INCREASE_SPEED},
+        // ... any other key-action mappings
+    };
+
+
 public:
     InputManager(GLFWwindow* window) : m_window(window) {}
 

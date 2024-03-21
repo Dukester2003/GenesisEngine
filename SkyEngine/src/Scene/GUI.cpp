@@ -1,5 +1,6 @@
 #include "GUI.h"
 
+
 bool GUI::showSaveWindow = false;
 bool GUI::showLoadWindow = false;
 char GUI::filename[64] = { '\0' };
@@ -524,4 +525,42 @@ void GUI::ShowLoadWindow(Scene& scene)
             showLoadWindow = false; // Close the dialog without saving
         }
     } ImGui::End();
+}
+
+void GUI::GuiScene(GLFWwindow* window, Framebuffer* framebuffer) {
+    if (ImGui::Begin("Scene", NULL, sceneFlags))
+    {
+
+        // Using a Child allow to fill all the space of the window.
+        // It also alows customization
+        if (ImGui::BeginTabBar("Our Scene"))
+        {
+            if (ImGui::BeginTabItem("Scene"))
+            {
+                if (ImGui::IsWindowHovered() || ImGui::IsWindowFocused()) { isSceneHovered = true; ImGui::CaptureMouseFromApp(false); }
+                else isSceneHovered = false;
+                // Get the size of the child (i.e. the whole draw size of the windows).
+                ImVec2 wsize = ImGui::GetWindowSize();
+                // Because I use the texture from OpenGL, I need to invert the V from the UV.
+                ImGui::Image((void*)(intptr_t)framebuffer->texture, wsize, ImVec2(0, 1), ImVec2(1, 0));
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Game"))
+            {
+                ImGui::EndTabItem();
+            }
+        }
+        ImGui::EndTabBar();
+    }
+    ImGui::End();
+}
+
+void GUI::FramebufferRender(GLFWwindow* window) {
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    ImGui::Render();
+    int display_w, display_h;
+    glfwGetFramebufferSize(window, &display_w, &display_h);
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

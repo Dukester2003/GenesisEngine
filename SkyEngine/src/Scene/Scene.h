@@ -78,6 +78,7 @@ public:
 
 	void CreateShaderTransformations();
 	void SetPerspectiveTransformations(const float screenWidth, const float screenHeight);
+	void UpdateViewport();
 	void UpdateObjects(Shader& shader, btDynamicsWorld* dynamicsWorld);
 
 	void UpdateDirLights(Shader& shader);
@@ -87,6 +88,7 @@ public:
 	void UpdateLight(Shader& shader);
 
 	void Update(Shader& shader, btDynamicsWorld* dynamicsWorld);
+	
 
 	bool dirLightPresent;
 	bool pointLightPresent;

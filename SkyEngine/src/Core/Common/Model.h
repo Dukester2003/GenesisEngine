@@ -280,6 +280,8 @@ private:
         return textureID;
     }
 
+
+
     unsigned int EmbeddedTexture(aiTexture* ai_texture, bool gamma = false)
     {
         unsigned int textureID;

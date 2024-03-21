@@ -13,7 +13,7 @@
 #include <vector>
 #include <btBulletDynamicsCommon.h>
 #include <iostream>
-#include "src/Scene/Scene.h"
+#include "../Scene/Scene.h"
 
 inline btDynamicsWorld* dynamicsWorld; 
 inline btBroadphaseInterface* broadphase;
@@ -156,6 +156,6 @@ public:
 
 
 
-#endif // !SURFACE_COLLISION_H
+#endif // !INIT_COLLISION_H
 
 
